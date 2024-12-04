@@ -93,8 +93,17 @@ public class ConsumerMain implements ApplicationRunner {
 		}
     	final Object payload = null; //Can be null if not specified in the description of the service.
     	
-		//cambiar a on/off las luces
-    	final String consumedService = arrowheadService.consumeServiceHTTP(String.class, httpMethod, address, port, serviceUri, interfaceName, token, payload, "testkey", "testvalue");
+		
+		// manda si on/off y el id de la farola> boolean
+		for (int i = 0; i < 10; i++) {
+			try{
+				final String consumedService = arrowheadService.consumeServiceHTTP(String.class, httpMethod, address, port, serviceUri, interfaceName, token, "{\"id\": " + i + "}", "testkey", "testvalue");
+			//  final String consumedService = arrowheadService.consumeServiceHTTP(String.class, httpMethod, address, port, serviceUri, interfaceName, token, payload, "testkey", "testvalue");
+				System.out.println("Street light nb " + i + " is on: " + consumedService);
+			} catch (Exception e) {
+				System.out.println("Error consuming service for id " + i + ": " + e.getMessage());
+			}
+		}
 	}
 
 }

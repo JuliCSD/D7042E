@@ -3,6 +3,10 @@ package eu.arrowhead.application.skeleton.publisher;
 import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,62 +32,65 @@ import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 public class PublisherMain implements ApplicationRunner {
 
     //=================================================================================================
-	// members
-	
-	@Value(ApplicationCommonConstants.$APPLICATION_SYSTEM_NAME)
-	private String applicationSystemName;
-	
-	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_ADDRESS_WD)
-	private String applicationSystemAddress;
-	
-	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_PORT_WD)
-	private int applicationSystemPort;
-	
-	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
-	private boolean sslEnabled;
-	
-	@Autowired
-	private ArrowheadService arrowheadService;
-	
-	private final Logger logger = LogManager.getLogger(PublisherApplicationInitListener.class);
-	
-	//=================================================================================================
-	// methods
+    // members
+    
+    @Value(ApplicationCommonConstants.$APPLICATION_SYSTEM_NAME)
+    private String applicationSystemName;
+    
+    @Value(ApplicationCommonConstants.$APPLICATION_SERVER_ADDRESS_WD)
+    private String applicationSystemAddress;
+    
+    @Value(ApplicationCommonConstants.$APPLICATION_SERVER_PORT_WD)
+    private int applicationSystemPort;
+    
+    @Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
+    private boolean sslEnabled;
+    
+    @Autowired
+    private ArrowheadService arrowheadService;
+    
+    private final Logger logger = LogManager.getLogger(PublisherApplicationInitListener.class);
+    
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final Random random = new Random();
+    
+    //=================================================================================================
+    // methods
 
-	//-------------------------------------------------------------------------------------------------
-	public static void main(final String[] args) {
-		SpringApplication.run(PublisherMain.class, args);
-	}
+    //-------------------------------------------------------------------------------------------------
+    public static void main(final String[] args) {
+        SpringApplication.run(PublisherMain.class, args);
+    }
 
-	@Override
-	public void run(final ApplicationArguments args) throws Exception {
-		logger.debug("run started...");		
-		publishRunStartedEvent();		
-	}
-	
-	//=================================================================================================
-	// assistant methods
+    @Override
+    public void run(final ApplicationArguments args) throws Exception {
+        logger.debug("run started...");
+        scheduler.scheduleAtFixedRate(this::publishRandomValueEvent, 0, 30, TimeUnit.SECONDS);
+    }
+    
+    //=================================================================================================
+    // assistant methods
 
-	//-------------------------------------------------------------------------------------------------
-	//Sample implementation of event publishing when application run started
-	private void publishRunStartedEvent() {
-		logger.debug( "publishRunStartedEvent started..." );
-		
-		final String eventType = PresetEventType.START_RUN.getEventTypeName();
-		
-		final SystemRequestDTO source = new SystemRequestDTO();
-		source.setSystemName(applicationSystemName);
-		source.setAddress(applicationSystemAddress);
-		source.setPort(applicationSystemPort);
-		if (sslEnabled) {
-			source.setAuthenticationInfo(Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()));
-		}
+    //-------------------------------------------------------------------------------------------------
+    //Sample implementation of event publishing with random values every 30 seconds
+    private void publishRandomValueEvent() {
+        logger.debug("publishRandomValueEvent started...");
+        
+        final String eventType = PresetEventType.START_RUN.getEventTypeName();
+        
+        final SystemRequestDTO source = new SystemRequestDTO();
+        source.setSystemName(applicationSystemName);
+        source.setAddress(applicationSystemAddress);
+        source.setPort(applicationSystemPort);
+        if (sslEnabled) {
+            source.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
+        }
 
-		final Map<String,String> metadata = null;		
-		final String payload = PublisherConstants.START_RUN_EVENT_PAYLOAD;		
-		final String timeStamp = Utilities.convertZonedDateTimeToUTCString(ZonedDateTime.now());		
-		final EventPublishRequestDTO publishRequestDTO = new EventPublishRequestDTO(eventType, source, metadata, payload, timeStamp);
-		
-		arrowheadService.publishToEventHandler(publishRequestDTO);				
-	}	
+        final Map<String, String> metadata = null;
+        final String payload = String.valueOf(random.nextInt(100)); // Generate a random value between 0 and 99
+        final String timeStamp = Utilities.convertZonedDateTimeToUTCString(ZonedDateTime.now());
+        final EventPublishRequestDTO publishRequestDTO = new EventPublishRequestDTO(eventType, source, metadata, payload, timeStamp);
+        
+        arrowheadService.publishToEventHandler(publishRequestDTO);
+    }
 }
