@@ -54,8 +54,7 @@ public class CarServiceWithPublishingController {
 
 	//-------------------------------------------------------------------------------------------------
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public List<CarResponseDTO> getCars(@RequestParam(name = CarProviderWithPublishingConstants.REQUEST_PARAM_BRAND, required = false) final String brand,
-													  @RequestParam(name = CarProviderWithPublishingConstants.REQUEST_PARAM_COLOR, required = false) final String color) {
+	@ResponseBody public List<CarResponseDTO> getCars(@RequestParam(name = CarProviderWithPublishingConstants.REQUEST_PARAM_STATUS, required = false) final String status) {
 		++counter;
 		
 		publisherService.publish(PresetEventType.REQUEST_RECEIVED, Map.of(EventTypeConstants.EVENT_TYPE_REQUEST_RECEIVED_METADATA_REQUEST_TYPE, HttpMethod.GET.name()), CarProviderWithPublishingConstants.CAR_URI);
@@ -63,10 +62,7 @@ public class CarServiceWithPublishingController {
 		final List<CarResponseDTO> response = new ArrayList<>();
 		for (final Car car : carDB.getAll()) {
 			boolean toAdd = true;
-			if (brand != null && !brand.isBlank() && !car.getBrand().equalsIgnoreCase(brand)) {
-				toAdd = false;
-			}
-			if (color != null && !color.isBlank() && !car.getColor().equalsIgnoreCase(color)) {
+			if (status != null && !status.isBlank() && !car.getStatus().equalsIgnoreCase(status)) {
 				toAdd = false;
 			}
 			if (toAdd) {
@@ -90,13 +86,10 @@ public class CarServiceWithPublishingController {
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public CarResponseDTO createCar(@RequestBody final CarRequestDTO dto) {
-		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
-			throw new BadPayloadException("brand is null or blank");
+		if (dto.getStatus() == null || dto.getStatus().isBlank()) {
+			throw new BadPayloadException("status is null or blank");
 		}
-		if (dto.getColor() == null || dto.getColor().isBlank()) {
-			throw new BadPayloadException("color is null or blank");
-		}
-		final Car car = carDB.create(dto.getBrand(), dto.getColor());
+		final Car car = carDB.create(dto.getStatus());
 		
 		return DTOConverter.convertCarToCarResponseDTO(car);
 	}
@@ -104,13 +97,10 @@ public class CarServiceWithPublishingController {
 	//-------------------------------------------------------------------------------------------------
 	@PutMapping(path = CarProviderWithPublishingConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public CarResponseDTO updateCar(@PathVariable(name = CarProviderWithPublishingConstants.PATH_VARIABLE_ID) final int id, @RequestBody final CarRequestDTO dto) {
-		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
-			throw new BadPayloadException("brand is null or blank");
+		if (dto.getStatus() == null || dto.getStatus().isBlank()) {
+			throw new BadPayloadException("status is null or blank");
 		}
-		if (dto.getColor() == null || dto.getColor().isBlank()) {
-			throw new BadPayloadException("color is null or blank");
-		}
-		final Car car = carDB.updateById(id, dto.getBrand(), dto.getColor());
+		final Car car = carDB.updateById(id, dto.getStatus());
 		
 		return DTOConverter.convertCarToCarResponseDTO(car);
 	}

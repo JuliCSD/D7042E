@@ -13,8 +13,8 @@ public class CarConsumerConstants {
 	
 	public static final String CREATE_CAR_SERVICE_DEFINITION = "create-car";
 	public static final String GET_CAR_SERVICE_DEFINITION = "get-car";
-	public static final String REQUEST_PARAM_KEY_BRAND = "request-param-brand";
-	public static final String REQUEST_PARAM_KEY_COLOR = "request-param-color";
+	public static final String REQUEST_PARAM_KEY_STATUS = "request-param-status";
+	// public static final String REQUEST_PARAM_KEY_COLOR = "request-param-color";
 	public static final String $REORCHESTRATION_WD = "${reorchestration:false}";
 	public static final String $MAX_RETRY_WD = "${max_retry:300}";
 	

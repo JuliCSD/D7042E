@@ -91,8 +91,8 @@ public class CarProviderWithPublishingApplicationInitListener extends Applicatio
 		arrowheadService.forceRegisterServiceToServiceRegistry(createCarServiceRequest);
 		
 		final ServiceRegistryRequestDTO getCarServiceRequest = createServiceRegistryRequest(CarProviderWithPublishingConstants.GET_CAR_SERVICE_DEFINITION,  CarProviderWithPublishingConstants.CAR_URI, HttpMethod.GET);
-		getCarServiceRequest.getMetadata().put(CarProviderWithPublishingConstants.REQUEST_PARAM_KEY_BRAND, CarProviderWithPublishingConstants.REQUEST_PARAM_BRAND);
-		getCarServiceRequest.getMetadata().put(CarProviderWithPublishingConstants.REQUEST_PARAM_KEY_COLOR, CarProviderWithPublishingConstants.REQUEST_PARAM_COLOR);
+		getCarServiceRequest.getMetadata().put(CarProviderWithPublishingConstants.REQUEST_PARAM_KEY_STATUS, CarProviderWithPublishingConstants.REQUEST_PARAM_STATUS);
+		// getCarServiceRequest.getMetadata().put(CarProviderWithPublishingConstants.REQUEST_PARAM_KEY_COLOR, CarProviderWithPublishingConstants.REQUEST_PARAM_COLOR);
 		arrowheadService.forceRegisterServiceToServiceRegistry(getCarServiceRequest);
 		
 		if (arrowheadService.echoCoreSystem(CoreSystem.EVENTHANDLER)) {

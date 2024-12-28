@@ -113,7 +113,7 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 				}
 					
 				if (carCreationService != null  && carRequestingService != null) {
-					final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("nissan", "green"), new CarRequestDTO("mazda", "blue"), new CarRequestDTO("opel", "blue"), new CarRequestDTO("nissan", "gray"));
+					final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("1"), new CarRequestDTO("1"), new CarRequestDTO("0"), new CarRequestDTO("0"));
 			    	
 					callCarCreationService(carCreationService , carsToCreate);
 					callCarRequestingService(carRequestingService);
@@ -132,6 +132,8 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 						sources.add(carRequestingService.getProvider());
 						
 						subscribeToDestoryEvents(sources);
+
+						logger.info("Subscription is done");
 					}
 				}
 			} catch (final Throwable ex) {
@@ -301,13 +303,13 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 																				getInterface(), token, null, new String[0]);
 		printOut(allCar);
 		
-		logger.info("Get only blue cars:");
-		final String[] queryParamColor = {orchestrationResult.getMetadata().get(CarConsumerConstants.REQUEST_PARAM_KEY_COLOR), "blue"};			
-		@SuppressWarnings("unchecked")
-		final List<CarResponseDTO> blueCars = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
-																				  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																				  getInterface(), token, null, queryParamColor);
-		printOut(blueCars);
+		// logger.info("Get only blue cars:");
+		// final String[] queryParamColor = {orchestrationResult.getMetadata().get(CarConsumerConstants.REQUEST_PARAM_KEY_COLOR), "blue"};			
+		// @SuppressWarnings("unchecked")
+		// final List<CarResponseDTO> blueCars = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
+		// 																		  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+		// 																		  getInterface(), token, null, queryParamColor);
+		// printOut(blueCars);
 		
     }
     

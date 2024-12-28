@@ -15,10 +15,10 @@ public class CarProviderWithPublishingConstants {
 	public static final String CAR_URI = "/car";
 	public static final String BY_ID_PATH = "/{id}";
 	public static final String PATH_VARIABLE_ID = "id";
-	public static final String REQUEST_PARAM_KEY_BRAND = "request-param-brand";
-	public static final String REQUEST_PARAM_BRAND = "brand";
-	public static final String REQUEST_PARAM_KEY_COLOR = "request-param-color";
-	public static final String REQUEST_PARAM_COLOR = "color";
+	public static final String REQUEST_PARAM_KEY_STATUS = "request-param-status";
+	public static final String REQUEST_PARAM_STATUS = "status";
+	// public static final String REQUEST_PARAM_KEY_COLOR = "request-param-color";
+	// public static final String REQUEST_PARAM_COLOR = "color";
 	
 	public static final String SERVICE_LIMIT="service_limit";
 	public static final int DEFAULT_SERVICE_LIMIT=200;
