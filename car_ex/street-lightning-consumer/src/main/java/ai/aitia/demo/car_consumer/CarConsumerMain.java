@@ -13,8 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 
 import ai.aitia.arrowhead.application.library.ArrowheadService;
-import ai.aitia.demo.car_common.dto.LampRequestDTO;
-import ai.aitia.demo.car_common.dto.LampResponseDTO;
+import ai.aitia.demo.car_common.dto.CarRequestDTO;
+import ai.aitia.demo.car_common.dto.CarResponseDTO;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.SSLProperties;
 import eu.arrowhead.common.Utilities;
@@ -28,8 +28,8 @@ import eu.arrowhead.common.dto.shared.ServiceQueryFormDTO;
 import eu.arrowhead.common.exception.InvalidParameterException;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, LampConsumerConstants.BASE_PACKAGE})
-public class StreetLightingConsumerMain implements ApplicationRunner {
+@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, CarConsumerConstants.BASE_PACKAGE})
+public class CarConsumerMain implements ApplicationRunner {
     
     //=================================================================================================
 	// members
@@ -40,27 +40,27 @@ public class StreetLightingConsumerMain implements ApplicationRunner {
     @Autowired
 	protected SSLProperties sslProperties;
     
-    private final Logger logger = LogManager.getLogger(StreetLightingConsumerMain.class);
+    private final Logger logger = LogManager.getLogger(CarConsumerMain.class);
     
     //=================================================================================================
 	// methods
 
 	//------------------------------------------------------------------------------------------------
     public static void main( final String[] args ) {
-    	SpringApplication.run(StreetLightingConsumerMain.class, args);
+    	SpringApplication.run(CarConsumerMain.class, args);
     }
 
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
-    	createLampServiceOrchestrationAndConsumption();
-    	getLampServiceOrchestrationAndConsumption();
+    	createCarServiceOrchestrationAndConsumption();
+    	getCarServiceOrchestrationAndConsumption();
 	}
     
     //-------------------------------------------------------------------------------------------------
-    public void createLampServiceOrchestrationAndConsumption() {
-    	logger.info("Orchestration request for " + LampConsumerConstants.CREATE_LAMP_SERVICE_DEFINITION + " service:");
-    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(LampConsumerConstants.CREATE_LAMP_SERVICE_DEFINITION)
+    public void createCarServiceOrchestrationAndConsumption() {
+    	logger.info("Orchestration request for " + CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION + " service:");
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION)
     																		.interfaces(getInterface())
     																		.build();
     	
@@ -83,27 +83,27 @@ public class StreetLightingConsumerMain implements ApplicationRunner {
 			logger.info("No provider found during the orchestration");
 		} else {
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
-			validateOrchestrationResult(orchestrationResult, LampConsumerConstants.CREATE_LAMP_SERVICE_DEFINITION);
+			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION);
 			
-			final List<LampRequestDTO> lampsToCreate = List.of(new LampRequestDTO(1), new LampRequestDTO(1), new LampRequestDTO(0), new LampRequestDTO(0));
+			final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("hello world", "aaa"), new CarRequestDTO("mazda", "blue"), new CarRequestDTO("opel", "blue"), new CarRequestDTO("nissan", "gray"));
 			
-			for (final LampRequestDTO lampRequestDTO : lampsToCreate) {
-				logger.info("Create a lamp request:");
-				printOut(lampRequestDTO);
+			for (final CarRequestDTO carRequestDTO : carsToCreate) {
+				logger.info("Create a car request:");
+				printOut(carRequestDTO);
 				final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
-				final LampResponseDTO lampCreated = arrowheadService.consumeServiceHTTP(LampResponseDTO.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
+				final CarResponseDTO carCreated = arrowheadService.consumeServiceHTTP(CarResponseDTO.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
 						orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-						getInterface(), token, lampRequestDTO, new String[0]);
+						getInterface(), token, carRequestDTO, new String[0]);
 				logger.info("Provider response");
-				printOut(lampCreated);
+				printOut(carCreated);
 			}			
 		}
     }
     
     //-------------------------------------------------------------------------------------------------
-    public void getLampServiceOrchestrationAndConsumption() {
-    	logger.info("Orchestration request for " + LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION + " service:");
-    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION)
+    public void getCarServiceOrchestrationAndConsumption() {
+    	logger.info("Orchestration request for " + CarConsumerConstants.GET_CAR_SERVICE_DEFINITION + " service:");
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(CarConsumerConstants.GET_CAR_SERVICE_DEFINITION)
     																		.interfaces(getInterface())
     																		.build();
     	
@@ -126,23 +126,23 @@ public class StreetLightingConsumerMain implements ApplicationRunner {
 			logger.info("No provider found during the orchestration");
 		} else {
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
-			validateOrchestrationResult(orchestrationResult, LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION);
+			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.GET_CAR_SERVICE_DEFINITION);
 			
-			logger.info("Get all lamps:");
+			logger.info("Get all cars:");
 			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
 			@SuppressWarnings("unchecked")
-			final List<LampResponseDTO> allLamp = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
+			final List<CarResponseDTO> allCar = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
 																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
 																					getInterface(), token, null, new String[0]);
-			printOut(allLamp);
+			printOut(allCar);
 			
-			logger.info("Get only on lamps:");
-			final String[] queryParamStatus = {orchestrationResult.getMetadata().get(LampConsumerConstants.REQUEST_PARAM_KEY_STATUS), 1};			
+			logger.info("Get only blue cars:");
+			final String[] queryParamColor = {orchestrationResult.getMetadata().get(CarConsumerConstants.REQUEST_PARAM_KEY_COLOR), "blue"};			
 			@SuppressWarnings("unchecked")
-			final List<LampResponseDTO> onLamps = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
+			final List<CarResponseDTO> blueCars = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
 																					  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																					  getInterface(), token, null, queryParamStatus);
-			printOut(onLamps);
+																					  getInterface(), token, null, queryParamColor);
+			printOut(blueCars);
 		}
     }
     
@@ -151,7 +151,7 @@ public class StreetLightingConsumerMain implements ApplicationRunner {
     
     //-------------------------------------------------------------------------------------------------
     private String getInterface() {
-    	return sslProperties.isSslEnabled() ? LampConsumerConstants.INTERFACE_SECURE : LampConsumerConstants.INTERFACE_INSECURE;
+    	return sslProperties.isSslEnabled() ? CarConsumerConstants.INTERFACE_SECURE : CarConsumerConstants.INTERFACE_INSECURE;
     }
     
     //-------------------------------------------------------------------------------------------------

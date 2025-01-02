@@ -16,73 +16,83 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.aitia.demo.car_common.dto.LampRequestDTO;
-import ai.aitia.demo.car_common.dto.LampResponseDTO;
-import ai.aitia.demo.car_provider.LampProviderConstants;
+import ai.aitia.demo.car_common.dto.CarRequestDTO;
+import ai.aitia.demo.car_common.dto.CarResponseDTO;
+import ai.aitia.demo.car_provider.CarProviderConstants;
 import ai.aitia.demo.car_provider.database.DTOConverter;
-import ai.aitia.demo.car_provider.database.InMemoryLampDB;
-import ai.aitia.demo.car_provider.entity.Lamp;
+import ai.aitia.demo.car_provider.database.InMemoryCarDB;
+import ai.aitia.demo.car_provider.entity.Car;
 import eu.arrowhead.common.exception.BadPayloadException;
 
 @RestController
-@RequestMapping(LampProviderConstants.LAMP_URI)
-public class LampServiceController {
+@RequestMapping(CarProviderConstants.CAR_URI)
+public class CarServiceController {
 	
 	//=================================================================================================
 	// members	
 	
 	@Autowired
-	private InMemoryLampDB lampDB;
+	private InMemoryCarDB carDB;
 
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public List<LampResponseDTO> getLamps(@RequestParam(name = LampProviderConstants.REQUEST_PARAM_BRAND, required = false) final int status) {
-		final List<LampResponseDTO> response = new ArrayList<>();
-		for (final Lamp lamp : lampDB.getAll()) {
+	@ResponseBody public List<CarResponseDTO> getCars(@RequestParam(name = CarProviderConstants.REQUEST_PARAM_BRAND, required = false) final String brand,
+													  @RequestParam(name = CarProviderConstants.REQUEST_PARAM_COLOR, required = false) final String color) {
+		final List<CarResponseDTO> response = new ArrayList<>();
+		for (final Car car : carDB.getAll()) {
 			boolean toAdd = true;
-			if (status != null) {
+			if (brand != null && !brand.isBlank() && !car.getBrand().equalsIgnoreCase(brand)) {
 				toAdd = false;
-			} 
+			}
+			if (color != null && !color.isBlank() && !car.getColor().equalsIgnoreCase(color)) {
+				toAdd = false;
+			}
 			if (toAdd) {
-				response.add(DTOConverter.convertLampToLampResponseDTO(lamp));
+				response.add(DTOConverter.convertCarToCarResponseDTO(car));
 			}
 		}
 		return response;
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	@GetMapping(path = LampProviderConstants.BY_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public LampResponseDTO getLampById(@PathVariable(value = LampProviderConstants.PATH_VARIABLE_ID) final int id) {
-		return DTOConverter.convertLampToLampResponseDTO(lampDB.getById(id));
+	@GetMapping(path = CarProviderConstants.BY_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody public CarResponseDTO getCarById(@PathVariable(value = CarProviderConstants.PATH_VARIABLE_ID) final int id) {
+		return DTOConverter.convertCarToCarResponseDTO(carDB.getById(id));
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public LampResponseDTO createLamp(@RequestBody final LampRequestDTO dto) {
-		if (dto.getStatus() == null || dto.getStatus().isBlank()) {
+	@ResponseBody public CarResponseDTO createCar(@RequestBody final CarRequestDTO dto) {
+		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
 			throw new BadPayloadException("brand is null or blank");
 		}
-		final Lamp lamp = lampDB.create(dto.getStatus());
-		return DTOConverter.convertLampToLampResponseDTO(lamp);
+		if (dto.getColor() == null || dto.getColor().isBlank()) {
+			throw new BadPayloadException("color is null or blank");
+		}
+		final Car car = carDB.create(dto.getBrand(), dto.getColor());
+		return DTOConverter.convertCarToCarResponseDTO(car);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	@PutMapping(path = LampProviderConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public LampResponseDTO updateLamp(@PathVariable(name = LampProviderConstants.PATH_VARIABLE_ID) final int id, @RequestBody final LampRequestDTO dto) {
-		if (dto.getStatus() == null || dto.getStatus().isBlank()) {
+	@PutMapping(path = CarProviderConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody public CarResponseDTO updateCar(@PathVariable(name = CarProviderConstants.PATH_VARIABLE_ID) final int id, @RequestBody final CarRequestDTO dto) {
+		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
 			throw new BadPayloadException("brand is null or blank");
 		}
-		final Lamp lamp = lampDB.updateById(id, dto.getStatus());
-		return DTOConverter.convertLampToLampResponseDTO(lamp);
+		if (dto.getColor() == null || dto.getColor().isBlank()) {
+			throw new BadPayloadException("color is null or blank");
+		}
+		final Car car = carDB.updateById(id, dto.getBrand(), dto.getColor());
+		return DTOConverter.convertCarToCarResponseDTO(car);
 	}
 	
 	
 	//-------------------------------------------------------------------------------------------------
-	@DeleteMapping(path = LampProviderConstants.BY_ID_PATH)
-	public void removeLampById(@PathVariable(value = LampProviderConstants.PATH_VARIABLE_ID) final int id) {
-		lampDB.removeById(id);
+	@DeleteMapping(path = CarProviderConstants.BY_ID_PATH)
+	public void removeCarById(@PathVariable(value = CarProviderConstants.PATH_VARIABLE_ID) final int id) {
+		carDB.removeById(id);
 	}
 }

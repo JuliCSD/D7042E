@@ -7,14 +7,14 @@ import org.springframework.context.annotation.ComponentScan;
 import eu.arrowhead.common.CommonConstants;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, LampProviderConstants.BASE_PACKAGE})
-public class ControllerProviderMain {
+@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, CarProviderConstants.BASE_PACKAGE})
+public class CarProviderMain {
 
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
 	public static void main(final String[] args) {
-		SpringApplication.run(ControllerProviderMain.class, args);
+		SpringApplication.run(CarProviderMain.class, args);
 	}	
 }

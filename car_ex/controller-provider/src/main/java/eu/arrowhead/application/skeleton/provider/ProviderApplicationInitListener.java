@@ -19,7 +19,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
-import ai.aitia.demo.car_provider.LampProviderConstants;
+import ai.aitia.demo.car_provider.CarProviderConstants;
 import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.config.ApplicationInitListener;
 import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
@@ -83,21 +83,21 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		}		
 		
 		//Register services into ServiceRegistry
-		final ServiceRegistryRequestDTO createLampServiceRequest = createServiceRegistryRequest(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI, HttpMethod.POST);		
-		arrowheadService.forceRegisterServiceToServiceRegistry(createLampServiceRequest);
+		final ServiceRegistryRequestDTO createCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI, HttpMethod.POST);		
+		arrowheadService.forceRegisterServiceToServiceRegistry(createCarServiceRequest);
 		
-		ServiceRegistryRequestDTO getLampServiceRequest = createServiceRegistryRequest(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION,  LampProviderConstants.LAMP_URI, HttpMethod.GET);
-		getLampServiceRequest.getMetadata().put(LampProviderConstants.REQUEST_PARAM_KEY_BRAND, LampProviderConstants.REQUEST_PARAM_BRAND);
-		getLampServiceRequest.getMetadata().put(LampProviderConstants.REQUEST_PARAM_KEY_COLOR, LampProviderConstants.REQUEST_PARAM_COLOR);
-		arrowheadService.forceRegisterServiceToServiceRegistry(getLampServiceRequest);
+		ServiceRegistryRequestDTO getCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.GET_CAR_SERVICE_DEFINITION,  CarProviderConstants.CAR_URI, HttpMethod.GET);
+		getCarServiceRequest.getMetadata().put(CarProviderConstants.REQUEST_PARAM_KEY_BRAND, CarProviderConstants.REQUEST_PARAM_BRAND);
+		getCarServiceRequest.getMetadata().put(CarProviderConstants.REQUEST_PARAM_KEY_COLOR, CarProviderConstants.REQUEST_PARAM_COLOR);
+		arrowheadService.forceRegisterServiceToServiceRegistry(getCarServiceRequest);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void customDestroy() {
 		//Unregister service
-		arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
-		arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.CREATE_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI);
+		arrowheadService.unregisterServiceFromServiceRegistry(CarProviderConstants.GET_CAR_SERVICE_DEFINITION, CarProviderConstants.CAR_URI);
 	}
 	
 	//=================================================================================================
@@ -143,19 +143,19 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		if (sslEnabled && tokenSecurityFilterEnabled) {
 			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN.name());
-			serviceRegistryRequest.setInterfaces(List.of(LampProviderConstants.INTERFACE_SECURE));
+			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.INTERFACE_SECURE));
 		} else if (sslEnabled) {
 			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE.name());
-			serviceRegistryRequest.setInterfaces(List.of(LampProviderConstants.INTERFACE_SECURE));
+			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.INTERFACE_SECURE));
 		} else {
 			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE.name());
-			serviceRegistryRequest.setInterfaces(List.of(LampProviderConstants.INTERFACE_INSECURE));
+			serviceRegistryRequest.setInterfaces(List.of(CarProviderConstants.INTERFACE_INSECURE));
 		}
 		serviceRegistryRequest.setProviderSystem(systemRequest);
 		serviceRegistryRequest.setServiceUri(serviceUri);
 		serviceRegistryRequest.setMetadata(new HashMap<>());
-		serviceRegistryRequest.getMetadata().put(LampProviderConstants.HTTP_METHOD, httpMethod.name());
+		serviceRegistryRequest.getMetadata().put(CarProviderConstants.HTTP_METHOD, httpMethod.name());
 		return serviceRegistryRequest;
 	}
 }

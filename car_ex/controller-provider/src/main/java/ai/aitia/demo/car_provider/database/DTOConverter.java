@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.util.Assert;
 
-import ai.aitia.demo.car_common.dto.LampResponseDTO;
-import ai.aitia.demo.car_provider.entity.Lamp;
+import ai.aitia.demo.car_common.dto.CarResponseDTO;
+import ai.aitia.demo.car_provider.entity.Car;
 
 public class DTOConverter {
 
@@ -15,19 +15,19 @@ public class DTOConverter {
 	// methods
 	
 	//-------------------------------------------------------------------------------------------------
-	public static LampResponseDTO convertLampToLampResponseDTO(final Lamp lamp) {
-		Assert.notNull(lamp, "lamp is null");
-		return new LampResponseDTO(lamp.getId(), lamp.getStatus());
+	public static CarResponseDTO convertCarToCarResponseDTO(final Car car) {
+		Assert.notNull(car, "car is null");
+		return new CarResponseDTO(car.getId(), car.getBrand(), car.getColor());
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public static List<LampResponseDTO> convertLampListToLampResponseDTOList(final List<Lamp> lamps) {
-		Assert.notNull(lamps, "lamp list is null");
-		final List<LampResponseDTO> lampResponse = new ArrayList<>(lamps.size());
-		for (final Lamp lamp : lamps) {
-			lampResponse.add(convertLampToLampResponseDTO(lamp));
+	public static List<CarResponseDTO> convertCarListToCarResponseDTOList(final List<Car> cars) {
+		Assert.notNull(cars, "car list is null");
+		final List<CarResponseDTO> carResponse = new ArrayList<>(cars.size());
+		for (final Car car : cars) {
+			carResponse.add(convertCarToCarResponseDTO(car));
 		}
-		return lampResponse;
+		return carResponse;
 	}
 
 	//=================================================================================================

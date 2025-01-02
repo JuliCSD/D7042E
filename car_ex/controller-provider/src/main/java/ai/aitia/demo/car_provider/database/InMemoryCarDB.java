@@ -5,11 +5,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
 
-import ai.aitia.demo.car_provider.entity.Lamp;
+import ai.aitia.demo.car_provider.entity.Car;
 import eu.arrowhead.common.exception.InvalidParameterException;
 
 @Component
-public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
+public class InMemoryCarDB extends ConcurrentHashMap<Integer, Car> {
 
 	//=================================================================================================
 	// members
@@ -22,22 +22,26 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public Lamp create(final int status) {
-		if (status == null ) {
-			throw new InvalidParameterException("status is null or empty");
-		}	 
+	public Car create(final String brand, final String color) {
+		if (brand == null || brand.isBlank()) {
+			throw new InvalidParameterException("brand is null or empty");
+		}		
+		if (color == null || color.isBlank()) {
+			throw new InvalidParameterException("color is null or empty");
+		}
+		
 		idCounter++;
-		this.put(idCounter, new Lamp(idCounter, status));
+		this.put(idCounter, new Car(idCounter, brand.toLowerCase().trim(), color.toLowerCase().trim()));
 		return this.get(idCounter);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public List<Lamp> getAll() {
+	public List<Car> getAll() {
 		return List.copyOf(this.values());
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public Lamp getById(final int id) {
+	public Car getById(final int id) {
 		if (this.containsKey(id)) {
 			return this.get(id);
 		} else {
@@ -46,14 +50,17 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public Lamp updateById(final int id, final int status) {
+	public Car updateById(final int id, final String brand, final String color) {
 		if (this.containsKey(id)) {
-			final Lamp lamp = this.get(id);
-			if (status!= null) {
-				lamp.setBrand(brand);
+			final Car car = this.get(id);
+			if (brand!= null && !brand.isBlank()) {
+				car.setBrand(brand);
 			}
-			this.put(id, lamp);
-			return lamp;
+			if (color != null && !color.isBlank()) {
+				car.setColor(color);
+			}
+			this.put(id, car);
+			return car;
 		} else {
 			throw new InvalidParameterException("id '" + id + "' not exists");
 		}
