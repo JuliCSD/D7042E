@@ -8,12 +8,12 @@
 		<version>4.4.0.2</version>
 	</parent>
 	
-	<artifactId>demo-car</artifactId>
+	<artifactId>smart-city</artifactId>
 	<packaging>pom</packaging>
 	
 	<modules>
-	    <module>demo-car-common</module>
-	    <module>demo-car-consumer</module>
-	    <module>demo-car-provider</module>		
+	    <module>smart-city-common</module>
+	    <module>demo-lamp-consumer</module>
+	    <module>demo-lamp-provider</module>		
 	</modules>
 </project>

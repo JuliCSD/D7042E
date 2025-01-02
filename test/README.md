@@ -1,4 +1,4 @@
-# Car Demo (Java Spring-Boot)
+# Lamp Demo (Java Spring-Boot)
 ##### The project provides Arrowhead Application demo implementation developed from [application-skeleton project](https://github.com/arrowhead-f/client-skeleton-java-spring)
 
 ## Overview
@@ -7,20 +7,20 @@ The goal of the project is to simply demonstrate how a consumer could orchestrat
 🟦 `AH Service Registry`
 🟥 `AH Authorization` 
 🟩 `AH Orchestrator`
-![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-car/doc/overview.png)
+![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-lamp/doc/overview.png)
 
 ## Service Descriptions
-**create-car:**
+**create-lamp:**
 
-Creates a new car instance.
-* ***input:*** CarRequestDTO.json
+Creates a new lamp instance.
+* ***input:*** LampRequestDTO.json
 ```
 {
    "group":"string",
    "status":"string"
 }
 ```
-* ***output:*** CarResponseDTO.json
+* ***output:*** LampResponseDTO.json
 ```
 {
    "id":"integer",
@@ -29,16 +29,16 @@ Creates a new car instance.
 }
 ```
 
-**get-car:**
+**get-lamp:**
 
-Returns a car list based on the given parameters.
+Returns a lamp list based on the given parameters.
 * ***input:*** Query parameters: 
 
   `group`={group} [*not mandatory*]
   
   `status`={status} [*not mandatory*]
 
-* ***output:*** List of CarResponseDTO.json
+* ***output:*** List of LampResponseDTO.json
 ```
 [{
    "id":"integer",
