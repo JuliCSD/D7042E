@@ -1,34 +1,25 @@
-package ai.aitia.demo.car_common.dto;
+package ai.aitia.demo.car_provider.entity;
 
-import java.io.Serializable;
-
-public class CarResponseDTO implements Serializable {
+public class Lamp {
 
 	//=================================================================================================
 	// members
 
-	private static final long serialVersionUID = -8371510478751740542L;
-	
-	private int id;
-	private String status;
+	private final int id;
+	private int status;
 
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public CarResponseDTO() {}
-	
-	//-------------------------------------------------------------------------------------------------
-	public CarResponseDTO(final int id, final String status) {
+	public Lamp(final int id, final String status) {
 		this.id = id;
 		this.status = status;
 	}
 
 	//-------------------------------------------------------------------------------------------------
 	public int getId() { return id; }
-	public String getStatus() { return status; }
-
+	public int getStatus() { return status; } 
 	//-------------------------------------------------------------------------------------------------
-	public void setId(final int id) {this.id = id; }
-	public void setStatus(final String status) { this.status = status; }
-}
+	public void getStatus(final int status) { this.status = status; }
+ }

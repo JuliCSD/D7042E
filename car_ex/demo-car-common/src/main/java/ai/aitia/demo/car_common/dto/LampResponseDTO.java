@@ -2,25 +2,32 @@ package ai.aitia.demo.car_common.dto;
 
 import java.io.Serializable;
 
-public class CarRequestDTO implements Serializable {
+public class LampResponseDTO implements Serializable {
 
 	//=================================================================================================
 	// members
 
-	private static final long serialVersionUID = -5363562707054976998L;
+	private static final long serialVersionUID = -8371510478751740542L;
+	
+	private int id;
+	private int status; 
 
-	private String status;
 	//=================================================================================================
 	// methods
+
+	//-------------------------------------------------------------------------------------------------
+	public LampResponseDTO() {}
 	
 	//-------------------------------------------------------------------------------------------------
-	public CarRequestDTO(final String status) {
-		this.status = status;
+	public LampResponseDTO(final int id, final int status) {
+		this.id = id;
+		this.status = status; 
 	}
 
 	//-------------------------------------------------------------------------------------------------
-	public String getStatus() { return status; }
-
+	public int getId() { return id; }
+	public int getStatus() { return status; } 
 	//-------------------------------------------------------------------------------------------------
-	public void setStatus(final String status) { this.status = status; }
+	public void setId(final int id) {this.id = id; }
+	public void setStatus(final int status) { this.status = status; } 
 }

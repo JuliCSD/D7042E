@@ -1,6 +1,6 @@
-package ai.aitia.demo.car_consumer_with_subscribing;
+package ai.aitia.demo.car_consumer;
 
-public class CarConsumerConstants {
+public class LampConsumerConstants {
 	
 	//=================================================================================================
 	// members
@@ -11,18 +11,15 @@ public class CarConsumerConstants {
 	public static final String INTERFACE_INSECURE = "HTTP-INSECURE-JSON";
 	public static final String HTTP_METHOD = "http-method";
 	
-	public static final String CREATE_CAR_SERVICE_DEFINITION = "create-status";
-	public static final String GET_CAR_SERVICE_DEFINITION = "get-status";
-	public static final String REQUEST_PARAM_KEY_STATUS = "request-param-status";
-	// public static final String REQUEST_PARAM_KEY_COLOR = "request-param-color";
-	public static final String $REORCHESTRATION_WD = "${reorchestration:false}";
-	public static final String $MAX_RETRY_WD = "${max_retry:300}";
+	public static final String CREATE_LAMP_SERVICE_DEFINITION = "create-status";
+	public static final String GET_LAMP_SERVICE_DEFINITION = "get-status";
+	public static final String REQUEST_PARAM_KEY_STATUS = "request-param-brand"; 
 	
 	//=================================================================================================
 	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	private CarConsumerConstants() {
+	private LampConsumerConstants() {
 		throw new UnsupportedOperationException();
 	}
 

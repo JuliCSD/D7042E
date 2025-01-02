@@ -303,6 +303,9 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 																				getInterface(), token, null, new String[0]);
 		printOut(allCar);
 		
+		for( CarResponseDTO car : allCar) {
+			printOut("Get car with id: " + car.getId());
+		}
 		// logger.info("Get only blue cars:");
 		// final String[] queryParamColor = {orchestrationResult.getMetadata().get(CarConsumerConstants.REQUEST_PARAM_KEY_COLOR), "blue"};			
 		// @SuppressWarnings("unchecked")

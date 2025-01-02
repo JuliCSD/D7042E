@@ -4,12 +4,12 @@
   
   <parent>
     <groupId>eu.arrowhead</groupId>
-    <artifactId>demo-car-with-events</artifactId>
+    <artifactId>demo-car</artifactId>
     <version>4.4.0.2</version>
   </parent>
   
-  <artifactId>demo-car-with-events-common</artifactId>
-  <name>Arrowhead Demo Car With Events Common</name>
+  <artifactId>demo-car-common</artifactId>
+  <name>Arrowhead Demo Car Common</name>
   
   <build>
 		<plugins>
