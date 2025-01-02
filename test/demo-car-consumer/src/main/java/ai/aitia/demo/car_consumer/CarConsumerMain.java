@@ -85,7 +85,7 @@ public class CarConsumerMain implements ApplicationRunner {
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
 			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION);
 			
-			final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("hello world", 1), new CarRequestDTO("no", 0), new CarRequestDTO("opel", 1), new CarRequestDTO("nissan", 0));
+			final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("city", 1), new CarRequestDTO("city", 0), new CarRequestDTO("market", 1), new CarRequestDTO("city", 0));
 			
 			for (final CarRequestDTO carRequestDTO : carsToCreate) {
 				logger.info("Create a car request:");

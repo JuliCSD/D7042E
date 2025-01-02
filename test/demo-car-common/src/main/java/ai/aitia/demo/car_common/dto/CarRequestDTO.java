@@ -9,23 +9,23 @@ public class CarRequestDTO implements Serializable {
 
 	private static final long serialVersionUID = -5363562707054976998L;
 
-	private String brand;
+	private String group;
 	private Integer status;
 
 	//=================================================================================================
 	// methods
 	
 	//-------------------------------------------------------------------------------------------------
-	public CarRequestDTO(final String brand, final Integer status) {
-		this.brand = brand;
+	public CarRequestDTO(final String group, final Integer status) {
+		this.group = group;
 		this.status= status;
 	}
 
 	//-------------------------------------------------------------------------------------------------
-	public String getBrand() { return brand; }
+	public String getGroup() { return group; }
 	public Integer getStatus() { return status; }
 
 	//-------------------------------------------------------------------------------------------------
-	public void setBrand(final String brand) { this.brand = brand; }
+	public void setGroup(final String group) { this.group = group; }
 	public void setStatus(final Integer status) { this.status= status; }	
 }

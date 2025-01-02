@@ -10,7 +10,7 @@ public class CarResponseDTO implements Serializable {
 	private static final long serialVersionUID = -8371510478751740542L;
 	
 	private int id;
-	private String brand;
+	private String group;
 	private Integer status;
 
 	//=================================================================================================
@@ -20,19 +20,19 @@ public class CarResponseDTO implements Serializable {
 	public CarResponseDTO() {}
 	
 	//-------------------------------------------------------------------------------------------------
-	public CarResponseDTO(final int id, final String brand, final Integer status) {
+	public CarResponseDTO(final int id, final String group, final Integer status) {
 		this.id = id;
-		this.brand = brand;
+		this.group = group;
 		this.status= status;
 	}
 
 	//-------------------------------------------------------------------------------------------------
 	public int getId() { return id; }
-	public String getBrand() { return brand; }
+	public String getGroup() { return group; }
 	public Integer getStatus() { return status; }
 
 	//-------------------------------------------------------------------------------------------------
 	public void setId(final int id) {this.id = id; }
-	public void setBrand(final String brand) { this.brand = brand; }
+	public void setGroup(final String group) { this.group = group; }
 	public void setStatus(final Integer status) { this.status= status; }	
 }

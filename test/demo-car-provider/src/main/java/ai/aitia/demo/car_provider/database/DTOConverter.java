@@ -17,7 +17,7 @@ public class DTOConverter {
 	//-------------------------------------------------------------------------------------------------
 	public static CarResponseDTO convertCarToCarResponseDTO(final Car car) {
 		Assert.notNull(car, "car is null");
-		return new CarResponseDTO(car.getId(), car.getBrand(), car.getStatus());
+		return new CarResponseDTO(car.getId(), car.getGroup(), car.getStatus());
 	}
 	
 	//-------------------------------------------------------------------------------------------------

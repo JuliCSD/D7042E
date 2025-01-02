@@ -6,25 +6,25 @@ public class Car {
 	// members
 
 	private final int id;
-	private String brand;
+	private String group;
 	private Integer status;
 
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public Car(final int id, final String brand, final Integer status) {
+	public Car(final int id, final String group, final Integer status) {
 		this.id = id;
-		this.brand = brand;
+		this.group = group;
 		this.status= status;
 	}
 
 	//-------------------------------------------------------------------------------------------------
 	public int getId() { return id; }
-	public String getBrand() { return brand; }
+	public String getGroup() { return group; }
 	public Integer getStatus() { return status; }
 
 	//-------------------------------------------------------------------------------------------------
-	public void setBrand(final String brand) { this.brand = brand; }
+	public void setGroup(final String group) { this.group = group; }
 	public void setStatus(final Integer status) { this.status= status; }	
 }

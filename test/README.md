@@ -16,7 +16,7 @@ Creates a new car instance.
 * ***input:*** CarRequestDTO.json
 ```
 {
-   "brand":"string",
+   "group":"string",
    "status":"string"
 }
 ```
@@ -24,7 +24,7 @@ Creates a new car instance.
 ```
 {
    "id":"integer",
-   "brand":"string",
+   "group":"string",
    "status":"string"
 }
 ```
@@ -34,7 +34,7 @@ Creates a new car instance.
 Returns a car list based on the given parameters.
 * ***input:*** Query parameters: 
 
-  `brand`={brand} [*not mandatory*]
+  `group`={group} [*not mandatory*]
   
   `status`={status} [*not mandatory*]
 
@@ -42,7 +42,7 @@ Returns a car list based on the given parameters.
 ```
 [{
    "id":"integer",
-   "brand":"string",
+   "group":"string",
    "status":"string"
 }]
 ```

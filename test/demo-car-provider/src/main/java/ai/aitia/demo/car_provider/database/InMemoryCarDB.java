@@ -22,16 +22,16 @@ public class InMemoryCarDB extends ConcurrentHashMap<Integer, Car> {
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public Car create(final String brand, final int status) {
-		if (brand == null || brand.isBlank()) {
-			throw new InvalidParameterException("brand is null or empty");
+	public Car create(final String group, final int status) {
+		if (group == null || group.isBlank()) {
+			throw new InvalidParameterException("group is null or empty");
 		}		
 		if (status>1 || status<0) {
 			throw new InvalidParameterException("statusis null or empty");
 		}
 		
 		idCounter++;
-		this.put(idCounter, new Car(idCounter, brand.toLowerCase().trim(), status));
+		this.put(idCounter, new Car(idCounter, group.toLowerCase().trim(), status));
 		return this.get(idCounter);
 	}
 	
@@ -50,11 +50,11 @@ public class InMemoryCarDB extends ConcurrentHashMap<Integer, Car> {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public Car updateById(final int id, final String brand, final Integer status) {
+	public Car updateById(final int id, final String group, final Integer status) {
 		if (this.containsKey(id)) {
 			final Car car = this.get(id);
-			if (brand!= null && !brand.isBlank()) {
-				car.setBrand(brand);
+			if (group!= null && !group.isBlank()) {
+				car.setGroup(group);
 			}
 			if (status< 1 && status> 0 && status!=null) {
 				car.setStatus(status);
