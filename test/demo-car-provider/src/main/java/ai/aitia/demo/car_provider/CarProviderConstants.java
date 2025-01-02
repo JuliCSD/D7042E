@@ -17,8 +17,8 @@ public class CarProviderConstants {
 	public static final String PATH_VARIABLE_ID = "id";
 	public static final String REQUEST_PARAM_KEY_BRAND = "request-param-brand";
 	public static final String REQUEST_PARAM_BRAND = "brand";
-	public static final String REQUEST_PARAM_KEY_COLOR = "request-param-color";
-	public static final String REQUEST_PARAM_COLOR = "color";	
+	public static final String REQUEST_PARAM_KEY_STATUS = "request-param-status";
+	public static final String REQUEST_PARAM_STATUS = "status";	
 	
 	//=================================================================================================
 	// assistant methods

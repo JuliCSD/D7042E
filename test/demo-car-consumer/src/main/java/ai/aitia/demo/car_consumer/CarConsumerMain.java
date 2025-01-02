@@ -85,7 +85,7 @@ public class CarConsumerMain implements ApplicationRunner {
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
 			validateOrchestrationResult(orchestrationResult, CarConsumerConstants.CREATE_CAR_SERVICE_DEFINITION);
 			
-			final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("hello world", "1"), new CarRequestDTO("no", "blue"), new CarRequestDTO("opel", "blue"), new CarRequestDTO("nissan", "gray"));
+			final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("hello world", 1), new CarRequestDTO("no", 0), new CarRequestDTO("opel", 1), new CarRequestDTO("nissan", 0));
 			
 			for (final CarRequestDTO carRequestDTO : carsToCreate) {
 				logger.info("Create a car request:");
@@ -136,12 +136,12 @@ public class CarConsumerMain implements ApplicationRunner {
 																					getInterface(), token, null, new String[0]);
 			printOut(allCar);
 			
-			logger.info("Get only blue cars:");
-			final String[] queryParamColor = {orchestrationResult.getMetadata().get(CarConsumerConstants.REQUEST_PARAM_KEY_COLOR), "blue"};			
+			logger.info("Get only ON cars:");
+			final String[] queryParamStatus= {orchestrationResult.getMetadata().get(CarConsumerConstants.REQUEST_PARAM_KEY_STATUS), "1"};			
 			@SuppressWarnings("unchecked")
 			final List<CarResponseDTO> blueCars = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
 																					  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																					  getInterface(), token, null, queryParamColor);
+																					  getInterface(), token, null, queryParamStatus);
 			printOut(blueCars);
 		}
     }

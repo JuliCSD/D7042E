@@ -88,7 +88,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		
 		ServiceRegistryRequestDTO getCarServiceRequest = createServiceRegistryRequest(CarProviderConstants.GET_CAR_SERVICE_DEFINITION,  CarProviderConstants.CAR_URI, HttpMethod.GET);
 		getCarServiceRequest.getMetadata().put(CarProviderConstants.REQUEST_PARAM_KEY_BRAND, CarProviderConstants.REQUEST_PARAM_BRAND);
-		getCarServiceRequest.getMetadata().put(CarProviderConstants.REQUEST_PARAM_KEY_COLOR, CarProviderConstants.REQUEST_PARAM_COLOR);
+		getCarServiceRequest.getMetadata().put(CarProviderConstants.REQUEST_PARAM_KEY_STATUS, CarProviderConstants.REQUEST_PARAM_STATUS);
 		arrowheadService.forceRegisterServiceToServiceRegistry(getCarServiceRequest);
 	}
 	

@@ -40,14 +40,14 @@ public class CarServiceController {
 	//-------------------------------------------------------------------------------------------------
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public List<CarResponseDTO> getCars(@RequestParam(name = CarProviderConstants.REQUEST_PARAM_BRAND, required = false) final String brand,
-													  @RequestParam(name = CarProviderConstants.REQUEST_PARAM_COLOR, required = false) final String color) {
+													  @RequestParam(name = CarProviderConstants.REQUEST_PARAM_STATUS, required = false) final Integer status) {
 		final List<CarResponseDTO> response = new ArrayList<>();
 		for (final Car car : carDB.getAll()) {
 			boolean toAdd = true;
 			if (brand != null && !brand.isBlank() && !car.getBrand().equalsIgnoreCase(brand)) {
 				toAdd = false;
 			}
-			if (color != null && !color.isBlank() && !car.getColor().equalsIgnoreCase(color)) {
+			if (status!=null && car.getStatus() != status) {
 				toAdd = false;
 			}
 			if (toAdd) {
@@ -69,10 +69,10 @@ public class CarServiceController {
 		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
 			throw new BadPayloadException("brand is null or blank");
 		}
-		if (dto.getColor() == null || dto.getColor().isBlank()) {
-			throw new BadPayloadException("color is null or blank");
+		if (dto.getStatus()>1 || dto.getStatus()<0) {
+			throw new BadPayloadException("statusis null or blank");
 		}
-		final Car car = carDB.create(dto.getBrand(), dto.getColor());
+		final Car car = carDB.create(dto.getBrand(), dto.getStatus());
 		return DTOConverter.convertCarToCarResponseDTO(car);
 	}
 	
@@ -82,10 +82,10 @@ public class CarServiceController {
 		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
 			throw new BadPayloadException("brand is null or blank");
 		}
-		if (dto.getColor() == null || dto.getColor().isBlank()) {
-			throw new BadPayloadException("color is null or blank");
+		if (dto.getStatus()>1 || dto.getStatus()<0) {
+			throw new BadPayloadException("statusis null or blank");
 		}
-		final Car car = carDB.updateById(id, dto.getBrand(), dto.getColor());
+		final Car car = carDB.updateById(id, dto.getBrand(), dto.getStatus());
 		return DTOConverter.convertCarToCarResponseDTO(car);
 	}
 	

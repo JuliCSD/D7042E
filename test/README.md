@@ -17,7 +17,7 @@ Creates a new car instance.
 ```
 {
    "brand":"string",
-   "color":"string"
+   "status":"string"
 }
 ```
 * ***output:*** CarResponseDTO.json
@@ -25,7 +25,7 @@ Creates a new car instance.
 {
    "id":"integer",
    "brand":"string",
-   "color":"string"
+   "status":"string"
 }
 ```
 
@@ -36,14 +36,14 @@ Returns a car list based on the given parameters.
 
   `brand`={brand} [*not mandatory*]
   
-  `color`={color} [*not mandatory*]
+  `status`={status} [*not mandatory*]
 
 * ***output:*** List of CarResponseDTO.json
 ```
 [{
    "id":"integer",
    "brand":"string",
-   "color":"string"
+   "status":"string"
 }]
 ```
 
