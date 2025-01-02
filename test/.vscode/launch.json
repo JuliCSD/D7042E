@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-CarProviderMain<demo-car-provider>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "ai.aitia.demo.car_provider.CarProviderMain",
+            "projectName": "demo-car-provider",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=33041 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=demo-car-provider"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CarConsumerMain<demo-car-consumer>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "ai.aitia.demo.car_consumer.CarConsumerMain",
+            "projectName": "demo-car-consumer",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

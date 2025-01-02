@@ -11,6 +11,12 @@
 	<name>Arrowhead Demo Car Provider</name>
 	
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>eu.arrowhead</groupId>
 			<artifactId>demo-car-common</artifactId>

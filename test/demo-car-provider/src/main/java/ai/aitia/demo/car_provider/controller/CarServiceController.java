@@ -39,14 +39,10 @@ public class CarServiceController {
 
 	//-------------------------------------------------------------------------------------------------
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public List<CarResponseDTO> getCars(@RequestParam(name = CarProviderConstants.REQUEST_PARAM_BRAND, required = false) final String brand,
-													  @RequestParam(name = CarProviderConstants.REQUEST_PARAM_STATUS, required = false) final Integer status) {
+	@ResponseBody public List<CarResponseDTO> getCars(@RequestParam(name = CarProviderConstants.REQUEST_PARAM_STATUS, required = false) final Integer status) {
 		final List<CarResponseDTO> response = new ArrayList<>();
 		for (final Car car : carDB.getAll()) {
-			boolean toAdd = true;
-			if (brand != null && !brand.isBlank() && !car.getBrand().equalsIgnoreCase(brand)) {
-				toAdd = false;
-			}
+			boolean toAdd = true;  
 			if (status!=null && car.getStatus() != status) {
 				toAdd = false;
 			}
@@ -66,26 +62,22 @@ public class CarServiceController {
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public CarResponseDTO createCar(@RequestBody final CarRequestDTO dto) {
-		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
-			throw new BadPayloadException("brand is null or blank");
-		}
-		if (dto.getStatus()>1 || dto.getStatus()<0) {
+		 
+		if (dto.getStatus() == null || dto.getStatus()>1 || dto.getStatus()<0) {
 			throw new BadPayloadException("statusis null or blank");
 		}
-		final Car car = carDB.create(dto.getBrand(), dto.getStatus());
+		final Car car = carDB.create( dto.getStatus());
 		return DTOConverter.convertCarToCarResponseDTO(car);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@PutMapping(path = CarProviderConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public CarResponseDTO updateCar(@PathVariable(name = CarProviderConstants.PATH_VARIABLE_ID) final int id, @RequestBody final CarRequestDTO dto) {
-		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
-			throw new BadPayloadException("brand is null or blank");
-		}
-		if (dto.getStatus()>1 || dto.getStatus()<0) {
+		 
+		if (dto.getStatus() == null || dto.getStatus()>1 || dto.getStatus()<0) {
 			throw new BadPayloadException("statusis null or blank");
 		}
-		final Car car = carDB.updateById(id, dto.getBrand(), dto.getStatus());
+		final Car car = carDB.updateById(id,  dto.getStatus());
 		return DTOConverter.convertCarToCarResponseDTO(car);
 	}
 	
