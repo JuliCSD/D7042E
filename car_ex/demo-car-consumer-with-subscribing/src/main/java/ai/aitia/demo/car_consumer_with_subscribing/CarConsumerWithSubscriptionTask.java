@@ -306,7 +306,7 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 		for( CarResponseDTO car : allCar) {
 			printOut("Get car with id: " + car.getId());
 		}
-		// logger.info("Get only blue cars:");
+		// logger.info("Get only noooo cars:");
 		// final String[] queryParamColor = {orchestrationResult.getMetadata().get(CarConsumerConstants.REQUEST_PARAM_KEY_COLOR), "blue"};			
 		// @SuppressWarnings("unchecked")
 		// final List<CarResponseDTO> blueCars = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(CarConsumerConstants.HTTP_METHOD)),
