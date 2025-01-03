@@ -29,8 +29,8 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 	private void initializeLamps() {
 
         this.lamps = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            lamps.add(new Lamp(i, "street", 0));
+		for (; idCounter < 20; idCounter++) {
+            lamps.add(new Lamp(idCounter, "street", 0));
         }
     }
 
