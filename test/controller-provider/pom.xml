@@ -7,8 +7,8 @@
     	<version>4.4.0.2</version>
   	</parent>
 	
-	<artifactId>demo-lamp-consumer</artifactId>
-	<name>Arrowhead Demo Lamp Consumer</name>
+	<artifactId>controller-provider</artifactId>
+	<name>Arrowhead Demo Lamp Provider</name>
 	
 	<dependencies>
 		<dependency>
@@ -55,8 +55,8 @@
 		            	</configuration>
 	          		</execution>
 	        	</executions>
-	      	</plugin> 			
+	      	</plugin>
 		</plugins>
-	</build>	
+	</build>
+	
 </project>
-

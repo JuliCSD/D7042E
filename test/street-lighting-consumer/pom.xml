@@ -7,8 +7,8 @@
     	<version>4.4.0.2</version>
   	</parent>
 	
-	<artifactId>demo-lamp-provider</artifactId>
-	<name>Arrowhead Demo Lamp Provider</name>
+	<artifactId>street-lighting-consumer</artifactId>
+	<name>Arrowhead Demo Lamp Consumer</name>
 	
 	<dependencies>
 		<dependency>
@@ -55,8 +55,8 @@
 		            	</configuration>
 	          		</execution>
 	        	</executions>
-	      	</plugin>
+	      	</plugin> 			
 		</plugins>
-	</build>
-	
+	</build>	
 </project>
+

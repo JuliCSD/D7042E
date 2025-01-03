@@ -24,7 +24,6 @@ Creates a new lamp instance.
 ```
 {
    "id":"integer",
-   "group":"string",
    "status":"string"
 }
 ```
@@ -42,7 +41,6 @@ Returns a lamp list based on the given parameters.
 ```
 [{
    "id":"integer",
-   "group":"string",
    "status":"string"
 }]
 ```

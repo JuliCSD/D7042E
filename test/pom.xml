@@ -13,7 +13,7 @@
 	
 	<modules>
 	    <module>smart-city-common</module>
-	    <module>demo-lamp-consumer</module>
-	    <module>demo-lamp-provider</module>		
+	    <module>street-lighting-consumer</module>
+	    <module>controller-provider</module>		
 	</modules>
 </project>
