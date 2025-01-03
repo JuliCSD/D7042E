@@ -1,5 +1,6 @@
 package ai.aitia.demo.lamp_provider.database;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,11 +18,24 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 	private static final long serialVersionUID = -2462387539362748691L;
 	
 	private int idCounter = 0;
+
+	private List<Lamp> lamps;
+
 	
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
+	private void initializeLamps() {
+
+        this.lamps = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            lamps.add(new Lamp(i, "street", 0));
+        }
+    }
+
+
+
 	public Lamp create(final String group, final int status) {
 		if (group == null || group.isBlank()) {
 			throw new InvalidParameterException("group is null or empty");
