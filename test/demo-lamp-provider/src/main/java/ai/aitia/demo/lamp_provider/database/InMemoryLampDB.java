@@ -1,6 +1,5 @@
 package ai.aitia.demo.lamp_provider.database;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,7 +18,13 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 	
 	private int idCounter = 0;
 
-	private List<Lamp> lamps;
+
+	//=================================================================================================
+    // constructor
+
+    public InMemoryLampDB() {
+        initializeLamps();
+    }
 
 	
 	//=================================================================================================
@@ -27,25 +32,21 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 
 	//-------------------------------------------------------------------------------------------------
 	private void initializeLamps() {
-
-        this.lamps = new ArrayList<>();
-		for (; idCounter < 20; idCounter++) {
-            lamps.add(new Lamp(idCounter, "street", 0));
-        }
+		for(int i=0; i<20; i++){
+        	create( 0);
+		}
     }
 
 
 
-	public Lamp create(final String group, final int status) {
-		if (group == null || group.isBlank()) {
-			throw new InvalidParameterException("group is null or empty");
-		}		
+	public Lamp create(final int status) {
+			
 		if (status>1 || status<0) {
 			throw new InvalidParameterException("statusis null or empty");
 		}
 		
 		idCounter++;
-		this.put(idCounter, new Lamp(idCounter, group.toLowerCase().trim(), status));
+		this.put(idCounter, new Lamp(idCounter, status));
 		return this.get(idCounter);
 	}
 	
@@ -64,12 +65,10 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public Lamp updateById(final int id, final String group, final Integer status) {
+	public Lamp updateById(final int id, final Integer status) {
 		if (this.containsKey(id)) {
 			final Lamp lamp = this.get(id);
-			if (group!= null && !group.isBlank()) {
-				lamp.setGroup(group);
-			}
+			
 			if (status< 1 && status> 0 && status!=null) {
 				lamp.setStatus(status);
 			}

@@ -13,7 +13,6 @@ public class LampConsumerConstants {
 	
 	public static final String CREATE_LAMP_SERVICE_DEFINITION = "create-lamp";
 	public static final String GET_LAMP_SERVICE_DEFINITION = "get-lamp";
-	public static final String REQUEST_PARAM_KEY_GROUP = "request-param-group";
 	public static final String REQUEST_PARAM_KEY_STATUS = "request-param-status";
 	
 	//=================================================================================================

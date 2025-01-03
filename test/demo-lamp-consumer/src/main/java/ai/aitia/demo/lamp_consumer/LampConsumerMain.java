@@ -53,7 +53,7 @@ public class LampConsumerMain implements ApplicationRunner {
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
-    	createLampServiceOrchestrationAndConsumption();
+    	// createLampServiceOrchestrationAndConsumption();
     	getLampServiceOrchestrationAndConsumption();
 	}
     
@@ -85,7 +85,7 @@ public class LampConsumerMain implements ApplicationRunner {
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
 			validateOrchestrationResult(orchestrationResult, LampConsumerConstants.CREATE_LAMP_SERVICE_DEFINITION);
 			
-			final List<LampRequestDTO> lampsToCreate = List.of(new LampRequestDTO("city", 1), new LampRequestDTO("city", 0), new LampRequestDTO("market", 1), new LampRequestDTO("city", 0));
+			final List<LampRequestDTO> lampsToCreate = List.of(new LampRequestDTO(1), new LampRequestDTO(1), new LampRequestDTO(1), new LampRequestDTO(1));
 			
 			for (final LampRequestDTO lampRequestDTO : lampsToCreate) {
 				logger.info("Create a lamp request:");

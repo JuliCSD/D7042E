@@ -39,14 +39,11 @@ public class LampServiceController {
 
 	//-------------------------------------------------------------------------------------------------
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public List<LampResponseDTO> getLamps(@RequestParam(name = LampProviderConstants.REQUEST_PARAM_GROUP, required = false) final String group,
-													  @RequestParam(name = LampProviderConstants.REQUEST_PARAM_STATUS, required = false) final Integer status) {
+	@ResponseBody public List<LampResponseDTO> getLamps( @RequestParam(name = LampProviderConstants.REQUEST_PARAM_STATUS, required = false) final Integer status) {
 		final List<LampResponseDTO> response = new ArrayList<>();
 		for (final Lamp lamp : lampDB.getAll()) {
 			boolean toAdd = true;
-			if (group != null && !group.isBlank() && !lamp.getGroup().equalsIgnoreCase(group)) {
-				toAdd = false;
-			}
+			
 			if (status!=null && lamp.getStatus() != status) {
 				toAdd = false;
 			}
@@ -66,26 +63,22 @@ public class LampServiceController {
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public LampResponseDTO createLamp(@RequestBody final LampRequestDTO dto) {
-		if (dto.getGroup() == null || dto.getGroup().isBlank()) {
-			throw new BadPayloadException("group is null or blank");
-		}
+		
 		if (dto.getStatus()>1 || dto.getStatus()<0) {
 			throw new BadPayloadException("statusis null or blank");
 		}
-		final Lamp lamp = lampDB.create(dto.getGroup(), dto.getStatus());
+		final Lamp lamp = lampDB.create(dto.getStatus());
 		return DTOConverter.convertLampToLampResponseDTO(lamp);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	@PutMapping(path = LampProviderConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public LampResponseDTO updateLamp(@PathVariable(name = LampProviderConstants.PATH_VARIABLE_ID) final int id, @RequestBody final LampRequestDTO dto) {
-		if (dto.getGroup() == null || dto.getGroup().isBlank()) {
-			throw new BadPayloadException("group is null or blank");
-		}
+		
 		if (dto.getStatus()>1 || dto.getStatus()<0) {
 			throw new BadPayloadException("statusis null or blank");
 		}
-		final Lamp lamp = lampDB.updateById(id, dto.getGroup(), dto.getStatus());
+		final Lamp lamp = lampDB.updateById(id, dto.getStatus());
 		return DTOConverter.convertLampToLampResponseDTO(lamp);
 	}
 	

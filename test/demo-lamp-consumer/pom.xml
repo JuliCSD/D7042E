@@ -13,7 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>eu.arrowhead</groupId>
-			<artifactId>demo-lamp-common</artifactId>
+			<artifactId>smart-city-common</artifactId>
 			<version>4.4.0.2</version>
 		</dependency>
 	</dependencies>

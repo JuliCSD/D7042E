@@ -15,8 +15,6 @@ public class LampProviderConstants {
 	public static final String LAMP_URI = "/lamp";
 	public static final String BY_ID_PATH = "/{id}";
 	public static final String PATH_VARIABLE_ID = "id";
-	public static final String REQUEST_PARAM_KEY_GROUP = "request-param-group";
-	public static final String REQUEST_PARAM_GROUP = "group";
 	public static final String REQUEST_PARAM_KEY_STATUS = "request-param-status";
 	public static final String REQUEST_PARAM_STATUS = "status";	
 	

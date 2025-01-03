@@ -87,7 +87,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 		arrowheadService.forceRegisterServiceToServiceRegistry(createLampServiceRequest);
 		
 		ServiceRegistryRequestDTO getLampServiceRequest = createServiceRegistryRequest(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION,  LampProviderConstants.LAMP_URI, HttpMethod.GET);
-		getLampServiceRequest.getMetadata().put(LampProviderConstants.REQUEST_PARAM_KEY_GROUP, LampProviderConstants.REQUEST_PARAM_GROUP);
+		
 		getLampServiceRequest.getMetadata().put(LampProviderConstants.REQUEST_PARAM_KEY_STATUS, LampProviderConstants.REQUEST_PARAM_STATUS);
 		arrowheadService.forceRegisterServiceToServiceRegistry(getLampServiceRequest);
 	}
