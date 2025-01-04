@@ -119,7 +119,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 				if (sensorCreationService != null  && sensorRequestingService != null) {
 					final List<SensorRequestDTO> sensorsToCreate = new ArrayList<>();//List.of(new SensorRequestDTO("nissan", "green"), new SensorRequestDTO("mazda", "blue"), new SensorRequestDTO("opel", "blue"), new SensorRequestDTO("nissan", "gray"));
 					
-					try (BufferedReader br = new BufferedReader(new FileReader("/home/juliana/IoT/D7042E/test_eventhandler/demo-sensor-consumer-with-subscribing/src/main/java/ai/aitia/demo/sensor_consumer_with_subscribing/test.csv"))) {
+					try (BufferedReader br = new BufferedReader(new FileReader("controller-subscriber/src/main/java/ai/aitia/demo/sensor_consumer_with_subscribing/test.csv"))) {
 						String line;
 						while ((line = br.readLine()) != null) {
 							String[] values = line.split(",");

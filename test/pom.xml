@@ -16,7 +16,7 @@
 	    <module>street-lighting-consumer</module>
 	    <module>controller-provider</module>	
 		<module>demo-sensor-common</module>	
-		<module>demo-sensor-consumer-with-subscribing</module>
+		<module>controller-subscriber</module>
 		<module>demo-sensor-provider-with-publishing</module>
 	</modules>
 </project>
