@@ -1,5 +1,9 @@
 package ai.aitia.demo.car_consumer_with_subscribing;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
@@ -113,10 +117,24 @@ public class CarConsumerWithSubscriptionTask extends Thread {
 				}
 					
 				if (carCreationService != null  && carRequestingService != null) {
-					// final List<CarRequestDTO> carsToCreate = List.of(new CarRequestDTO("nissan", "green"), new CarRequestDTO("mazda", "blue"), new CarRequestDTO("opel", "blue"), new CarRequestDTO("nissan", "gray"));
-			    	
-					// callCarCreationService(carCreationService , carsToCreate);
-					callCarRequestingService(carRequestingService);
+					final List<CarRequestDTO> carsToCreate = new ArrayList<>();//List.of(new CarRequestDTO("nissan", "green"), new CarRequestDTO("mazda", "blue"), new CarRequestDTO("opel", "blue"), new CarRequestDTO("nissan", "gray"));
+					
+					try (BufferedReader br = new BufferedReader(new FileReader("/home/juliana/IoT/D7042E/test_eventhandler/demo-car-consumer-with-subscribing/src/main/java/ai/aitia/demo/car_consumer_with_subscribing/test.csv"))) {
+						String line;
+						while ((line = br.readLine()) != null) {
+							String[] values = line.split(",");
+							if (values.length == 2) {
+								carsToCreate.add(new CarRequestDTO(values[0], values[1]));
+							} else {
+								logger.warn("Invalid line in CSV: " + line);
+							}
+						} 
+						callCarCreationService(carCreationService , carsToCreate);
+						callCarRequestingService(carRequestingService);
+
+					} catch (IOException e) {
+						logger.error("Error reading CSV file", e);
+					}
 				} else {
 					counter++;
 					
