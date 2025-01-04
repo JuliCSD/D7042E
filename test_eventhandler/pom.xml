@@ -8,12 +8,12 @@
 		<version>4.4.0.2</version>
 	</parent>
 	
-	<artifactId>demo-car-with-events</artifactId>
+	<artifactId>demo-sensor-with-events</artifactId>
 	<packaging>pom</packaging>
 	
 	<modules>
-	    <module>demo-car-common</module>
-	    <module>demo-car-consumer-with-subscribing</module>
-	    <module>demo-car-provider-with-publishing</module>
+	    <module>demo-sensor-common</module>
+	    <module>demo-sensor-consumer-with-subscribing</module>
+	    <module>demo-sensor-provider-with-publishing</module>
 	</modules>
 </project>

@@ -1,8 +1,8 @@
-# Car Demo With Events (Java Spring-Boot)
+# Sensor Demo With Events (Java Spring-Boot)
 ##### The project provides Arrowhead Application demo implementation developed from [application-skeleton project](https://github.com/arrowhead-f/client-skeleton-java-spring)
 
 ## Overview
-The goal of the original Car Demo project is to simply demonstrate how a consumer could orchestrate for service and consume it afterward.
+The goal of the original Sensor Demo project is to simply demonstrate how a consumer could orchestrate for service and consume it afterward.
 
 The goal of the Events addition is to simply demonstrate how would a consumer subscribe to events and receive events, and how would a producer publish events.
 
@@ -12,20 +12,20 @@ The goal of the Events addition is to simply demonstrate how would a consumer s
 🟥 `AH Authorization` 
 🟩 `AH Orchestrator`
 🟨 `AH Event Handler`
-![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-car-with-events/doc/overview.png)
+![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-sensor-with-events/doc/overview.png)
 
 ## Service Descriptions
-**create-car:**
+**create-sensor:**
 
-Creates a new car instance.
-* ***input:*** CarRequestDTO.json
+Creates a new sensor instance.
+* ***input:*** SensorRequestDTO.json
 ```
 {
    "brand":"string",
    "color":"string"
 }
 ```
-* ***output:*** CarResponseDTO.json
+* ***output:*** SensorResponseDTO.json
 ```
 {
    "id":"integer",
@@ -34,16 +34,16 @@ Creates a new car instance.
 }
 ```
 
-**get-car:**
+**get-sensor:**
 
-Returns a car list based on the given parameters.
+Returns a sensor list based on the given parameters.
 * ***input:*** Query parameters: 
 
   `brand`={brand} [*not mandatory*]
   
   `color`={color} [*not mandatory*]
 
-* ***output:*** List of CarResponseDTO.json
+* ***output:*** List of SensorResponseDTO.json
 ```
 [{
    "id":"integer",
