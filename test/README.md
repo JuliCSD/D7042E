@@ -7,7 +7,7 @@ The goal of the project is to simply demonstrate how a consumer could orchestrat
 🟦 `AH Service Registry`
 🟥 `AH Authorization` 
 🟩 `AH Orchestrator`
-![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/master/demo-lamp/doc/overview.png)
+![Alt text](https://github.com/arrowhead-f/sos-examples-spring/blob/master/smart-city/doc/overview.png)
 
 ## Service Descriptions
 **create-lamp:**

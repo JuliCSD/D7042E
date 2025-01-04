@@ -3,7 +3,7 @@
 	
 	<parent>
     	<groupId>eu.arrowhead</groupId>
-    	<artifactId>demo-lamp</artifactId>
+    	<artifactId>smart-city</artifactId>
     	<version>4.4.0.2</version>
   	</parent>
 	
