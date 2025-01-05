@@ -11,9 +11,6 @@ import eu.arrowhead.common.exception.InvalidParameterException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 @Component
@@ -53,8 +50,6 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 	}
 
 	public Sensor create(final String name, final String value) {
-
-		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
 		if (name == null || name.isBlank()) {
 			throw new InvalidParameterException("name is null or empty");
@@ -106,9 +101,4 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 		}
 	}
 
-	public void updateAll() {
-		System.out.println("Updating all sensors AAAAAAAAAAA");
-		// this.clear();
-		initializeSensors();
-	}
 }

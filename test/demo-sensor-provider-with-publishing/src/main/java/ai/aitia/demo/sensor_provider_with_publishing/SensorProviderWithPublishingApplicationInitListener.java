@@ -90,7 +90,7 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 		final ServiceRegistryRequestDTO createSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.CREATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.POST);		
 		arrowheadService.forceRegisterServiceToServiceRegistry(createSensorServiceRequest);
 		
-		final ServiceRegistryRequestDTO updateSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.UPDATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.PUT);		
+		final ServiceRegistryRequestDTO updateSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.UPDATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.POST);		
 		arrowheadService.forceRegisterServiceToServiceRegistry(updateSensorServiceRequest);
 
 		final ServiceRegistryRequestDTO getSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.GET_SENSOR_SERVICE_DEFINITION,  SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.GET);

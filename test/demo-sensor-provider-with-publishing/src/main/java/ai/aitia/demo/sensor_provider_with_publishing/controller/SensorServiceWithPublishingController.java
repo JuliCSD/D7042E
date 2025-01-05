@@ -1,5 +1,8 @@
 package ai.aitia.demo.sensor_provider_with_publishing.controller;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,7 @@ import eu.arrowhead.application.skeleton.publisher.event.EventTypeConstants;
 import eu.arrowhead.application.skeleton.publisher.event.PresetEventType;
 import eu.arrowhead.application.skeleton.publisher.service.PublisherService;
 import eu.arrowhead.common.exception.BadPayloadException;
+import eu.arrowhead.common.exception.InvalidParameterException;
 
 @RestController
 @RequestMapping(SensorProviderWithPublishingConstants.SENSOR_URI)
@@ -90,16 +94,39 @@ public class SensorServiceWithPublishingController {
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public SensorResponseDTO createSensor(@RequestBody final SensorRequestDTO dto) {
-		if (dto.getName() == null || dto.getName().isBlank()) {
-			throw new BadPayloadException("name is null or blank");
-		}
-		if (dto.getValue() == null || dto.getValue().isBlank()) {
-			throw new BadPayloadException("value is null or blank");
-		}
-		final Sensor sensor = sensorDB.create(dto.getName(), dto.getValue());
+
+
+		List<Sensor> sensors = sensorDB.getAll();
+		// for(int i=0; i<100;i++){
+		// 	System.out.println(sensors.get(i).getName()+" || "+sensors.get(i).getValue()+"\n"); 
+		// }
 		
-		return DTOConverter.convertSensorToSensorResponseDTO(sensor);
+
+		System.out.println(sensors.get(1).getName()+" || "+sensors.get(1).getValue()+"\n"); 
+
+
+		try (BufferedReader br = new BufferedReader(new FileReader("demo-sensor-provider-with-publishing/target/test.csv"))) {
+			String line;
+			int id= 1;
+			while ((line = br.readLine()) != null) {
+				String[] values = line.split(",");
+				if (values.length == 2) {
+					sensorDB.updateById(id, values[0], values[1]);
+				} else {
+					throw new InvalidParameterException("Invalid line in CSV: " + line);
+				}
+				id++;
+			} 
+
+		} catch (IOException e) {
+			throw new InvalidParameterException("Error reading CSV file", e);
+		}
+		return DTOConverter.convertSensorToSensorResponseDTO(sensorDB.getById(0));
 	}
+
+
+
+	
 	
 	//-------------------------------------------------------------------------------------------------
 	@PutMapping(path = SensorProviderWithPublishingConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -122,8 +149,25 @@ public class SensorServiceWithPublishingController {
 	}
 
 	//-------------------------------------------------------------------------------------------------
-	@GetMapping(path = SensorProviderWithPublishingConstants.UPDATE_ALL_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void updateAll() {
-		sensorDB.updateAll();
+	@PostMapping(path= "/update-sensor", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody public SensorResponseDTO updateAll(@RequestBody final SensorRequestDTO dto) {
+		
+		try (BufferedReader br = new BufferedReader(new FileReader("demo-sensor-provider-with-publishing/target/test.csv"))) {
+			String line;
+			int id=0;
+			while ((line = br.readLine()) != null) {
+				String[] values = line.split(",");
+				if (values.length == 2) {
+					sensorDB.updateById(id, values[0], values[1]);
+				} else {
+					throw new InvalidParameterException("Invalid line in CSV: " + line);
+				}
+				id++;
+			} 
+
+		} catch (IOException e) {
+			throw new InvalidParameterException("Error reading CSV file", e);
+		}
+		return DTOConverter.convertSensorToSensorResponseDTO(sensorDB.getById(0));
 	}
 }
