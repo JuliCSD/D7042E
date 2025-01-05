@@ -9,7 +9,7 @@ min_luminosity = 0
 max_luminosity = 1000
 
 
-file_path = '/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/ai/aitia/demo/sensor_consumer_with_subscribing/test.csv'
+file_path = 'demo-sensor-provider-with-publishing/target/test.csv'
 
 
 for minute in range(minutes_in_a_day):

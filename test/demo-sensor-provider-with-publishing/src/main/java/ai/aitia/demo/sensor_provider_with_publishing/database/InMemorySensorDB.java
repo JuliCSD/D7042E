@@ -36,7 +36,7 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 	//-------------------------------------------------------------------------------------------------
 
 	private void initializeSensors() {
-		try (BufferedReader br = new BufferedReader(new FileReader("controller-subscriber/src/main/java/ai/aitia/demo/sensor_consumer_with_subscribing/test.csv"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("demo-sensor-provider-with-publishing/target/test.csv"))) {
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
@@ -53,6 +53,9 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 	}
 
 	public Sensor create(final String name, final String value) {
+
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
 		if (name == null || name.isBlank()) {
 			throw new InvalidParameterException("name is null or empty");
 		}		
@@ -104,7 +107,8 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 	}
 
 	public void updateAll() {
-		this.clear();
+		System.out.println("Updating all sensors AAAAAAAAAAA");
+		// this.clear();
 		initializeSensors();
 	}
 }

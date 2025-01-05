@@ -120,4 +120,10 @@ public class SensorServiceWithPublishingController {
 	public void removeSensorById(@PathVariable(value = SensorProviderWithPublishingConstants.PATH_VARIABLE_ID) final int id) {
 		sensorDB.removeById(id);
 	}
+
+	//-------------------------------------------------------------------------------------------------
+	@GetMapping(path = SensorProviderWithPublishingConstants.UPDATE_ALL_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
+	public void updateAll() {
+		sensorDB.updateAll();
+	}
 }

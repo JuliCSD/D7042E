@@ -118,7 +118,37 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 					
 				if (sensorCreationService != null  && sensorRequestingService != null) {
 					
-						// callSensorUpdateService(sensorCreationService, new SensorRequestDTO("sensor", "test"));
+						// callSensorUpdateService(sensorCreationService);
+
+						OrchestrationResultDTO orchestrationResult = sensorCreationService;
+						final List<SensorRequestDTO> sensorsToUpdate = List.of(new SensorRequestDTO("name", "value"), new SensorRequestDTO("name", "value"));
+						logger.debug("consumeCreateCarService started...");
+    	
+						// validateOrchestrationResult(orchestrationResult, );
+							
+						int id = 1;
+						for (final SensorRequestDTO sensorRequestDTO : sensorsToUpdate) {
+							logger.info("Update measurements request:");
+							printOut(sensorRequestDTO);
+							final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
+							final SensorResponseDTO sensorUpdated = arrowheadService.consumeServiceHTTP(
+																		SensorResponseDTO.class, 
+																		HttpMethod.valueOf("PUT"),
+																		orchestrationResult.getProvider().getAddress(), 
+																		orchestrationResult.getProvider().getPort(), 
+																		orchestrationResult.getServiceUri()+"/"+id,
+																		getInterface(), 
+																		token, 
+																		sensorRequestDTO, 
+																		new String[0]
+																	);
+
+							logger.info("Provider response");
+							printOut(sensorUpdated);
+							id++;
+						}			
+
+
 						callSensorRequestingService(sensorRequestingService);
 
 				} else {
@@ -160,36 +190,29 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	//Assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	private void callSensorUpdateService(final OrchestrationResultDTO orchestrationResult, final SensorRequestDTO sensorRequestDTO) {
+	private void callSensorUpdateService(final OrchestrationResultDTO orchestrationResult) {
 		logger.debug("consumeUpdateSensorService started...");
-	
-		// Validate the orchestration result for the update sensor service
+    	
 		validateOrchestrationResult(orchestrationResult, SensorConsumerConstants.UPDATE_SENSOR_SERVICE_DEFINITION);
-	
-		// Log the sensor update request
+			
+		
 		logger.info("Update sensors request:");
-		printOut(sensorRequestDTO);
-	
-		// Get the authorization token if available
 		final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
-	
-		// Consume the update sensor service
-		final SensorResponseDTO sensorUpdated = arrowheadService.consumeServiceHTTP(
-			SensorResponseDTO.class,
-			HttpMethod.valueOf(orchestrationResult.getMetadata().get(SensorConsumerConstants.HTTP_METHOD)),
+			
+		arrowheadService.consumeServiceHTTP(
+			Void.class, 
+			HttpMethod.PUT, 
 			orchestrationResult.getProvider().getAddress(),
 			orchestrationResult.getProvider().getPort(),
-			orchestrationResult.getServiceUri(),
+			orchestrationResult.getServiceUri() + SensorConsumerConstants.UPDATE_SENSOR_SERVICE_DEFINITION, 
 			getInterface(),
 			token,
-			sensorRequestDTO,
+			null, 
 			new String[0]
-		);
-	
-		// Log the provider response
-		logger.info("Provider response");
-		printOut(sensorUpdated);
-	}
+    	);
+		logger.info("updateAll() called successfully.");
+
+    }
 
     //-------------------------------------------------------------------------------------------------
     private void callSensorCreationService(final OrchestrationResultDTO orchestrationResult, final List<SensorRequestDTO> sensorsToCreate) {

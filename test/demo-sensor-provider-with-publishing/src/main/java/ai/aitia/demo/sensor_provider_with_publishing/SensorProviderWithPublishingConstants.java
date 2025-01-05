@@ -25,6 +25,7 @@ public class SensorProviderWithPublishingConstants {
 	public static final String $SERVICE_LIMIT_WD="${"+SERVICE_LIMIT+":"+DEFAULT_SERVICE_LIMIT+"}";
 
 	public static final String UPDATE_SENSOR_SERVICE_DEFINITION = "update-sensor";
+	public static final String UPDATE_ALL_PATH = "update-all";
 	
 	//=================================================================================================
 	// assistant methods

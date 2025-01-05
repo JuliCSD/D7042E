@@ -107,7 +107,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	private void checkConfiguration() {
 		if (!sslEnabled && tokenSecurityFilterEnabled) {			 
 			logger.warn("Contradictory configuration:");
-			logger.warn("token.security.filter.enabled=true while server.ssl.enabled=false");
+			logger.warn("token.security.filter.enabled=true while server.ssl.enabled=true");
 		}
 	}
 
