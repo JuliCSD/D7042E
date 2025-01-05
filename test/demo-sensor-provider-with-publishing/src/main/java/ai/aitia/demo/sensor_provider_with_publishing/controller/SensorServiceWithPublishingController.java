@@ -54,8 +54,8 @@ public class SensorServiceWithPublishingController {
 
 	//-------------------------------------------------------------------------------------------------
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public List<SensorResponseDTO> getSensors(@RequestParam(name = SensorProviderWithPublishingConstants.REQUEST_PARAM_BRAND, required = false) final String brand,
-													  @RequestParam(name = SensorProviderWithPublishingConstants.REQUEST_PARAM_COLOR, required = false) final String color) {
+	@ResponseBody public List<SensorResponseDTO> getSensors(@RequestParam(name = SensorProviderWithPublishingConstants.REQUEST_PARAM_NAME, required = false) final String name,
+													  @RequestParam(name = SensorProviderWithPublishingConstants.REQUEST_PARAM_VALUE, required = false) final String value) {
 		++counter;
 		
 		publisherService.publish(PresetEventType.REQUEST_RECEIVED, Map.of(EventTypeConstants.EVENT_TYPE_REQUEST_RECEIVED_METADATA_REQUEST_TYPE, HttpMethod.GET.name()), SensorProviderWithPublishingConstants.SENSOR_URI);
@@ -63,10 +63,10 @@ public class SensorServiceWithPublishingController {
 		final List<SensorResponseDTO> response = new ArrayList<>();
 		for (final Sensor sensor : sensorDB.getAll()) {
 			boolean toAdd = true;
-			if (brand != null && !brand.isBlank() && !sensor.getBrand().equalsIgnoreCase(brand)) {
+			if (name != null && !name.isBlank() && !sensor.getName().equalsIgnoreCase(name)) {
 				toAdd = false;
 			}
-			if (color != null && !color.isBlank() && !sensor.getColor().equalsIgnoreCase(color)) {
+			if (value != null && !value.isBlank() && !sensor.getValue().equalsIgnoreCase(value)) {
 				toAdd = false;
 			}
 			if (toAdd) {
@@ -90,13 +90,13 @@ public class SensorServiceWithPublishingController {
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public SensorResponseDTO createSensor(@RequestBody final SensorRequestDTO dto) {
-		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
-			throw new BadPayloadException("brand is null or blank");
+		if (dto.getName() == null || dto.getName().isBlank()) {
+			throw new BadPayloadException("name is null or blank");
 		}
-		if (dto.getColor() == null || dto.getColor().isBlank()) {
-			throw new BadPayloadException("color is null or blank");
+		if (dto.getValue() == null || dto.getValue().isBlank()) {
+			throw new BadPayloadException("value is null or blank");
 		}
-		final Sensor sensor = sensorDB.create(dto.getBrand(), dto.getColor());
+		final Sensor sensor = sensorDB.create(dto.getName(), dto.getValue());
 		
 		return DTOConverter.convertSensorToSensorResponseDTO(sensor);
 	}
@@ -104,13 +104,13 @@ public class SensorServiceWithPublishingController {
 	//-------------------------------------------------------------------------------------------------
 	@PutMapping(path = SensorProviderWithPublishingConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody public SensorResponseDTO updateSensor(@PathVariable(name = SensorProviderWithPublishingConstants.PATH_VARIABLE_ID) final int id, @RequestBody final SensorRequestDTO dto) {
-		if (dto.getBrand() == null || dto.getBrand().isBlank()) {
-			throw new BadPayloadException("brand is null or blank");
+		if (dto.getName() == null || dto.getName().isBlank()) {
+			throw new BadPayloadException("name is null or blank");
 		}
-		if (dto.getColor() == null || dto.getColor().isBlank()) {
-			throw new BadPayloadException("color is null or blank");
+		if (dto.getValue() == null || dto.getValue().isBlank()) {
+			throw new BadPayloadException("value is null or blank");
 		}
-		final Sensor sensor = sensorDB.updateById(id, dto.getBrand(), dto.getColor());
+		final Sensor sensor = sensorDB.updateById(id, dto.getName(), dto.getValue());
 		
 		return DTOConverter.convertSensorToSensorResponseDTO(sensor);
 	}

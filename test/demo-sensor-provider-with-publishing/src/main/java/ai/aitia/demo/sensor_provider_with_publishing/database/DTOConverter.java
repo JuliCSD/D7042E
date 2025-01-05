@@ -17,7 +17,7 @@ public class DTOConverter {
 	//-------------------------------------------------------------------------------------------------
 	public static SensorResponseDTO convertSensorToSensorResponseDTO(final Sensor sensor) {
 		Assert.notNull(sensor, "sensor is null");
-		return new SensorResponseDTO(sensor.getId(), sensor.getBrand(), sensor.getColor());
+		return new SensorResponseDTO(sensor.getId(), sensor.getName(), sensor.getValue());
 	}
 	
 	//-------------------------------------------------------------------------------------------------

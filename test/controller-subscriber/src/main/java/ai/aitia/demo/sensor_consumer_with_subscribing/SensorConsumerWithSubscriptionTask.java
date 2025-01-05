@@ -117,24 +117,10 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 				}
 					
 				if (sensorCreationService != null  && sensorRequestingService != null) {
-					final List<SensorRequestDTO> sensorsToCreate = new ArrayList<>();//List.of(new SensorRequestDTO("nissan", "green"), new SensorRequestDTO("mazda", "blue"), new SensorRequestDTO("opel", "blue"), new SensorRequestDTO("nissan", "gray"));
 					
-					try (BufferedReader br = new BufferedReader(new FileReader("controller-subscriber/src/main/java/ai/aitia/demo/sensor_consumer_with_subscribing/test.csv"))) {
-						String line;
-						while ((line = br.readLine()) != null) {
-							String[] values = line.split(",");
-							if (values.length == 2) {
-								sensorsToCreate.add(new SensorRequestDTO(values[0], values[1]));
-							} else {
-								logger.warn("Invalid line in CSV: " + line);
-							}
-						} 
-						callSensorCreationService(sensorCreationService , sensorsToCreate);
+						// callSensorUpdateService(sensorCreationService, new SensorRequestDTO("sensor", "test"));
 						callSensorRequestingService(sensorRequestingService);
 
-					} catch (IOException e) {
-						logger.error("Error reading CSV file", e);
-					}
 				} else {
 					counter++;
 					
@@ -172,6 +158,38 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	
 	//=================================================================================================
 	//Assistant methods
+
+	//-------------------------------------------------------------------------------------------------
+	private void callSensorUpdateService(final OrchestrationResultDTO orchestrationResult, final SensorRequestDTO sensorRequestDTO) {
+		logger.debug("consumeUpdateSensorService started...");
+	
+		// Validate the orchestration result for the update sensor service
+		validateOrchestrationResult(orchestrationResult, SensorConsumerConstants.UPDATE_SENSOR_SERVICE_DEFINITION);
+	
+		// Log the sensor update request
+		logger.info("Update sensors request:");
+		printOut(sensorRequestDTO);
+	
+		// Get the authorization token if available
+		final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
+	
+		// Consume the update sensor service
+		final SensorResponseDTO sensorUpdated = arrowheadService.consumeServiceHTTP(
+			SensorResponseDTO.class,
+			HttpMethod.valueOf(orchestrationResult.getMetadata().get(SensorConsumerConstants.HTTP_METHOD)),
+			orchestrationResult.getProvider().getAddress(),
+			orchestrationResult.getProvider().getPort(),
+			orchestrationResult.getServiceUri(),
+			getInterface(),
+			token,
+			sensorRequestDTO,
+			new String[0]
+		);
+	
+		// Log the provider response
+		logger.info("Provider response");
+		printOut(sensorUpdated);
+	}
 
     //-------------------------------------------------------------------------------------------------
     private void callSensorCreationService(final OrchestrationResultDTO orchestrationResult, final List<SensorRequestDTO> sensorsToCreate) {
@@ -320,11 +338,11 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 		printOut(allSensor);
 		
 		logger.info("Get only blue sensors:");
-		final String[] queryParamColor = {orchestrationResult.getMetadata().get(SensorConsumerConstants.REQUEST_PARAM_KEY_COLOR), "blue"};			
+		final String[] queryParamValue = {orchestrationResult.getMetadata().get(SensorConsumerConstants.REQUEST_PARAM_KEY_VALUE), "blue"};			
 		@SuppressWarnings("unchecked")
 		final List<SensorResponseDTO> blueSensors = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(SensorConsumerConstants.HTTP_METHOD)),
 																				  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																				  getInterface(), token, null, queryParamColor);
+																				  getInterface(), token, null, queryParamValue);
 		printOut(blueSensors);
 		
     }

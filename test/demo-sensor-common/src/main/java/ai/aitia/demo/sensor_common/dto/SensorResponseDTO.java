@@ -10,8 +10,8 @@ public class SensorResponseDTO implements Serializable {
 	private static final long serialVersionUID = -8371510478751740542L;
 	
 	private int id;
-	private String brand;
-	private String color;
+	private String name;
+	private String value;
 
 	//=================================================================================================
 	// methods
@@ -20,19 +20,19 @@ public class SensorResponseDTO implements Serializable {
 	public SensorResponseDTO() {}
 	
 	//-------------------------------------------------------------------------------------------------
-	public SensorResponseDTO(final int id, final String brand, final String color) {
+	public SensorResponseDTO(final int id, final String name, final String value) {
 		this.id = id;
-		this.brand = brand;
-		this.color = color;
+		this.name = name;
+		this.value = value;
 	}
 
 	//-------------------------------------------------------------------------------------------------
 	public int getId() { return id; }
-	public String getBrand() { return brand; }
-	public String getColor() { return color; }
+	public String getName() { return name; }
+	public String getValue() { return value; }
 
 	//-------------------------------------------------------------------------------------------------
 	public void setId(final int id) {this.id = id; }
-	public void setBrand(final String brand) { this.brand = brand; }
-	public void setColor(final String color) { this.color = color; }	
+	public void setName(final String name) { this.name = name; }
+	public void setValue(final String value) { this.value = value; }	
 }

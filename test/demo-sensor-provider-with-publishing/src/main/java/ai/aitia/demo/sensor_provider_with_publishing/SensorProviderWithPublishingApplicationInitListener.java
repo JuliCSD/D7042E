@@ -90,9 +90,12 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 		final ServiceRegistryRequestDTO createSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.CREATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.POST);		
 		arrowheadService.forceRegisterServiceToServiceRegistry(createSensorServiceRequest);
 		
+		final ServiceRegistryRequestDTO updateSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.UPDATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.PUT);		
+		arrowheadService.forceRegisterServiceToServiceRegistry(updateSensorServiceRequest);
+
 		final ServiceRegistryRequestDTO getSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.GET_SENSOR_SERVICE_DEFINITION,  SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.GET);
-		getSensorServiceRequest.getMetadata().put(SensorProviderWithPublishingConstants.REQUEST_PARAM_KEY_BRAND, SensorProviderWithPublishingConstants.REQUEST_PARAM_BRAND);
-		getSensorServiceRequest.getMetadata().put(SensorProviderWithPublishingConstants.REQUEST_PARAM_KEY_COLOR, SensorProviderWithPublishingConstants.REQUEST_PARAM_COLOR);
+		getSensorServiceRequest.getMetadata().put(SensorProviderWithPublishingConstants.REQUEST_PARAM_KEY_NAME, SensorProviderWithPublishingConstants.REQUEST_PARAM_NAME);
+		getSensorServiceRequest.getMetadata().put(SensorProviderWithPublishingConstants.REQUEST_PARAM_KEY_VALUE, SensorProviderWithPublishingConstants.REQUEST_PARAM_VALUE);
 		arrowheadService.forceRegisterServiceToServiceRegistry(getSensorServiceRequest);
 		
 		if (arrowheadService.echoCoreSystem(CoreSystem.EVENTHANDLER)) {
@@ -107,6 +110,8 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 		publishDestroyedEvent();
 		arrowheadService.unregisterServiceFromServiceRegistry(SensorProviderWithPublishingConstants.CREATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI);
 		arrowheadService.unregisterServiceFromServiceRegistry(SensorProviderWithPublishingConstants.GET_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI);
+		arrowheadService.unregisterServiceFromServiceRegistry(SensorProviderWithPublishingConstants.UPDATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI);
+
 	}
 	
 	//=================================================================================================
