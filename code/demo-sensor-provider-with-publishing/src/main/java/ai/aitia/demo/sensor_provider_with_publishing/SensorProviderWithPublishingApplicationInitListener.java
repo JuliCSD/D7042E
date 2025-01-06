@@ -87,8 +87,8 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 		}		
 		
 		//Register services into ServiceRegistry
-		final ServiceRegistryRequestDTO createSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.CREATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.POST);		
-		arrowheadService.forceRegisterServiceToServiceRegistry(createSensorServiceRequest);
+		final ServiceRegistryRequestDTO updateSensorsServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.CREATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.POST);		
+		arrowheadService.forceRegisterServiceToServiceRegistry(updateSensorsServiceRequest);
 		
 		final ServiceRegistryRequestDTO updateSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.UPDATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.POST);		
 		arrowheadService.forceRegisterServiceToServiceRegistry(updateSensorServiceRequest);

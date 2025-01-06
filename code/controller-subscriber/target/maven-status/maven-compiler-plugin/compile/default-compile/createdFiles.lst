@@ -1,5 +1,6 @@
 eu/arrowhead/application/skeleton/subscriber/security/SubscriberSecurityConfig.class
 eu/arrowhead/application/skeleton/subscriber/configuration/ContainerConfiguration.class
+ai/aitia/demo/sensor_consumer_with_subscribing/LampConsumerConstants.class
 eu/arrowhead/application/skeleton/subscriber/constants/SubscriberDefaults.class
 eu/arrowhead/application/skeleton/subscriber/ConfigEventProperites.class
 ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerWithSubscriptionTask.class

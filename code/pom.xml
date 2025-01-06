@@ -13,9 +13,8 @@
 	
 	<modules>
 	    <module>smart-city-common</module>
-	    <module>street-lighting-consumer</module>
-	    <module>controller-provider</module>	
-		<module>demo-sensor-common</module>	
+	    <!-- <module>street-lighting-consumer</module> -->
+	    <!-- <module>controller-provider</module>	 -->
 		<module>controller-subscriber</module>
 		<module>demo-sensor-provider-with-publishing</module>
 	</modules>

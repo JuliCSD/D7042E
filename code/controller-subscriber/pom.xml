@@ -7,13 +7,13 @@
     	<version>4.4.0.2</version>
   	</parent>
 	
-	<artifactId>demo-sensor-provider-with-subscribing</artifactId>
+	<artifactId>demo-sensor-consumer-with-subscribing</artifactId>
 	<name>Arrowhead Demo Sensor Consumer With Subscribing</name>
 	
 	<dependencies>
 		<dependency>
 			<groupId>eu.arrowhead</groupId>
-			<artifactId>demo-sensor-with-events-common</artifactId>
+			<artifactId>smart-city-common</artifactId>
 			<version>4.4.0.2</version>
 		</dependency>
 	</dependencies>

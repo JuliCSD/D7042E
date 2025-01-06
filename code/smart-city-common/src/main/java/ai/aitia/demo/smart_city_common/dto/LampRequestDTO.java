@@ -1,34 +1,29 @@
-package ai.aitia.demo.lamp_common.dto;
+package ai.aitia.demo.smart_city_common.dto;
 
 import java.io.Serializable;
 
-public class LampResponseDTO implements Serializable {
+public class LampRequestDTO implements Serializable {
 
 	//=================================================================================================
 	// members
 
-	private static final long serialVersionUID = -8371510478751740542L;
-	
-	private int id;
+	private static final long serialVersionUID = -5363562707054976998L;
+ 
 	private Integer status;
 
 	//=================================================================================================
 	// methods
-
-	//-------------------------------------------------------------------------------------------------
-	public LampResponseDTO() {}
 	
 	//-------------------------------------------------------------------------------------------------
-	public LampResponseDTO(final int id, final Integer status) {
-		this.id = id;
+	public LampRequestDTO(  final Integer status) { 
 		this.status= status;
 	}
 
 	//-------------------------------------------------------------------------------------------------
-	public int getId() { return id; }
+ 
 	public Integer getStatus() { return status; }
 
 	//-------------------------------------------------------------------------------------------------
-	public void setId(final int id) {this.id = id; }
+ 
 	public void setStatus(final Integer status) { this.status= status; }	
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.util.Assert;
 
-import ai.aitia.demo.sensor_common.dto.SensorResponseDTO;
+import ai.aitia.demo.smart_city_common.dto.SensorResponseDTO;
 import ai.aitia.demo.sensor_provider_with_publishing.entity.Sensor;
 
 public class DTOConverter {

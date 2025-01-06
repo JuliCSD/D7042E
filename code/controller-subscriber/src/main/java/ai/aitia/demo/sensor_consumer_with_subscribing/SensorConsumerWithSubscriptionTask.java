@@ -20,8 +20,10 @@ import org.springframework.http.HttpMethod;
 
 import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
-import ai.aitia.demo.sensor_common.dto.SensorRequestDTO;
-import ai.aitia.demo.sensor_common.dto.SensorResponseDTO;
+import ai.aitia.demo.smart_city_common.dto.SensorRequestDTO;
+import ai.aitia.demo.smart_city_common.dto.SensorResponseDTO;
+import ai.aitia.demo.smart_city_common.dto.LampRequestDTO;
+import ai.aitia.demo.smart_city_common.dto.LampResponseDTO;
 import eu.arrowhead.application.skeleton.subscriber.SubscriberUtilities;
 import eu.arrowhead.application.skeleton.subscriber.constants.SubscriberConstants;
 import eu.arrowhead.common.CommonConstants;
@@ -88,9 +90,11 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	public void run() {
 		logger.info("ConsumerTask.run started...");
 		
+		getLampServiceOrchestrationAndConsumption();
+
+		
 		interrupted = Thread.currentThread().isInterrupted();
 
-		OrchestrationResultDTO sensorCreationService = null;
 		OrchestrationResultDTO sensorRequestingService = null;
 		
 		int counter = 0;
@@ -102,7 +106,6 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 							if (reorchestration) {
 								logger.info("Recieved publisher destroyed event - started reorchestration.");
 								
-								sensorCreationService = orchestrateCreateSensorService();
 								sensorRequestingService = orchestrateGetSensorService();
 							} else {
 								logger.info("Recieved publisher destroyed event - started shuting down.");
@@ -116,26 +119,20 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 					notificatonQueue.clear();
 				}
 					
-				if (sensorCreationService != null  && sensorRequestingService != null) {
+				if (sensorRequestingService != null) {
 					
-					final List<SensorRequestDTO> sensorsToCreate = List.of(new SensorRequestDTO("test", "test"));
-					
-			    	
-					callSensorUpdateService(sensorCreationService, sensorsToCreate);
 					callSensorRequestingService(sensorRequestingService);
 
 				} else {
 					counter++;
 					
-					sensorCreationService = orchestrateCreateSensorService();
 					sensorRequestingService = orchestrateGetSensorService();
 					
-					if (sensorCreationService != null  && sensorRequestingService != null) {
+					if (sensorRequestingService != null) {
 						counter = 0;
 						
 						final Set<SystemResponseDTO> sources = new HashSet<SystemResponseDTO>();
 						
-						sources.add(sensorCreationService.getProvider());
 						sources.add(sensorRequestingService.getProvider());
 						
 						subscribeToDestoryEvents(sources);
@@ -144,7 +141,6 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			} catch (final Throwable ex) {
 				logger.debug(ex.getMessage());
 				
-				sensorCreationService = null;
 				sensorRequestingService = null;
 			}	
 		}
@@ -163,66 +159,52 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	//Assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	// private void callSensorUpdateService(final OrchestrationResultDTO orchestrationResult) {
-
-		// OrchestrationResultDTO orchestrationResult = sensorCreationService;
-		// final List<SensorRequestDTO> sensorsToUpdate = List.of(new SensorRequestDTO("name", "value"), new SensorRequestDTO("name", "value"));
-		// logger.debug("consumeCreateCarService started...");
-
-		// // validateOrchestrationResult(orchestrationResult, );
+	//-------------------------------------------------------------------------------------------------
+    public void getLampServiceOrchestrationAndConsumption() {
+    	logger.info("Orchestration request for " + LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION + " service:");
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION)
+    																		.interfaces(getInterface())
+    																		.build();
+    	
+		final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
+		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
+																					   .flag(Flag.MATCHMAKING, true)
+																					   .flag(Flag.OVERRIDE_STORE, true)
+																					   .build();
+		
+		printOut(orchestrationFormRequest);		
+		
+		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+		
+		logger.info("Orchestration response:");
+		printOut(orchestrationResponse);		
+		
+		if (orchestrationResponse == null) {
+			logger.info("No orchestration response received");
+		} else if (orchestrationResponse.getResponse().isEmpty()) {
+			logger.info("No provider found during the orchestration");
+		} else {
+			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
+			validateOrchestrationResult(orchestrationResult, LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION);
 			
-		// int id = 1;
-		// for (final SensorRequestDTO sensorRequestDTO : sensorsToUpdate) {
-		// 	logger.info("Update measurements request:");
-		// 	printOut(sensorRequestDTO);
-		// 	final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
-		// 	final SensorResponseDTO sensorUpdated = arrowheadService.consumeServiceHTTP(
-		// 												SensorResponseDTO.class, 
-		// 												HttpMethod.valueOf("PUT"),
-		// 												orchestrationResult.getProvider().getAddress(), 
-		// 												orchestrationResult.getProvider().getPort(), 
-		// 												orchestrationResult.getServiceUri()+"/"+id,
-		// 												getInterface(), 
-		// 												token, 
-		// 												sensorRequestDTO, 
-		// 												new String[0]
-		// 											);
-
-		// 	logger.info("Provider response");
-		// 	printOut(sensorUpdated);
-		// 	id++;
-		// }	
-
-
-	// private void callSensorUpdateService(final OrchestrationResultDTO orchestrationResult) {
-		// logger.debug("consumeUpdateSensorService started...");
-	
-		// // Validar el resultado de la orquestación para el servicio de actualización de sensores
-		// validateOrchestrationResult(orchestrationResult, SensorConsumerConstants.UPDATE_SENSOR_SERVICE_DEFINITION);
-	
-		// // Obtener el token de autorización si está disponible
-		// final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
-	
-		// // Crear la solicitud de actualización del sensor
-		// final SensorRequestDTO sensorRequestDTO = new SensorRequestDTO("sensorName", "newValue");
-		// logger.info("Update sensor request:");
-		// printOut(sensorRequestDTO);
-
-		// // Realizar la solicitud HTTP POST para actualizar el sensor
-		// final SensorResponseDTO sensorUpdated = arrowheadService.consumeServiceHTTP(
-		// 	SensorResponseDTO.class,
-		// 	HttpMethod.POST,
-		// 	orchestrationResult.getProvider().getAddress(),
-		// 	orchestrationResult.getProvider().getPort(),
-		// 	orchestrationResult.getServiceUri(),
-		// 	getInterface(),
-		// 	token,
-		// 	sensorRequestDTO,
-		// 	new String[0]
-		// );
-
-		// logger.info("Provider response:");
-		// printOut(sensorUpdated);
+			logger.info("Get all lamps:");
+			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
+			@SuppressWarnings("unchecked")
+			final List<LampResponseDTO> allLamp = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
+																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+																					getInterface(), token, null, new String[0]);
+			printOut(allLamp);
+			
+			logger.info("Get only ON lamps:");
+			final String[] queryParamStatus= {orchestrationResult.getMetadata().get(LampConsumerConstants.REQUEST_PARAM_KEY_STATUS), "1"};			
+			@SuppressWarnings("unchecked")
+			final List<LampResponseDTO> blueLamps = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
+																					  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+																					  getInterface(), token, null, queryParamStatus);
+			printOut(blueLamps);
+		}
+    }
+    
 
 
 	private void callSensorUpdateService(final OrchestrationResultDTO orchestrationResult, final List<SensorRequestDTO> sensorsToUpdate) {
@@ -260,7 +242,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 
     //-------------------------------------------------------------------------------------------------
     private void callSensorCreationService(final OrchestrationResultDTO orchestrationResult, final List<SensorRequestDTO> sensorsToCreate) {
-    	logger.debug("consumeCreateSensorService started...");
+    	logger.debug("consumeupdateSensorsService started...");
     	
 		validateOrchestrationResult(orchestrationResult, SensorConsumerConstants.CREATE_SENSOR_SERVICE_DEFINITION);
 			
@@ -323,7 +305,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-    private OrchestrationResultDTO orchestrateCreateSensorService() {
+    private OrchestrationResultDTO orchestrateupdateSensorsService() {
     	logger.info("Orchestration request for " + SensorConsumerConstants.UPDATE_SENSOR_SERVICE_DEFINITION + " service:");
     	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(SensorConsumerConstants.UPDATE_SENSOR_SERVICE_DEFINITION)
     																		.interfaces(getInterface())

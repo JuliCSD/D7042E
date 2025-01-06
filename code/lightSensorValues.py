@@ -28,7 +28,8 @@ for minute in range(minutes_in_a_day):
             luminosity = min_luminosity
 
         sensor_data = []
-        for i in range(100):
+        nb_sensors = 10
+        for i in range(nb_sensors):
             luminosity += random.uniform(-50, 50)
             luminosity = max(min_luminosity, min(max_luminosity, luminosity))
             luminosity = round(luminosity, 1)
@@ -42,6 +43,6 @@ for minute in range(minutes_in_a_day):
             # writer.writerow(['sensor_type', 'luminosity'])
             writer.writerows(sensor_data)
         
-        print(f"Luminosity values for 100 sensors have been overwritten in {file_path}")    
-        # Wait for 10 seconds before generating new values
-        time.sleep(10)
+        print(f"Luminosity values for {nb_sensors} sensors have been overwritten in {file_path}")    
+        # Wait for 1 seconds before generating new values
+        time.sleep(1)

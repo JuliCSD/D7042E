@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_common.dto;
+package ai.aitia.demo.smart_city_common.dto;
 
 import java.io.Serializable;
 
