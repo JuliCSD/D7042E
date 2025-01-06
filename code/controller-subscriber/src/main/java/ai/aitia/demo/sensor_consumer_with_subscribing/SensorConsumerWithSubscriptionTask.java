@@ -143,6 +143,13 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 				
 				sensorRequestingService = null;
 			}	
+
+			try {
+				Thread.sleep(2000);
+			} catch (final InterruptedException ex) {
+				logger.debug("ConsumerTask interrupted");
+				interrupted = true;
+			}
 		}
 		
 		System.exit(0);
