@@ -1,14 +1,16 @@
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/configuration/ContainerConfProperties.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/controller/SubscriberController.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/security/SubscriberNotificationAccessControlFilter.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/SubscriberUtilities.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/SubscriberMain.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/SubscriberApplicationInitListener.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/security/SubscriberTokenSecurityFilter.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/security/SubscriberSecurityConfig.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/security/SubscriberAccessControlFilter.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/constants/SubscriberDefaults.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/configuration/ConfigConstants.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/constants/SubscriberConstants.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/configuration/ContainerConfiguration.java
-/home/juliana/Desktop/LTU/IoT automation/git clone/D7042E/code/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/ConfigEventProperites.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerWithSubscriptionApplicationInitListener.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/security/SubscriberSecurityConfig.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/security/SubscriberNotificationAccessControlFilter.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/security/SubscriberAccessControlFilter.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/configuration/ConfigConstants.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/security/SubscriberTokenSecurityFilter.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/SubscriberUtilities.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerWithSubscriptionTask.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerWithSubscriptionMain.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/ConfigEventProperites.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerWithSubscriptionController.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/configuration/ContainerConfProperties.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/constants/SubscriberConstants.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerConstants.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/configuration/ContainerConfiguration.java
+/home/juliana/IoT/D7042E/test/controller-subscriber/src/main/java/eu/arrowhead/application/skeleton/subscriber/constants/SubscriberDefaults.java

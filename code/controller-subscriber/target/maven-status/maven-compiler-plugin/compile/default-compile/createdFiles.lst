@@ -2,10 +2,12 @@ eu/arrowhead/application/skeleton/subscriber/security/SubscriberSecurityConfig.c
 eu/arrowhead/application/skeleton/subscriber/configuration/ContainerConfiguration.class
 eu/arrowhead/application/skeleton/subscriber/constants/SubscriberDefaults.class
 eu/arrowhead/application/skeleton/subscriber/ConfigEventProperites.class
+ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerWithSubscriptionTask.class
 eu/arrowhead/application/skeleton/subscriber/security/SubscriberAccessControlFilter.class
-eu/arrowhead/application/skeleton/subscriber/SubscriberApplicationInitListener.class
-eu/arrowhead/application/skeleton/subscriber/controller/SubscriberController.class
-eu/arrowhead/application/skeleton/subscriber/SubscriberMain.class
+ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerWithSubscriptionMain.class
+ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerWithSubscriptionController.class
+ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerConstants.class
+ai/aitia/demo/sensor_consumer_with_subscribing/SensorConsumerWithSubscriptionApplicationInitListener.class
 eu/arrowhead/application/skeleton/subscriber/constants/SubscriberConstants.class
 eu/arrowhead/application/skeleton/subscriber/security/SubscriberTokenSecurityFilter.class
 eu/arrowhead/application/skeleton/subscriber/security/SubscriberNotificationAccessControlFilter.class

@@ -2,13 +2,21 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-    	<groupId>eu.arrowhead</groupId>	
-		<artifactId>application-skeleton-java-spring</artifactId>
-		<version>4.4.0.2</version>
+    	<groupId>eu.arrowhead</groupId>
+    	<artifactId>smart-city</artifactId>
+    	<version>4.4.0.2</version>
   	</parent>
 	
-	<artifactId>controller-subscriber</artifactId>
-	<name>Arrowhead Subscriber Controller</name>
+	<artifactId>demo-sensor-provider-with-subscribing</artifactId>
+	<name>Arrowhead Demo Sensor Consumer With Subscribing</name>
+	
+	<dependencies>
+		<dependency>
+			<groupId>eu.arrowhead</groupId>
+			<artifactId>demo-sensor-with-events-common</artifactId>
+			<version>4.4.0.2</version>
+		</dependency>
+	</dependencies>
 	
 	<build>
 		<plugins>
@@ -47,8 +55,8 @@
 		            	</configuration>
 	          		</execution>
 	        	</executions>
-	      	</plugin>
+	      	</plugin> 			
 		</plugins>
-	</build>
-	
+	</build>	
 </project>
+

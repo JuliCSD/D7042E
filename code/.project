@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>application-skeleton</name>
+	<name>smart-city</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,7 +16,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1732737795517</id>
+			<id>1732195597467</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
