@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
 
 import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
@@ -44,10 +45,13 @@ import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.dto.shared.SystemResponseDTO;
 import eu.arrowhead.common.exception.InvalidParameterException;
 
-
+@Component
 public class SensorConsumerWithSubscriptionTask extends Thread {
 	//=================================================================================================
 	// members
+
+	@Autowired
+	private InMemoryLampDB lampDB;
 	
 	private boolean interrupted = false;
 	
@@ -83,8 +87,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	@Value(SensorConsumerConstants.$MAX_RETRY_WD)
 	private int max_retry;
 
-	@Autowired
-	private InMemoryLampDB lampDB;
+
 
 	
 	//=================================================================================================
@@ -123,7 +126,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	
 				if (sensorRequestingService != null) {
 					List<SensorResponseDTO> allSensor = callSensorRequestingService(sensorRequestingService);
-					System.out.println("allSensor size before updateLampStatus: " + allSensor.size());
+					// System.out.println("allSensor size before updateLampStatus: " + allSensor.size());
 					boolean updated = updateLampStatus(allSensor);
 					System.out.println("LampDB updated: " + updated);
 				} else {
@@ -268,6 +271,8 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	
 	//-------------------------------------------------------------------------------------------------
 	private boolean updateLampStatus(final List<SensorResponseDTO> allSensor) {
+
+
 		if (allSensor == null) {
 			logger.error("allSensor is null");
 			return false;
@@ -281,9 +286,12 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 		}
 
 		boolean updated = false;
+		System.out.println("allSensor size in updateLampStatus: "+allSensor.get(0));
+		System.out.println("primer sensor id " + allSensor.get(0).getId() + " value: " + allSensor.get(0).getValue());
+
 
 		for (final SensorResponseDTO sensor : allSensor) {
-			logger.info("Processing sensor with ID: " + sensor.getId());
+			logger.info("Sensor ID: " + sensor.getId() + ", Value: " + sensor.getValue());
 			System.out.println("Update lamp by id:");
 			int sensorId = sensor.getId();
 			int value = 0;
@@ -299,13 +307,23 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			if (lampId > 20) { //add variable pr nb total de lampes !!!!
 				lampId = 20;
 			}
+			Lamp lampToUpdate = lampDB.getById(lampId);
+			if (lampToUpdate == null) {
+				System.out.println("Lamp with ID " + lampId + " not found.");
+				continue;
+			}
+	
 
-			if (value < 500) {
-				lampDB.updateById(lampId, 0);
+			if (value < 10) {
+				// lampDB.updateById(lampId, 0);
+				lampToUpdate.setStatus(0);
+
 				System.out.println("lampId: " + lampId + " OFF");
 				updated = true;
 			} else {
-				lampDB.updateById(lampId, 1);
+				// lampDB.updateById(lampId, 1);
+				lampToUpdate.setStatus(1);
+
 				System.out.println("lampId: " + lampId + " ON");
 				updated = true;
 			}

@@ -71,16 +71,16 @@ public class LampServiceController {
 		return DTOConverter.convertLampToLampResponseDTO(lamp);
 	}
 	
-	//-------------------------------------------------------------------------------------------------
-	@PutMapping(path = LampProviderConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public LampResponseDTO updateLamp(@PathVariable(name = LampProviderConstants.PATH_VARIABLE_ID) final int id, @RequestBody final LampRequestDTO dto) {
+	// //-------------------------------------------------------------------------------------------------
+	// @PutMapping(path = LampProviderConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	// @ResponseBody public LampResponseDTO updateLamp(@PathVariable(name = LampProviderConstants.PATH_VARIABLE_ID) final int id, @RequestBody final LampRequestDTO dto) {
 		
-		if (dto.getStatus()>1 || dto.getStatus()<0) {
-			throw new BadPayloadException("statusis null or blank");
-		}
-		final Lamp lamp = lampDB.updateById(id, dto.getStatus());
-		return DTOConverter.convertLampToLampResponseDTO(lamp);
-	}
+	// 	if (dto.getStatus()>1 || dto.getStatus()<0) {
+	// 		throw new BadPayloadException("statusis null or blank");
+	// 	}
+	// 	final Lamp lamp = lampDB.updateById(id, dto.getStatus());
+	// 	return DTOConverter.convertLampToLampResponseDTO(lamp);
+	// }
 	
 	
 	//-------------------------------------------------------------------------------------------------

@@ -8,6 +8,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -18,12 +20,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
 import eu.arrowhead.common.dto.shared.EventDTO;
+import eu.arrowhead.common.dto.shared.ServiceRegistryRequestDTO;
+import eu.arrowhead.common.dto.shared.ServiceSecurityType;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 import eu.arrowhead.common.exception.InvalidParameterException;
@@ -36,7 +41,10 @@ import eu.arrowhead.application.skeleton.subscriber.SubscriberUtilities;
 import eu.arrowhead.application.skeleton.subscriber.constants.SubscriberConstants;
 import eu.arrowhead.application.skeleton.subscriber.security.SubscriberSecurityConfig;
 
+import org.springframework.context.annotation.Configuration;
+
 @Component
+@Configuration
 public class SensorConsumerWithSubscriptionApplicationInitListener extends ApplicationInitListener {
 	
 	//=================================================================================================
@@ -118,7 +126,23 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 
 		final SensorConsumerWithSubscriptionTask consumerTask = applicationContext.getBean(SubscriberConstants.CONSUMER_TASK, SensorConsumerWithSubscriptionTask.class);
 		consumerTask.start();
-		//TODO: implement here any custom behavior on application start up
+
+		try {
+            arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
+            arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION,  LampProviderConstants.LAMP_URI);
+
+		} catch (final ArrowheadException ex) {
+            logger.debug("Service not found in the registry, nothing to unregister.");
+        }
+		
+		//Register services into ServiceRegistry
+		final ServiceRegistryRequestDTO createLampServiceRequest = createServiceRegistryRequest(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI, HttpMethod.POST);		
+		arrowheadService.forceRegisterServiceToServiceRegistry(createLampServiceRequest);
+		
+		ServiceRegistryRequestDTO getLampServiceRequest = createServiceRegistryRequest(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION,  LampProviderConstants.LAMP_URI, HttpMethod.GET);
+		getLampServiceRequest.getMetadata().put(LampProviderConstants.REQUEST_PARAM_KEY_STATUS, LampProviderConstants.REQUEST_PARAM_STATUS);
+		arrowheadService.forceRegisterServiceToServiceRegistry(getLampServiceRequest);
+		
 	}
 
 	//-------------------------------------------------------------------------------------------------
@@ -136,6 +160,10 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 		if (getConsumerTask() != null) {
 			getConsumerTask().destroy();
 		}
+
+		arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
+		arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
+	
 	}
 	
 	//=================================================================================================
@@ -222,5 +250,33 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 
 		subscriberSecurityConfig.getNotificationFilter().setEventTypeMap( eventTypeMap );
 		subscriberSecurityConfig.getNotificationFilter().setServerCN( arrowheadService.getServerCN() );
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	private ServiceRegistryRequestDTO createServiceRegistryRequest(final String serviceDefinition, final String serviceUri, final HttpMethod httpMethod) {
+		final ServiceRegistryRequestDTO serviceRegistryRequest = new ServiceRegistryRequestDTO();
+		serviceRegistryRequest.setServiceDefinition(serviceDefinition);
+		final SystemRequestDTO systemRequest = new SystemRequestDTO();
+		systemRequest.setSystemName(applicationSystemName);
+		systemRequest.setAddress(applicationSystemAddress);
+		systemRequest.setPort(applicationSystemPort);		
+
+		if (sslEnabled && tokenSecurityFilterEnabled) {
+			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
+			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN.name());
+			serviceRegistryRequest.setInterfaces(List.of(LampProviderConstants.INTERFACE_SECURE));
+		} else if (sslEnabled) {
+			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
+			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE.name());
+			serviceRegistryRequest.setInterfaces(List.of(LampProviderConstants.INTERFACE_SECURE));
+		} else {
+			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE.name());
+			serviceRegistryRequest.setInterfaces(List.of(LampProviderConstants.INTERFACE_INSECURE));
+		}
+		serviceRegistryRequest.setProviderSystem(systemRequest);
+		serviceRegistryRequest.setServiceUri(serviceUri);
+		serviceRegistryRequest.setMetadata(new HashMap<>());
+		serviceRegistryRequest.getMetadata().put(LampProviderConstants.HTTP_METHOD, httpMethod.name());
+		return serviceRegistryRequest;
 	}
 }

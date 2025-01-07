@@ -13,8 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 
 import ai.aitia.arrowhead.application.library.ArrowheadService;
-import ai.aitia.demo.lamp_common.dto.LampRequestDTO;
-import ai.aitia.demo.lamp_common.dto.LampResponseDTO;
+import ai.aitia.demo.smart_city_common.dto.LampRequestDTO;
+import ai.aitia.demo.smart_city_common.dto.LampResponseDTO;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.SSLProperties;
 import eu.arrowhead.common.Utilities;
@@ -139,10 +139,10 @@ public class LampConsumerMain implements ApplicationRunner {
 			logger.info("Get only ON lamps:");
 			final String[] queryParamStatus= {orchestrationResult.getMetadata().get(LampConsumerConstants.REQUEST_PARAM_KEY_STATUS), "1"};			
 			@SuppressWarnings("unchecked")
-			final List<LampResponseDTO> blueLamps = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
+			final List<LampResponseDTO> onLamps = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
 																					  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
 																					  getInterface(), token, null, queryParamStatus);
-			printOut(blueLamps);
+			printOut(onLamps);
 		}
     }
     
