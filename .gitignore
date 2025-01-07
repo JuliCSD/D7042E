@@ -39,3 +39,5 @@ Thumbs.db
 *.class
 
 client-skeleton-java-spring/
+code/street-lighting-consumer/.classpath
+code/controller-subscriber/target/controller-subscriber-4.4.0.2.jar.original
