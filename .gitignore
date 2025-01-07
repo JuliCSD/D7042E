@@ -29,18 +29,13 @@ Thumbs.db
 
 # Ignorar archivos .lst
 *.lst
+# Ignorar archivos CSV
+*.csv
 
-*.class
-
+# Ignorar archivos .original
 *.original
 
-
-code/light-sensor-provider/target/test.csv
-code/controller-subscriber/target/controller-subscriber-4.4.0.2.jar.original
-code/light-sensor-provider/target/light-sensor-provider-4.4.0.2.jar.original
-code/street-lighting-consumer/target/street-lighting-consumer-4.4.0.2.jar.original
-code/light-sensor-provider/target/test.csv
-
+# Ignorar archivos .class
+*.class
 
 client-skeleton-java-spring/
-
