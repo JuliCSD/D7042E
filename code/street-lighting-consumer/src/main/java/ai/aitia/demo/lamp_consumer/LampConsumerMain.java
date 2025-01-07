@@ -57,48 +57,6 @@ public class LampConsumerMain implements ApplicationRunner {
     	getLampServiceOrchestrationAndConsumption();
 	}
     
-    //-------------------------------------------------------------------------------------------------
-    public void createLampServiceOrchestrationAndConsumption() {
-    	logger.info("Orchestration request for " + LampConsumerConstants.CREATE_LAMP_SERVICE_DEFINITION + " service:");
-    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(LampConsumerConstants.CREATE_LAMP_SERVICE_DEFINITION)
-    																		.interfaces(getInterface())
-    																		.build();
-    	
-		final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
-		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
-																					   .flag(Flag.MATCHMAKING, true)
-																					   .flag(Flag.OVERRIDE_STORE, true)
-																					   .build();
-		
-		printOut(orchestrationFormRequest);		
-		
-		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
-		
-		logger.info("Orchestration response:");
-		printOut(orchestrationResponse);		
-		
-		if (orchestrationResponse == null) {
-			logger.info("No orchestration response received");
-		} else if (orchestrationResponse.getResponse().isEmpty()) {
-			logger.info("No provider found during the orchestration");
-		} else {
-			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
-			validateOrchestrationResult(orchestrationResult, LampConsumerConstants.CREATE_LAMP_SERVICE_DEFINITION);
-			
-			final List<LampRequestDTO> lampsToCreate = List.of(new LampRequestDTO(1), new LampRequestDTO(1), new LampRequestDTO(1), new LampRequestDTO(1));
-			
-			for (final LampRequestDTO lampRequestDTO : lampsToCreate) {
-				logger.info("Create a lamp request:");
-				printOut(lampRequestDTO);
-				final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
-				final LampResponseDTO lampCreated = arrowheadService.consumeServiceHTTP(LampResponseDTO.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
-						orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-						getInterface(), token, lampRequestDTO, new String[0]);
-				logger.info("Provider response");
-				printOut(lampCreated);
-			}			
-		}
-    }
     
     //-------------------------------------------------------------------------------------------------
     public void getLampServiceOrchestrationAndConsumption() {

@@ -70,7 +70,6 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 			final Lamp lamp = this.get(id);
 			
 			if (status< 1 && status> 0 && status!=null) {
-				System.out.println("Lamp status is updated to: " + status);
 				lamp.setStatus(status);
 			}
 			this.put(id, lamp);

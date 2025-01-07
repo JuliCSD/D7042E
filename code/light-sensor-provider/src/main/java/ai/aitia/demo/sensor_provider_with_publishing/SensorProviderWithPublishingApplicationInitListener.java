@@ -15,7 +15,6 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-// import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -25,23 +24,17 @@ import org.springframework.stereotype.Component;
 import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.config.ApplicationInitListener;
 import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
-// import ai.aitia.demo.sensor_provider_with_publishing.database.InMemorySensorDB;
-// import ai.aitia.demo.sensor_provider_with_publishing.entity.Sensor;
 import eu.arrowhead.application.skeleton.provider.security.ProviderSecurityConfig;
 import eu.arrowhead.application.skeleton.publisher.constants.PublisherConstants;
 import eu.arrowhead.application.skeleton.publisher.event.PresetEventType;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
-// import eu.arrowhead.common.core.CoreSystemService;
 import eu.arrowhead.common.dto.shared.EventPublishRequestDTO;
 import eu.arrowhead.common.dto.shared.ServiceRegistryRequestDTO;
 import eu.arrowhead.common.dto.shared.ServiceSecurityType;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
-
-// import org.springframework.web.util.UriComponents;
-// import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class SensorProviderWithPublishingApplicationInitListener extends ApplicationInitListener {
@@ -51,9 +44,6 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 	
 	@Autowired
 	private ArrowheadService arrowheadService;
-
-	// @Autowired
-	// private InMemorySensorDB sensorDB;
 	
 	@Autowired
 	private ProviderSecurityConfig providerSecurityConfig;
@@ -74,8 +64,6 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 	private int mySystemPort;
 	
 	private final Logger logger = LogManager.getLogger(SensorProviderWithPublishingApplicationInitListener.class);
-
-	
 	
 	//=================================================================================================
 	// methods
@@ -111,45 +99,9 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 		arrowheadService.forceRegisterServiceToServiceRegistry(getSensorServiceRequest);
 		
 		if (arrowheadService.echoCoreSystem(CoreSystem.EVENTHANDLER)) {
-			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENTHANDLER);
-			
-			// registerEventType("SENSOR_LIST_UPDATED");
+			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENTHANDLER);	
 		}
 	}
-
-	
-
-// private void registerEventType(String eventTypeName) {
-//     logger.info("Registering event type: {}", eventTypeName);
-
-//     // Construye el endpoint completo del EventHandler
-// 	String eventHandlerAddress = (String)arrowheadService.getCoreServiceUri(CoreSystemService.EVENT_PUBLISH_SERVICE).toString();
-//     if (eventHandlerAddress == null || eventHandlerAddress.isEmpty()) {
-//         throw new IllegalStateException("EventHandler core service URI is not available.");
-//     }
-
-//     UriComponents registerEventTypeUri = UriComponentsBuilder.fromHttpUrl(eventHandlerAddress)
-//                                                              .path("/event-type")
-//                                                              .build();
-
-//     // Define el cuerpo de la solicitud para registrar el tipo de evento
-//     Map<String, String> requestBody = Map.of("eventTypeName", eventTypeName);
-
-//     try {
-//         // Llama al EventHandler para registrar el evento
-// 		arrowheadService.consumeServiceHTTP(
-// 			Void.class,  // Tipo de respuesta esperado
-// 			HttpMethod.POST,
-// 			registerEventTypeUri,
-// 			"HTTP-SECURE-JSON",  // Interfaces (puedes usar "HTTP-SECURE-JSON" si estás en modo seguro)
-// 			requestBody
-// 		);
-//         logger.info("Event type '{}' registered successfully.", eventTypeName);
-//     } catch (Exception e) {
-//         logger.error("Failed to register event type '{}'. Error: {}", eventTypeName, e.getMessage());
-//         throw new RuntimeException("Failed to register event type: " + eventTypeName, e);
-//     }
-// }
 	
 	//-------------------------------------------------------------------------------------------------
 	@Override
@@ -161,43 +113,7 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 		arrowheadService.unregisterServiceFromServiceRegistry(SensorProviderWithPublishingConstants.UPDATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI);
 
 	}
-
-
-	// @Scheduled(fixedRate = 30000) // Cada 30 segundos
-    // public void publishCarList() { 
-    //     List<Sensor> sensorList = sensorDB.getAll();
-
-    //     // Crear el evento
-    //     EventPublishRequestDTO publishRequest = createSensorListEvent(sensorList);
-
-    //     // Publicar al EventHandler
-    //     arrowheadService.publishToEventHandler(publishRequest);
-    //     System.out.println("Published car list to EventHandler.");
-    // }
 	
-	// private EventPublishRequestDTO createSensorListEvent(List<Sensor> sensorList) {
-    //     // Define el tipo de evento
-    //     final String eventType = "SENSOR_LIST_UPDATED";
-
-    //     // Define el sistema que publica
-    //     final SystemRequestDTO source = new SystemRequestDTO();
-    //     source.setSystemName(mySystemName);
-    //     source.setAddress(mySystemAddress);
-    //     source.setPort(mySystemPort);
-    //     if (sslEnabled) {
-    //         source.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
-    //     }
-
-    //     // Metadata y payload
-    //     final Map<String, String> metadata = new HashMap<>();
-	// 	final String sensorListJson = Utilities.toJson(sensorList);
-	// 	final String payload = Utilities.toPrettyJson(sensorListJson);
-
-    //     // Timestamp
-    //     final String timestamp = Utilities.convertZonedDateTimeToUTCString(ZonedDateTime.now());
-
-    //     return new EventPublishRequestDTO(eventType, source, metadata, payload, timestamp);
-    // }
 	//=================================================================================================
 	// assistant methods
 	

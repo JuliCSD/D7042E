@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -36,12 +37,11 @@ import eu.arrowhead.common.exception.InvalidParameterException;
 import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.config.ApplicationInitListener;
 import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
+
 import eu.arrowhead.application.skeleton.subscriber.ConfigEventProperites;
 import eu.arrowhead.application.skeleton.subscriber.SubscriberUtilities;
 import eu.arrowhead.application.skeleton.subscriber.constants.SubscriberConstants;
 import eu.arrowhead.application.skeleton.subscriber.security.SubscriberSecurityConfig;
-
-import org.springframework.context.annotation.Configuration;
 
 @Component
 @Configuration
@@ -126,7 +126,7 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 
 		final SensorConsumerWithSubscriptionTask consumerTask = applicationContext.getBean(SubscriberConstants.CONSUMER_TASK, SensorConsumerWithSubscriptionTask.class);
 		consumerTask.start();
-
+		
 		try {
             arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
             arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION,  LampProviderConstants.LAMP_URI);
@@ -135,7 +135,7 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
             logger.debug("Service not found in the registry, nothing to unregister.");
         }
 		
-		//Register services into ServiceRegistry
+		//Register LAMP services into ServiceRegistry
 		final ServiceRegistryRequestDTO createLampServiceRequest = createServiceRegistryRequest(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI, HttpMethod.POST);		
 		arrowheadService.forceRegisterServiceToServiceRegistry(createLampServiceRequest);
 		
@@ -160,7 +160,7 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 		if (getConsumerTask() != null) {
 			getConsumerTask().destroy();
 		}
-
+		
 		arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
 		arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
 	

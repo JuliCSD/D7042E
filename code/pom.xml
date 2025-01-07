@@ -12,8 +12,8 @@
 	<packaging>pom</packaging>
 	
 	<modules>
-	    <module>smart-city-common</module>
-	    <module>street-lighting-consumer</module>
+	    	<module>smart-city-common</module>
+	    	<module>street-lighting-consumer</module>
 		<module>controller-subscriber</module>
 		<module>light-sensor-provider</module>
 	</modules>
