@@ -104,43 +104,46 @@ public class SensorConsumerMain implements ApplicationRunner {
     }
 	
 	//-------------------------------------------------------------------------------------------------
-    private OrchestrationResultDTO orchestrate(final String serviceDefinition) {
-    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(serviceDefinition)
-    			.interfaces(getInterface())
-    			.build();
-    	
-    	final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
-    	final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
-    			.flag(Flag.MATCHMAKING, true)
-    			.flag(Flag.OVERRIDE_STORE, true)
-    			.build();
-    	System.out.println("Orchestration request: ");
+	private OrchestrationResultDTO orchestrate(final String serviceDefinition) {
+		final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(serviceDefinition)
+				.interfaces(getInterface())
+				.build();
+		System.out.println("Service query form: ");
+		printOutJSON(serviceQueryForm);
+	
+		final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
+		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
+				.flag(Flag.MATCHMAKING, true)
+				.flag(Flag.OVERRIDE_STORE, true)
+				.build();
+		System.out.println("Orchestration request: ");
 		printOutJSON(orchestrationFormRequest);
-		
-    	final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
-    	
-    	if (orchestrationResponse == null) {
-    		logger.info("No orchestration response received");
-    	} else if (orchestrationResponse.getResponse().isEmpty()) {
-    		logger.info("No provider found during the orchestration");
-    	} else {
-    		final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
-    		validateOrchestrationResult(orchestrationResult, serviceDefinition);
-    		return orchestrationResult;
-    	}
-    	throw new ArrowheadException("Unsuccessful orchestration: " + serviceDefinition);
-    }
-    
+	
+		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+		System.out.println("Orchestration response: ");
+		printOutJSON(orchestrationResponse);
+	
+		if (orchestrationResponse == null) {
+			logger.info("No orchestration response received");
+		} else if (orchestrationResponse.getResponse().isEmpty()) {
+			logger.info("No provider found during the orchestration");
+		} else {
+			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
+			validateOrchestrationResult(orchestrationResult, serviceDefinition);
+			return orchestrationResult;
+		}
+		throw new ArrowheadException("Unsuccessful orchestration: " + serviceDefinition);
+	}
     //-------------------------------------------------------------------------------------------------
-    private SensorMeasurementsDTO consumeSensorMeasurementsService(final OrchestrationResultDTO orchestrationResult, final long building, final long timestamp) {
-    	final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
+	private SensorMeasurementsDTO consumeSensorMeasurementsService(final OrchestrationResultDTO orchestrationResult, final long building, final long timestamp) {
+		final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
 		final String[] queryParam = {orchestrationResult.getMetadata().get(EFCommonConstants.REQUEST_PARAM_KEY_BUILDING), String.valueOf(building),
 									 orchestrationResult.getMetadata().get(EFCommonConstants.REQUEST_PARAM_KEY_TIMESTAMP), String.valueOf(timestamp)};
-		
+	
 		return arrowheadService.consumeServiceHTTP(SensorMeasurementsDTO.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(EFCommonConstants.HTTP_METHOD)),
 												   orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
 												   getInterface(), token, null, queryParam);
-    }
+	}
     
     //-------------------------------------------------------------------------------------------------
     private String getInterface() {
