@@ -29,3 +29,4 @@ Thumbs.db
 
 # Ignorar archivos .lst
 *.lst
+code/light-sensor-provider/target/test.csv
