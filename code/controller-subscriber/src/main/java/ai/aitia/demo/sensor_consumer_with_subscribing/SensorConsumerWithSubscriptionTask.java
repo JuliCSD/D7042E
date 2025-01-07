@@ -22,6 +22,8 @@ import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
 import ai.aitia.demo.smart_city_common.dto.SensorRequestDTO;
 import ai.aitia.demo.smart_city_common.dto.SensorResponseDTO;
+import ai.aitia.demo.sensor_consumer_with_subscribing.database.InMemoryLampDB;
+import ai.aitia.demo.sensor_consumer_with_subscribing.entity.Lamp;
 import ai.aitia.demo.smart_city_common.dto.LampRequestDTO;
 import ai.aitia.demo.smart_city_common.dto.LampResponseDTO;
 import eu.arrowhead.application.skeleton.subscriber.SubscriberUtilities;
@@ -81,6 +83,9 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	@Value(SensorConsumerConstants.$MAX_RETRY_WD)
 	private int max_retry;
 
+	@Autowired
+	private InMemoryLampDB lampDB;
+
 	
 	//=================================================================================================
 	// methods
@@ -115,10 +120,10 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 					
 					notificatonQueue.clear();
 				}
-					
+
 				if (sensorRequestingService != null) {
-					
-					callSensorRequestingService(sensorRequestingService);
+					List<SensorResponseDTO> allSensor = callSensorRequestingService(sensorRequestingService);
+					System.out.println("LampDB updated : "+updateLampStatus(allSensor));
 
 				} else {
 					counter++;
@@ -142,12 +147,15 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			}	
 
 
-			try {
-				Thread.sleep(10000);
-			} catch (final InterruptedException ex) {
-				logger.debug("ConsumerTask interrupted");
-				interrupted = true;
-			}
+			System.out.println("counter: " + counter);
+			
+
+			// try {
+			// 	Thread.sleep(10000);
+			// } catch (final InterruptedException ex) {
+			// 	logger.debug("ConsumerTask interrupted");
+			// 	interrupted = true;
+			// }
 		}
 		
 		System.exit(0);
@@ -165,7 +173,6 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 
 	//-------------------------------------------------------------------------------------------------
     
-
 
 	private void callSensorUpdateService(final OrchestrationResultDTO orchestrationResult, final List<SensorRequestDTO> sensorsToUpdate) {
 		logger.debug("consumeUpdateSensorService started...");
@@ -335,7 +342,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
     }
     
     //-------------------------------------------------------------------------------------------------
-    private void callSensorRequestingService( final OrchestrationResultDTO orchestrationResult) {
+    private List<SensorResponseDTO> callSensorRequestingService( final OrchestrationResultDTO orchestrationResult) {
 		validateOrchestrationResult(orchestrationResult, SensorConsumerConstants.GET_SENSOR_SERVICE_DEFINITION);
 		
 		logger.info("Get all sensors:");
@@ -345,10 +352,49 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 																				orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
 																				getInterface(), token, null, new String[0]);
 		printOut(allSensor);
-		
+		return allSensor;
 		
     }
     
+
+	private boolean updateLampStatus(final List<SensorResponseDTO> allSensor) {
+
+		System.out.println("allSensor: " + allSensor.size());
+
+		if (allSensor.isEmpty()) {
+			logger.info("No sensors found.");
+			return false;
+		}
+	
+		for(final SensorResponseDTO sensor : allSensor) {
+			int sensorId = sensor.getId();
+			int value = 0;
+
+			try {
+				value = Integer.parseInt(sensor.getValue());
+			} catch (NumberFormatException e) {
+				logger.error("Invalid sensor value: " + sensor.getValue());
+				continue;
+			}
+
+			logger.info("Processing sensor with ID: "+sensorId); 
+
+			int lampId = (sensorId/2)+1;
+			if (lampId > 20) { //add variable pr nb total de lampes !!!!
+				lampId = 20;
+			}
+
+			if (value < 500) {
+				lampDB.updateById(lampId, 0);
+				System.out.println("lampId: " + lampId + " OFF");
+			} else {
+				lampDB.updateById(lampId, 1);
+				System.out.println("lampId: " + lampId + " ON");
+			}
+		}
+		return true;
+	}
+
     //-------------------------------------------------------------------------------------------------
     private String getInterface() {
     	return sslProperties.isSslEnabled() ? SensorConsumerConstants.INTERFACE_SECURE : SensorConsumerConstants.INTERFACE_INSECURE;
