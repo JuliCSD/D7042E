@@ -7,7 +7,7 @@
     	<version>4.4.0.2</version>
   	</parent>
 	
-	<artifactId>demo-sensor-consumer-with-subscribing</artifactId>
+	<artifactId>controller-subscriber</artifactId>
 	<name>Arrowhead Demo Sensor Consumer With Subscribing</name>
 	
 	<dependencies>

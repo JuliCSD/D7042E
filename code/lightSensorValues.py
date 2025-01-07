@@ -9,7 +9,7 @@ min_luminosity = 0
 max_luminosity = 1000
 
 
-file_path = 'demo-sensor-provider-with-publishing/target/test.csv'
+file_path = 'light-sensor-provider/target/test.csv'
 
 
 for minute in range(minutes_in_a_day):

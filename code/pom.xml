@@ -16,6 +16,6 @@
 	    <!-- <module>street-lighting-consumer</module> -->
 	    <!-- <module>controller-provider</module>	 -->
 		<module>controller-subscriber</module>
-		<module>demo-sensor-provider-with-publishing</module>
+		<module>light-sensor-provider</module>
 	</modules>
 </project>

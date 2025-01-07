@@ -90,9 +90,6 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	public void run() {
 		logger.info("ConsumerTask.run started...");
 		
-		getLampServiceOrchestrationAndConsumption();
-
-		
 		interrupted = Thread.currentThread().isInterrupted();
 
 		OrchestrationResultDTO sensorRequestingService = null;
@@ -144,8 +141,9 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 				sensorRequestingService = null;
 			}	
 
+
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(10000);
 			} catch (final InterruptedException ex) {
 				logger.debug("ConsumerTask interrupted");
 				interrupted = true;
@@ -166,51 +164,6 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	//Assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	//-------------------------------------------------------------------------------------------------
-    public void getLampServiceOrchestrationAndConsumption() {
-    	logger.info("Orchestration request for " + LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION + " service:");
-    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION)
-    																		.interfaces(getInterface())
-    																		.build();
-    	
-		final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
-		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
-																					   .flag(Flag.MATCHMAKING, true)
-																					   .flag(Flag.OVERRIDE_STORE, true)
-																					   .build();
-		
-		printOut(orchestrationFormRequest);		
-		
-		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
-		
-		logger.info("Orchestration response:");
-		printOut(orchestrationResponse);		
-		
-		if (orchestrationResponse == null) {
-			logger.info("No orchestration response received");
-		} else if (orchestrationResponse.getResponse().isEmpty()) {
-			logger.info("No provider found during the orchestration");
-		} else {
-			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
-			validateOrchestrationResult(orchestrationResult, LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION);
-			
-			logger.info("Get all lamps:");
-			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
-			@SuppressWarnings("unchecked")
-			final List<LampResponseDTO> allLamp = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
-																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																					getInterface(), token, null, new String[0]);
-			printOut(allLamp);
-			
-			logger.info("Get only ON lamps:");
-			final String[] queryParamStatus= {orchestrationResult.getMetadata().get(LampConsumerConstants.REQUEST_PARAM_KEY_STATUS), "1"};			
-			@SuppressWarnings("unchecked")
-			final List<LampResponseDTO> blueLamps = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
-																					  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																					  getInterface(), token, null, queryParamStatus);
-			printOut(blueLamps);
-		}
-    }
     
 
 
@@ -393,13 +346,6 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 																				getInterface(), token, null, new String[0]);
 		printOut(allSensor);
 		
-		logger.info("Get only blue sensors:");
-		final String[] queryParamValue = {orchestrationResult.getMetadata().get(SensorConsumerConstants.REQUEST_PARAM_KEY_VALUE), "blue"};			
-		@SuppressWarnings("unchecked")
-		final List<SensorResponseDTO> blueSensors = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(SensorConsumerConstants.HTTP_METHOD)),
-																				  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																				  getInterface(), token, null, queryParamValue);
-		printOut(blueSensors);
 		
     }
     
