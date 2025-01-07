@@ -31,6 +31,7 @@ for minute in range(minutes_in_a_day):
         for i in range(100):
             luminosity += random.uniform(-50, 50)
             luminosity = max(min_luminosity, min(max_luminosity, luminosity))
+            luminosity = round(luminosity, 1)
 
             sensor_data.append([f'sensor{i+1}', luminosity])
 
@@ -38,6 +39,7 @@ for minute in range(minutes_in_a_day):
         # Overwrite the data in the CSV file
         with open(file_path, mode='w', newline='') as file:
             writer = csv.writer(file)
+            # writer.writerow(['sensor_type', 'luminosity'])
             writer.writerows(sensor_data)
         
         print(f"Luminosity values for 100 sensors have been overwritten in {file_path}")    

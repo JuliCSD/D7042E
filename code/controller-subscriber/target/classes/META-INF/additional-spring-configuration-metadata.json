@@ -15,28 +15,23 @@
     "description": "A description for 'sr_port'"
   },
   {
-    "name": "token.security.filter.enabled",
+    "name": "reorchestration",
     "type": "java.lang.Boolean",
-    "description": "A description for 'token.security.filter.enabled'"
+    "description": "A description for 'reorchestration'"
   },
   {
-    "name": "event.eventTypeURIMap.START_INIT",
-    "type": "java.lang.String",
-    "description": "A description for 'event.eventTypeURIMap.START_INIT'"
-  },
-  {
-    "name": "event.eventTypeURIMap.START_RUN",
-    "type": "java.lang.String",
-    "description": "A description for 'event.eventTypeURIMap.START_RUN'"
-  },
-  {
-    "name": "event.eventTypeURIMap.REQUEST_RECEIVED",
-    "type": "java.lang.String",
-    "description": "A description for 'event.eventTypeURIMap.REQUEST_RECEIVED'"
+    "name": "max_retry",
+    "type": "java.lang.Integer",
+    "description": "A description for 'max_retry'"
   },
   {
     "name": "container.max_keep_alive_requests",
     "type": "java.lang.Integer",
     "description": "A description for 'container.max_keep_alive_requests'"
+  },
+  {
+    "name": "token.security.filter.enabled",
+    "type": "java.lang.Boolean",
+    "description": "A description for 'token.security.filter.enabled'"
   }
 ]}

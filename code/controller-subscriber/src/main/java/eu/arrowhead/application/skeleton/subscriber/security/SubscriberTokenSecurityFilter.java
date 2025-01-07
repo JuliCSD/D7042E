@@ -70,15 +70,15 @@ public class SubscriberTokenSecurityFilter extends TokenSecurityFilter {
 				final HttpServletRequest httpRequest = (HttpServletRequest) request;
 				final String requestTarget = Utilities.stripEndSlash(httpRequest.getRequestURL().toString());
 				
-				if (eventTypeMap != null) {					
-					for (final String notificationUri : eventTypeMap.values()) {						
-						if (requestTarget.endsWith(SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI + "/" + notificationUri)) {							
+				if (eventTypeMap != null) {
+					for (final String notificationUri  : eventTypeMap.values()) {
+						if (requestTarget.endsWith( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI + "/" + notificationUri)) {
 							chain.doFilter(request, response);
 							return;
 						}
 					}
-				}	
-					
+				}
+	
 				final String clientCN = getCertificateCNFromRequest(httpRequest);
 				if (clientCN == null) {
 					log.error("Unauthorized access: {}", requestTarget);
@@ -91,7 +91,7 @@ public class SubscriberTokenSecurityFilter extends TokenSecurityFilter {
 					throw new AuthException("Unauthorized access: " + requestTarget + ", no token is specified");
 				}
 				
-				checkToken(clientCN, token, requestTarget);				
+				checkToken(clientCN, token, requestTarget);
 			} catch (final ArrowheadException ex) {
 				handleException(ex, response);
 			}

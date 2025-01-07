@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>arrowhead-application-skeleton-consumer</name>
+	<name>client-skeleton-consumer</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -33,7 +33,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1732737795552</id>
+			<id>1732195597483</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
