@@ -2,6 +2,8 @@ package ai.aitia.demo.sensor_consumer_with_subscribing.database;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,7 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 	
 	private int idCounter = 0;
 
+	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
 	//=================================================================================================
     // constructor
@@ -40,49 +43,78 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 
 
 	public Lamp create(final int status) {
+		lock.readLock().lock();
+
+		try{
+			if (status>1 || status<0) {
+				throw new InvalidParameterException("statusis null or empty");
+			}
 			
-		if (status>1 || status<0) {
-			throw new InvalidParameterException("statusis null or empty");
-		}
+			idCounter++;
+			this.put(idCounter, new Lamp(idCounter, status));
+			return this.get(idCounter);
+		} finally {
+            lock.readLock().unlock();
+        }
 		
-		idCounter++;
-		this.put(idCounter, new Lamp(idCounter, status));
-		return this.get(idCounter);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	public List<Lamp> getAll() {
-		return List.copyOf(this.values());
+		lock.readLock().lock();
+		try{
+			return List.copyOf(this.values());
+		} finally {
+            lock.readLock().unlock();
+        }
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	public Lamp getById(final int id) {
-		if (this.containsKey(id)) {
-			return this.get(id);
-		} else {
-			throw new InvalidParameterException("id '" + id + "' not exists");
-		}
+		lock.readLock().lock();
+
+		try{
+			if (this.containsKey(id)) {
+				return this.get(id);
+			} else {
+				throw new InvalidParameterException("id '" + id + "' not exists");
+			}
+		} finally {
+            lock.readLock().unlock();
+        }
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	public Lamp updateById(final int id, final Integer status) {
-		if (this.containsKey(id)) {
-			final Lamp lamp = this.get(id);
-			
-			if (status< 1 && status> 0 && status!=null) {
-				lamp.setStatus(status);
+		lock.readLock().lock();
+
+		try{
+			if (this.containsKey(id)) {
+				final Lamp lamp = this.get(id);
+				
+				if (status< 1 && status> 0 && status!=null) {
+					lamp.setStatus(status);
+				}
+				this.put(id, lamp);
+				return lamp;
+			} else {
+				throw new InvalidParameterException("id '" + id + "' not exists");
 			}
-			this.put(id, lamp);
-			return lamp;
-		} else {
-			throw new InvalidParameterException("id '" + id + "' not exists");
-		}
+		} finally {
+            lock.readLock().unlock();
+        }
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	public void removeById(final int id) {
-		if (this.containsKey(id)) {
-			this.remove(id);
-		}
+		lock.readLock().lock();
+
+		try{
+			if (this.containsKey(id)) {
+				this.remove(id);
+			}
+		} finally {
+            lock.readLock().unlock();
+        }
 	}
 }
