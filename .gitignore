@@ -30,6 +30,10 @@ Thumbs.db
 # Ignorar archivos .lst
 *.lst
 
+*.class
+
+*.original
+
 
 code/light-sensor-provider/target/test.csv
 code/controller-subscriber/target/controller-subscriber-4.4.0.2.jar.original
@@ -39,3 +43,4 @@ code/light-sensor-provider/target/test.csv
 
 
 client-skeleton-java-spring/
+
