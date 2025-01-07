@@ -100,86 +100,69 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	@Override
 	public void run() {
 		logger.info("ConsumerTask.run started...");
-	
+
 		interrupted = Thread.currentThread().isInterrupted();
-	
+
 		OrchestrationResultDTO sensorRequestingService = null;
-	
+
 		int counter = 0;
 		while (!interrupted && (counter < max_retry)) {
+			List<SensorResponseDTO> allSensor;
 
-			// try {
-			// 	semaphore.acquire();
-			// 	System.out.println("Semaphore acquired");
-
-			// 	List<SensorResponseDTO> allSensor = new ArrayList<SensorResponseDTO>();
-
-				try {
-					if (notificatonQueue.peek() != null) {
-						for (final EventDTO event : notificatonQueue) {
-							if (SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE.equalsIgnoreCase(event.getEventType())) {
-								if (reorchestration) {
-									logger.info("Recieved publisher destroyed event - started reorchestration.");
-		
-									sensorRequestingService = orchestrateGetSensorService();
-								} else {
-									logger.info("Recieved publisher destroyed event - started shuting down.");
-									System.exit(0);
-								}
+			try {
+				if (notificatonQueue.peek() != null) {
+					for (final EventDTO event : notificatonQueue) {
+						if (SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE.equalsIgnoreCase(event.getEventType())) {
+							if (reorchestration) {
+								logger.info("Received publisher destroyed event - started reorchestration.");
+								sensorRequestingService = orchestrateGetSensorService();
 							} else {
-								logger.info("ConsumerTask recevied event - with type: " + event.getEventType() + ", and payload: " + event.getPayload() + ".");
+								logger.info("Received publisher destroyed event - started shutting down.");
+								System.exit(0);
 							}
-						}
-		
-						notificatonQueue.clear();
-					}
-		
-					if (sensorRequestingService != null) {
-						// allSensor =  List.copyOf(callSensorRequestingService(sensorRequestingService));
-						// System.out.println("allSensor size before updateLampStatus: " + allSensor.size());
-						
-					} else {
-						counter++;
-		
-						sensorRequestingService = orchestrateGetSensorService();
-		
-						if (sensorRequestingService != null) {
-							counter = 0;
-		
-							final Set<SystemResponseDTO> sources = new HashSet<SystemResponseDTO>();
-		
-							sources.add(sensorRequestingService.getProvider());
-		
-							subscribeToDestoryEvents(sources);
+						} else {
+							logger.info("ConsumerTask received event - with type: " + event.getEventType() + ", and payload: " + event.getPayload() + ".");
 						}
 					}
-				} catch (final Throwable ex) {
-					logger.debug(ex.getMessage());
-		
-					sensorRequestingService = null;
+					notificatonQueue.clear();
 				}
-		
 
-				// boolean updated = updateLampStatus(allSensor);
-				// System.out.println("LampDB updated: " + updated);
-				System.out.println("counter: " + counter);
-		
-				try {
-					Thread.sleep(10000);
-				} catch (final InterruptedException ex) {
-					logger.debug("ConsumerTask interrupted");
-			// 		interrupted = true;
-			// 	}
+				if (sensorRequestingService != null) {
+					allSensor = List.copyOf(callSensorRequestingService(sensorRequestingService));
+					// System.out.println("allSensor size before updateLampStatus: " + allSensor.size());
+				} else {
+					counter++;
+					allSensor = new ArrayList<>();
+					sensorRequestingService = orchestrateGetSensorService();
 
-			// } catch (InterruptedException e) {
-			// 	logger.error("Semaphore acquisition interrupted", e);
-			// 	Thread.currentThread().interrupt();
- 			// } finally {
-			// 	semaphore.release();
-			// 	System.out.println("Semaphore released");
+					if (sensorRequestingService != null) {
+						counter = 0;
+
+						final Set<SystemResponseDTO> sources = new HashSet<>();
+						sources.add(sensorRequestingService.getProvider());
+
+						subscribeToDestroyEvents(sources);
+					}
+				}
+			} catch (final Throwable ex) {
+				logger.debug(ex.getMessage());
+				allSensor = new ArrayList<>();
+				sensorRequestingService = null;
+			}
+
+			boolean updated = updateLampStatus(allSensor);
+			System.out.println("updated: " + updated);
+			System.out.println("All sensor size: " + allSensor.size());
+			System.out.println("counter: " + counter);
+
+			try {
+				Thread.sleep(10000);
+			} catch (final InterruptedException ex) {
+				logger.debug("ConsumerTask interrupted");
+				interrupted = true;
 			}
 		}
-		
+
 		System.exit(0);
 	}
 	
@@ -193,7 +176,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	//=================================================================================================
 	//Assistant methods    
 	
-	private void subscribeToDestoryEvents(final Set<SystemResponseDTO> providers) {
+	private void subscribeToDestroyEvents(final Set<SystemResponseDTO> providers) {
 		final Set<SystemRequestDTO> sources = new HashSet<>(providers.size());
 		
 		for (final SystemResponseDTO provider : providers) {
