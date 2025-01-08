@@ -1,48 +1,33 @@
 import csv
-from datetime import datetime, timedelta
-import random
 import time
+import random
 
-start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-minutes_in_a_day = 1440
-min_luminosity = 0
-max_luminosity = 1000
 nb_weather_sensors = 50
 
+# Inicializar los datos de los sensores
+data = [(random.uniform(20, 25), random.uniform(40, 60), random.uniform(1000, 1020), random.uniform(0, 20)) for _ in range(nb_weather_sensors)]
 
-file_path = 'weather-sensor-provider/target/test.csv'
-
-
-for minute in range(minutes_in_a_day):
-        current_time = start_time + timedelta(minutes=minute)
-        hour = current_time.hour + current_time.minute / 60.0
-
-        # Simular el ciclo de luminosidad del sol
-        if 6 <= hour < 18:
-            # Durante el día, la luminosidad aumenta hasta el mediodía y luego disminuye
-            if hour < 12:
-                luminosity = min_luminosity + (max_luminosity - min_luminosity) * ((hour - 6) / 6)
-            else:
-                luminosity = max_luminosity - (max_luminosity - min_luminosity) * ((hour - 12) / 6)
-        else:
-            # Durante la noche, la luminosidad es baja
-            luminosity = min_luminosity
-
-        weather_sensor_data = []
-        for i in range(nb_weather_sensors):
-            luminosity += random.uniform(-50, 50)
-            luminosity = max(min_luminosity, min(max_luminosity, luminosity))
-            luminosity = round(luminosity, 1)
-
-            weather_sensor_data.append([f'weather_sensor{i+1}', luminosity])
-
+while True:
+    # Abrir el archivo CSV para escribir (sobrescribir)
+    with open('weather-sensor-provider/target/test.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        # Escribir el encabezado
+        # writer.writerow(['Temperature(°C)', 'Humidity(%)', 'Pressure(hPa)', 'WindSpeed(km/h)'])
         
-        # Overwrite the data in the CSV file
-        with open(file_path, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['weather_sensor_type', 'luminosity'])
-            writer.writerows(weather_sensor_data)
+        # Escribir los datos
+        for i, (temp, hum, pres, wind_speed) in enumerate(data):
+            writer.writerow([temp, hum, pres, wind_speed])
         
-        print(f"Weather values for {nb_weather_sensors} sensors have been overwritten in {file_path}")    
-        # Wait for 1 seconds before generating new values
-        time.sleep(1)
+        # Actualizar los datos con algunos cambios aleatorios
+        data = [
+            (
+                temp + random.uniform(-0.5, 0.5),
+                hum + random.uniform(-1, 1),
+                pres + random.uniform(-0.1, 0.1),
+                wind_speed + random.uniform(-2, 2),
+            )
+            for temp, hum, pres, wind_speed in data
+        ]
+    
+    # Esperar 1 segundo antes de sobrescribir el archivo nuevamente
+    time.sleep(1)

@@ -10,8 +10,10 @@ public class WeatherSensorResponseDTO implements Serializable {
 	private static final long serialVersionUID = -8371510478751740542L;
 	
 	private int id;
-	private String name;
-	private String value;
+	private String temperature;
+	private String humidity;
+	private String pressure;
+	private String wind;
 
 	//=================================================================================================
 	// methods
@@ -20,19 +22,25 @@ public class WeatherSensorResponseDTO implements Serializable {
 	public WeatherSensorResponseDTO() {}
 	
 	//-------------------------------------------------------------------------------------------------
-	public WeatherSensorResponseDTO(final int id, final String name, final String value) {
+	public WeatherSensorResponseDTO(final int id, final String temperature, final String humidity, final String pressure, final String wind) {
 		this.id = id;
-		this.name = name;
-		this.value = value;
+		this.temperature = temperature;
+		this.humidity = humidity;
+		this.pressure = pressure;
+		this.wind = wind;
 	}
 
 	//-------------------------------------------------------------------------------------------------
 	public int getId() { return id; }
-	public String getName() { return name; }
-	public String getValue() { return value; }
+	public String getTemperature() { return temperature; }
+	public String getHumidity() { return humidity; }
+	public String getPressure() { return pressure; }
+	public String getWind() { return wind; }
 
 	//-------------------------------------------------------------------------------------------------
 	public void setId(final int id) {this.id = id; }
-	public void setName(final String name) { this.name = name; }
-	public void setValue(final String value) { this.value = value; }	
+	public void setTemperature(final String temperature) { this.temperature = temperature; }
+	public void setHumidity(final String humidity) { this.humidity = humidity; }	
+	public void setPressure(final String pressure) { this.pressure = pressure; }
+	public void setWind(final String wind) { this.wind = wind; }
 }

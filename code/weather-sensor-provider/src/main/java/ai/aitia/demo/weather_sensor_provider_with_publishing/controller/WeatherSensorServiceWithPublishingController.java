@@ -47,8 +47,10 @@ public class WeatherSensorServiceWithPublishingController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<WeatherSensorResponseDTO> getWeatherSensors(@RequestParam(name = WeatherSensorProviderWithPublishingConstants.REQUEST_PARAM_NAME, required = false) final String name,
-                                              @RequestParam(name = WeatherSensorProviderWithPublishingConstants.REQUEST_PARAM_VALUE, required = false) final String value) {
+    public List<WeatherSensorResponseDTO> getWeatherSensors(@RequestParam(name = WeatherSensorProviderWithPublishingConstants.REQUEST_PARAM_TEMPERATURE, required = false) final String temperature,
+                                              @RequestParam(name = WeatherSensorProviderWithPublishingConstants.REQUEST_PARAM_HUMIDITY, required = false) final String humidity,
+                                              @RequestParam(name = WeatherSensorProviderWithPublishingConstants.REQUEST_PARAM_PRESSURE, required = false) final String pressure,
+                                              @RequestParam(name = WeatherSensorProviderWithPublishingConstants.REQUEST_PARAM_WIND, required = false) final String wind) {
         ++counter;
 
         publisherService.publish(PresetEventType.REQUEST_RECEIVED, Map.of(EventTypeConstants.EVENT_TYPE_REQUEST_RECEIVED_METADATA_REQUEST_TYPE, HttpMethod.GET.name()), WeatherSensorProviderWithPublishingConstants.WEATHER_SENSOR_URI);
@@ -56,10 +58,16 @@ public class WeatherSensorServiceWithPublishingController {
         final List<WeatherSensorResponseDTO> response = new ArrayList<>();
         for (final WeatherSensor weatherSensor : weatherSensorDB.getAll()) {
             boolean toAdd = true;
-            if (name != null && !name.isBlank() && !weatherSensor.getName().equalsIgnoreCase(name)) {
+            if (temperature != null && !temperature.isBlank() && !weatherSensor.getTemperature().equalsIgnoreCase(temperature)) {
                 toAdd = false;
             }
-            if (value != null && !value.isBlank() && !weatherSensor.getValue().equalsIgnoreCase(value)) {
+            if (humidity != null && !humidity.isBlank() && !weatherSensor.getHumidity().equalsIgnoreCase(humidity)) {
+                toAdd = false;
+            }
+            if (pressure != null && !pressure.isBlank() && !weatherSensor.getPressure().equalsIgnoreCase(pressure)) {
+                toAdd = false;
+            }
+            if (wind != null && !wind.isBlank() && !weatherSensor.getWind().equalsIgnoreCase(wind)) {
                 toAdd = false;
             }
             if (toAdd) {
@@ -83,13 +91,19 @@ public class WeatherSensorServiceWithPublishingController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public WeatherSensorResponseDTO createWeatherSensor(@RequestBody final WeatherSensorRequestDTO dto) {
-        if (dto.getName() == null || dto.getName().isBlank()) {
-            throw new BadPayloadException("name is null or blank");
+        if (dto.getTemperature() == null || dto.getTemperature().isBlank()) {
+            throw new BadPayloadException("temperature is null or blank");
         }
-        if (dto.getValue() == null || dto.getValue().isBlank()) {
-            throw new BadPayloadException("value is null or blank");
+        if (dto.getHumidity() == null || dto.getHumidity().isBlank()) {
+            throw new BadPayloadException("humidity is null or blank");
         }
-        final WeatherSensor weatherSensor = weatherSensorDB.create(dto.getName(), dto.getValue());
+        if (dto.getPressure() == null || dto.getPressure().isBlank()) {
+            throw new BadPayloadException("pressure is null or blank");
+        }
+        if (dto.getWind() == null || dto.getWind().isBlank()) {
+            throw new BadPayloadException("wind is null or blank");
+        }
+        final WeatherSensor weatherSensor = weatherSensorDB.create(dto.getTemperature(), dto.getHumidity(), dto.getPressure(), dto.getWind());
 
         return DTOConverter.convertWeatherSensorToWeatherSensorResponseDTO(weatherSensor);
     }
@@ -97,13 +111,19 @@ public class WeatherSensorServiceWithPublishingController {
     @PutMapping(path = WeatherSensorProviderWithPublishingConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public WeatherSensorResponseDTO updateWeatherSensor(@PathVariable(name = WeatherSensorProviderWithPublishingConstants.PATH_VARIABLE_ID) final int id, @RequestBody final WeatherSensorRequestDTO dto) {
-        if (dto.getName() == null || dto.getName().isBlank()) {
-            throw new BadPayloadException("name is null or blank");
+        if (dto.getTemperature() == null || dto.getTemperature().isBlank()) {
+            throw new BadPayloadException("temperature is null or blank");
         }
-        if (dto.getValue() == null || dto.getValue().isBlank()) {
-            throw new BadPayloadException("value is null or blank");
+        if (dto.getHumidity() == null || dto.getHumidity().isBlank()) {
+            throw new BadPayloadException("humidity is null or blank");
         }
-        final WeatherSensor weatherSensor = weatherSensorDB.updateById(id, dto.getName(), dto.getValue());
+        if (dto.getPressure() == null || dto.getPressure().isBlank()) {
+            throw new BadPayloadException("pressure is null or blank");
+        }
+        if (dto.getWind() == null || dto.getWind().isBlank()) {
+            throw new BadPayloadException("wind is null or blank");
+        }
+        final WeatherSensor weatherSensor = weatherSensorDB.updateById(id, dto.getTemperature(), dto.getHumidity(), dto.getPressure(), dto.getWind());
 
         return DTOConverter.convertWeatherSensorToWeatherSensorResponseDTO(weatherSensor);
     }

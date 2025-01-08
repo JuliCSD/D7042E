@@ -52,10 +52,10 @@ public class CsvDataLoader implements CommandLineRunner {
             int id = 0;
             while ((line = br.readLine()) != null) {
                 final String[] values = line.split(",");
-                if (values.length == 2) {
+                if (values.length == 4) {
                     final int weatherSensorId = id;
                     executorService.submit(() -> {
-                        weatherSensorDB.updateById(weatherSensorId, values[0], values[1]);
+                        weatherSensorDB.updateById(weatherSensorId, values[0], values[1], values[2], values[3]);
                     });
                 } else {
                     throw new InvalidParameterException("Invalid line in CSV: " + line);

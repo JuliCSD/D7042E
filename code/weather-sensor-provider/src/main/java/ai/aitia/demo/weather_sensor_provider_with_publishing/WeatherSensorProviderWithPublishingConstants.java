@@ -15,10 +15,18 @@ public class WeatherSensorProviderWithPublishingConstants {
 	public static final String WEATHER_SENSOR_URI = "/weather-sensor";
 	public static final String BY_ID_PATH = "/{id}";
 	public static final String PATH_VARIABLE_ID = "id";
-	public static final String REQUEST_PARAM_KEY_NAME = "request-param-name";
-	public static final String REQUEST_PARAM_NAME = "name";
-	public static final String REQUEST_PARAM_KEY_VALUE = "request-param-value";
-	public static final String REQUEST_PARAM_VALUE = "value";
+
+	public static final String REQUEST_PARAM_KEY_TEMPERATURE = "request-param-temperature";
+	public static final String REQUEST_PARAM_TEMPERATURE = "temperature";
+
+	public static final String REQUEST_PARAM_KEY_HUMIDITY = "request-param-humidity";
+	public static final String REQUEST_PARAM_HUMIDITY = "humidity";
+
+	public static final String REQUEST_PARAM_KEY_PRESSURE = "request-param-pressure";
+	public static final String REQUEST_PARAM_PRESSURE = "pressure";
+
+	public static final String REQUEST_PARAM_KEY_WIND = "request-param-wind";
+	public static final String REQUEST_PARAM_WIND = "wind";
 	
 	public static final String SERVICE_LIMIT="service_limit";
 	public static final int DEFAULT_SERVICE_LIMIT=200;

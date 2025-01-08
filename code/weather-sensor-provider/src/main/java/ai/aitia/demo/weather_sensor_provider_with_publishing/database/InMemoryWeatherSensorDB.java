@@ -44,8 +44,8 @@ public class InMemoryWeatherSensorDB extends ConcurrentHashMap<Integer, WeatherS
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-				if (values.length == 2) {
-					create(values[0], values[1]);
+				if (values.length == 4) {
+					create(values[0], values[1], values[2], values[3]);
 				} else {
 					throw new InvalidParameterException("Invalid line in CSV: " + line);
 				}
@@ -58,18 +58,24 @@ public class InMemoryWeatherSensorDB extends ConcurrentHashMap<Integer, WeatherS
         }
 	}
 
-	public WeatherSensor create(final String name, final String value) {
+	public WeatherSensor create(final String temperature, final String humidity, final String pressure, final String wind) { 
 		lock.readLock().lock();
         try {
-			if (name == null || name.isBlank()) {
+			if (temperature == null || temperature.isBlank()) {
 				throw new InvalidParameterException("name is null or empty");
 			}		
-			if (value == null || value.isBlank()) {
+			if (humidity == null || humidity.isBlank()) {
+				throw new InvalidParameterException("value is null or empty");
+			}
+			if (pressure == null || pressure.isBlank()) {
+				throw new InvalidParameterException("name is null or empty");
+			}		
+			if (wind == null || wind.isBlank()) {
 				throw new InvalidParameterException("value is null or empty");
 			}
 			
 			idCounter++;
-			this.put(idCounter, new WeatherSensor(idCounter, name.toLowerCase().trim(), value.toLowerCase().trim()));
+			this.put(idCounter, new WeatherSensor(idCounter, temperature.toLowerCase().trim(), humidity.toLowerCase().trim(), pressure.toLowerCase().trim(), wind.toLowerCase().trim()));
 
 		} finally {
             lock.readLock().unlock();
@@ -102,16 +108,22 @@ public class InMemoryWeatherSensorDB extends ConcurrentHashMap<Integer, WeatherS
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public WeatherSensor updateById(final int id, final String name, final String value) {
+	public WeatherSensor updateById(final int id, final String temperature, final String humidity, final String pressure, final String wind) {
 		lock.writeLock().lock();
         try {
 			if (this.containsKey(id)) {
 				final WeatherSensor weatherSensor = this.get(id);
-				if (name!= null && !name.isBlank()) {
-					weatherSensor.setName(name);
+				if (temperature!= null && !temperature.isBlank()) {
+					weatherSensor.setTemperature(temperature);
 				}
-				if (value != null && !value.isBlank()) {
-					weatherSensor.setValue(value);
+				if (humidity != null && !humidity.isBlank()) {
+					weatherSensor.setHumidity(humidity);
+				}
+				if (pressure!= null && !pressure.isBlank()) {
+					weatherSensor.setTemperature(pressure);
+				}
+				if (wind != null && !wind.isBlank()) {
+					weatherSensor.setWind(wind);
 				}
 				this.put(id, weatherSensor);
 				return weatherSensor;

@@ -17,7 +17,7 @@ public class DTOConverter {
 	//-------------------------------------------------------------------------------------------------
 	public static WeatherSensorResponseDTO convertWeatherSensorToWeatherSensorResponseDTO(final WeatherSensor weatherSensor) {
 		Assert.notNull(weatherSensor, "weatherSensor is null");
-		return new WeatherSensorResponseDTO(weatherSensor.getId(), weatherSensor.getName(), weatherSensor.getValue());
+		return new WeatherSensorResponseDTO(weatherSensor.getId(), weatherSensor.getTemperature(), weatherSensor.getHumidity(), weatherSensor.getPressure(), weatherSensor.getWind());
 	}
 	
 	//-------------------------------------------------------------------------------------------------
