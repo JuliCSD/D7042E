@@ -7,6 +7,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.springframework.stereotype.Component;
 
+import ai.aitia.demo.sensor_consumer_with_subscribing.LampProviderConstants;
 import ai.aitia.demo.sensor_consumer_with_subscribing.entity.Lamp;
 import eu.arrowhead.common.exception.InvalidParameterException;
 
@@ -35,7 +36,7 @@ public class InMemoryLampDB extends ConcurrentHashMap<Integer, Lamp> {
 
 	//-------------------------------------------------------------------------------------------------
 	private void initializeLamps() {
-		for(int i=0; i<20; i++){
+		for(int i=0; i<LampProviderConstants.NUMBER_OF_LAMPS; i++){
         	create( 0);
 		}
     }

@@ -1,5 +1,6 @@
 package ai.aitia.demo.lamp_consumer;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpMethod;
 import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.demo.smart_city_common.dto.LampRequestDTO;
 import ai.aitia.demo.smart_city_common.dto.LampResponseDTO;
+import ai.aitia.demo.smart_city_common.dto.SensorResponseDTO;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.SSLProperties;
 import eu.arrowhead.common.Utilities;
@@ -89,10 +91,12 @@ public class LampConsumerMain implements ApplicationRunner {
 			logger.info("Get all lamps:");
 			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
 			@SuppressWarnings("unchecked")
-			final List<LampResponseDTO> allLamp = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
-																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																					getInterface(), token, null, new String[0]);
-			printOut(allLamp);
+			final LampResponseDTO[] lampsArray = arrowheadService.consumeServiceHTTP(LampResponseDTO[].class, 
+																					HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
+																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), 
+																					orchestrationResult.getServiceUri(), getInterface(), token, null, new String[0]);
+			final List<LampResponseDTO> allLamps = Arrays.asList(lampsArray);
+			turnOnOff(allLamps);
 			
 			logger.info("Get only ON lamps:");
 			final String[] queryParamStatus= {orchestrationResult.getMetadata().get(LampConsumerConstants.REQUEST_PARAM_KEY_STATUS), "1"};			
@@ -100,13 +104,38 @@ public class LampConsumerMain implements ApplicationRunner {
 			final List<LampResponseDTO> onLamps = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
 																					  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
 																					  getInterface(), token, null, queryParamStatus);
+			
+
+
+			
+
+
 			printOut(onLamps);
+			
 		}
     }
     
     //=================================================================================================
 	// assistant methods
     
+	private void turnOnOff(final List<LampResponseDTO> allLamps) {
+		for (final LampResponseDTO lamp : allLamps) {
+			int status = lamp.getStatus();
+			int id = lamp.getId();
+
+			if(status == 0){
+				System.out.println("Turning off lamp with id: " + id);
+				continue;
+			}
+			if(status == 1){
+				System.out.println("Turning on lamp with id: " + id);
+				continue;
+			}
+			System.out.println("Error in turning on/off lamp with id: " + id);
+		}
+		
+	}
+
     //-------------------------------------------------------------------------------------------------
     private String getInterface() {
     	return sslProperties.isSslEnabled() ? LampConsumerConstants.INTERFACE_SECURE : LampConsumerConstants.INTERFACE_INSECURE;
