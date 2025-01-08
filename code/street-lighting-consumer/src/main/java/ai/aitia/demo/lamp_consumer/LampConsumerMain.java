@@ -55,7 +55,22 @@ public class LampConsumerMain implements ApplicationRunner {
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
-    	getLampServiceOrchestrationAndConsumption();
+		
+		int counter = 0;
+		int max_retry = 10;
+		while (!Thread.currentThread().isInterrupted() && (counter < max_retry)) {
+			try {
+				getLampServiceOrchestrationAndConsumption();
+				Thread.sleep(10000);
+			} catch (final InterruptedException ex) {
+				logger.debug("Thread interrupted", ex);
+				Thread.currentThread().interrupt(); // Restablecer el estado de interrupción
+				counter++;
+			} catch (final Exception ex) {
+				logger.error("An error occurred", ex);
+				counter++;
+			}
+		}
 	}
     
     
