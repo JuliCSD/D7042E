@@ -87,11 +87,6 @@ public class LightSensorProviderWithPublishingApplicationInitListener extends Ap
 		}		
 		
 		//Register services into ServiceRegistry
-		final ServiceRegistryRequestDTO updateLightSensorsServiceRequest = createServiceRegistryRequest(LightSensorProviderWithPublishingConstants.CREATE_LIGHT_SENSOR_SERVICE_DEFINITION, LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI, HttpMethod.POST);		
-		arrowheadService.forceRegisterServiceToServiceRegistry(updateLightSensorsServiceRequest);
-		
-		final ServiceRegistryRequestDTO updateLightSensorServiceRequest = createServiceRegistryRequest(LightSensorProviderWithPublishingConstants.UPDATE_LIGHT_SENSOR_SERVICE_DEFINITION, LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI, HttpMethod.POST);		
-		arrowheadService.forceRegisterServiceToServiceRegistry(updateLightSensorServiceRequest);
 
 		final ServiceRegistryRequestDTO getLightSensorServiceRequest = createServiceRegistryRequest(LightSensorProviderWithPublishingConstants.GET_LIGHT_SENSOR_SERVICE_DEFINITION,  LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI, HttpMethod.GET);
 		getLightSensorServiceRequest.getMetadata().put(LightSensorProviderWithPublishingConstants.REQUEST_PARAM_KEY_NAME, LightSensorProviderWithPublishingConstants.REQUEST_PARAM_NAME);
@@ -108,9 +103,7 @@ public class LightSensorProviderWithPublishingApplicationInitListener extends Ap
 	public void customDestroy() {
 		//Unregister service
 		publishDestroyedEvent();
-		arrowheadService.unregisterServiceFromServiceRegistry(LightSensorProviderWithPublishingConstants.CREATE_LIGHT_SENSOR_SERVICE_DEFINITION, LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI);
 		arrowheadService.unregisterServiceFromServiceRegistry(LightSensorProviderWithPublishingConstants.GET_LIGHT_SENSOR_SERVICE_DEFINITION, LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI);
-		arrowheadService.unregisterServiceFromServiceRegistry(LightSensorProviderWithPublishingConstants.UPDATE_LIGHT_SENSOR_SERVICE_DEFINITION, LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI);
 
 	}
 	

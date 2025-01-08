@@ -55,7 +55,6 @@ public class LampConsumerMain implements ApplicationRunner {
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
-    	// createLampServiceOrchestrationAndConsumption();
     	getLampServiceOrchestrationAndConsumption();
 	}
     

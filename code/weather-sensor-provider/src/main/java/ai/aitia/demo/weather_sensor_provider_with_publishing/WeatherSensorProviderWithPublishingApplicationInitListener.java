@@ -87,11 +87,6 @@ public class WeatherSensorProviderWithPublishingApplicationInitListener extends 
 		}		
 		
 		//Register services into ServiceRegistry
-		final ServiceRegistryRequestDTO updateWeatherSensorsServiceRequest = createServiceRegistryRequest(WeatherSensorProviderWithPublishingConstants.CREATE_WEATHER_SENSOR_SERVICE_DEFINITION, WeatherSensorProviderWithPublishingConstants.WEATHER_SENSOR_URI, HttpMethod.POST);		
-		arrowheadService.forceRegisterServiceToServiceRegistry(updateWeatherSensorsServiceRequest);
-		
-		final ServiceRegistryRequestDTO updateWeatherSensorServiceRequest = createServiceRegistryRequest(WeatherSensorProviderWithPublishingConstants.UPDATE_WEATHER_SENSOR_SERVICE_DEFINITION, WeatherSensorProviderWithPublishingConstants.WEATHER_SENSOR_URI, HttpMethod.POST);		
-		arrowheadService.forceRegisterServiceToServiceRegistry(updateWeatherSensorServiceRequest);
 
 		final ServiceRegistryRequestDTO getWeatherSensorServiceRequest = createServiceRegistryRequest(WeatherSensorProviderWithPublishingConstants.GET_WEATHER_SENSOR_SERVICE_DEFINITION,  WeatherSensorProviderWithPublishingConstants.WEATHER_SENSOR_URI, HttpMethod.GET);
 		getWeatherSensorServiceRequest.getMetadata().put(WeatherSensorProviderWithPublishingConstants.REQUEST_PARAM_KEY_NAME, WeatherSensorProviderWithPublishingConstants.REQUEST_PARAM_NAME);
@@ -108,9 +103,7 @@ public class WeatherSensorProviderWithPublishingApplicationInitListener extends 
 	public void customDestroy() {
 		//Unregister service
 		publishDestroyedEvent();
-		arrowheadService.unregisterServiceFromServiceRegistry(WeatherSensorProviderWithPublishingConstants.CREATE_WEATHER_SENSOR_SERVICE_DEFINITION, WeatherSensorProviderWithPublishingConstants.WEATHER_SENSOR_URI);
 		arrowheadService.unregisterServiceFromServiceRegistry(WeatherSensorProviderWithPublishingConstants.GET_WEATHER_SENSOR_SERVICE_DEFINITION, WeatherSensorProviderWithPublishingConstants.WEATHER_SENSOR_URI);
-		arrowheadService.unregisterServiceFromServiceRegistry(WeatherSensorProviderWithPublishingConstants.UPDATE_WEATHER_SENSOR_SERVICE_DEFINITION, WeatherSensorProviderWithPublishingConstants.WEATHER_SENSOR_URI);
 
 	}
 	

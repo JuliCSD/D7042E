@@ -135,10 +135,7 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
             logger.debug("Service not found in the registry, nothing to unregister.");
         }
 		
-		//Register LAMP services into ServiceRegistry
-		final ServiceRegistryRequestDTO createLampServiceRequest = createServiceRegistryRequest(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI, HttpMethod.POST);		
-		arrowheadService.forceRegisterServiceToServiceRegistry(createLampServiceRequest);
-		
+		//Register LAMP services into ServiceRegistry	
 		ServiceRegistryRequestDTO getLampServiceRequest = createServiceRegistryRequest(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION,  LampProviderConstants.LAMP_URI, HttpMethod.GET);
 		getLampServiceRequest.getMetadata().put(LampProviderConstants.REQUEST_PARAM_KEY_STATUS, LampProviderConstants.REQUEST_PARAM_STATUS);
 		arrowheadService.forceRegisterServiceToServiceRegistry(getLampServiceRequest);
