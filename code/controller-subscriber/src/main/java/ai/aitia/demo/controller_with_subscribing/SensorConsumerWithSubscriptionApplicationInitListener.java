@@ -128,7 +128,6 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 		consumerTask.start();
 		
 		try {
-            arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
             arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION,  LampProviderConstants.LAMP_URI);
 
 		} catch (final ArrowheadException ex) {
@@ -158,7 +157,6 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 			getConsumerTask().destroy();
 		}
 		
-		arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.CREATE_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
 		arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
 	
 	}

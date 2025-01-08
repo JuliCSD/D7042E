@@ -96,7 +96,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 		
 		interrupted = Thread.currentThread().isInterrupted();
 
-		// OrchestrationResultDTO lightSensorRequestingService = null;
+		OrchestrationResultDTO lightSensorRequestingService = null;
 		OrchestrationResultDTO weatherSensorRequestingService = null;
 		
 		int counter = 0;
@@ -108,7 +108,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 							if (reorchestration) {
 								logger.info("Recieved publisher destroyed event - started reorchestration.");
 								
-								// lightSensorRequestingService = orchestrateGetLightSensorService();
+								lightSensorRequestingService = orchestrateGetLightSensorService();
 								weatherSensorRequestingService = orchestrateGetWeatherSensorService();	
 
 							} else {
@@ -123,17 +123,16 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 					notificatonQueue.clear();
 				}
 
-				if (weatherSensorRequestingService != null) { //(lightSensorRequestingService != null && weatherSensorRequestingService != null) {
-					// List<LightSensorResponseDTO> allLightSensor = callLightSensorRequestingService(lightSensorRequestingService);
+				if (lightSensorRequestingService != null && weatherSensorRequestingService != null) {
+					List<LightSensorResponseDTO> allLightSensor = callLightSensorRequestingService(lightSensorRequestingService);
 					List<WeatherSensorResponseDTO> allWeatherSensor = callWeatherSensorRequestingService(weatherSensorRequestingService);
-					// System.out.println("LampDB updated : "+updateLampStatus(allLightSensor));
-					System.out.println("LampDB updated : ");
+					System.out.println("LampDB updated : "+updateLampStatus(allLightSensor, allWeatherSensor));
 
 
 				} else {
 					counter++;
 					
-					// lightSensorRequestingService = orchestrateGetLightSensorService();
+					lightSensorRequestingService = orchestrateGetLightSensorService();
 					weatherSensorRequestingService = orchestrateGetWeatherSensorService();
 					
 					if (weatherSensorRequestingService != null) {//lightSensorRequestingService != null && weatherSensorRequestingService != null) {
@@ -141,7 +140,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 						
 						final Set<SystemResponseDTO> sources = new HashSet<SystemResponseDTO>();
 						
-						// sources.add(lightSensorRequestingService.getProvider());
+						sources.add(lightSensorRequestingService.getProvider());
 						sources.add(weatherSensorRequestingService.getProvider());
 						
 						subscribeToDestoryEvents(sources);
@@ -150,7 +149,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			} catch (final Throwable ex) {
 				logger.debug(ex.getMessage());
 				
-				// lightSensorRequestingService = null;
+				lightSensorRequestingService = null;
 				weatherSensorRequestingService = null;
 			}	
 
@@ -263,7 +262,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 
     //-------------------------------------------------------------------------------------------------
     private OrchestrationResultDTO orchestrateGetWeatherSensorService() {
-    	logger.info("Orchestration request for " + SensorConsumerConstants.GET_WEATHER_SENSOR_SERVICE_DEFINITION + " service:");
+    	// logger.info("Orchestration request for " + SensorConsumerConstants.GET_WEATHER_SENSOR_SERVICE_DEFINITION + " service:");
     	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(SensorConsumerConstants.GET_WEATHER_SENSOR_SERVICE_DEFINITION)
     																		.interfaces(getInterface())
     																		.build();
@@ -274,12 +273,12 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 																					   .flag(Flag.OVERRIDE_STORE, true)
 																					   .flag(Flag.PING_PROVIDERS, true)
 																					   .build();
-		printOut(orchestrationFormRequest);		
+		// printOut(orchestrationFormRequest);		
 		
 		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
 		
-		logger.info("Orchestration response:");
-		printOut(orchestrationResponse);		
+		// logger.info("Orchestration response:");
+		// printOut(orchestrationResponse);		
 		
 		if (orchestrationResponse == null) {
 			logger.info("No orchestration response received");
@@ -312,7 +311,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 		final List<LightSensorResponseDTO> allLightSensor = Arrays.asList(lightSensorsArray);
 
 																				
-		printOut(allLightSensor);
+		// printOut(allLightSensor);
 		return allLightSensor;
 		
     }
@@ -333,14 +332,14 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 		final List<WeatherSensorResponseDTO> allWeatherSensor = Arrays.asList(weatherSensorsArray);
 
 																				
-		printOut(allWeatherSensor);
+		// printOut(allWeatherSensor);
 		return allWeatherSensor;
 		
     }
   
 
 	//-------------------------------------------------------------------------------------------------
-	private boolean updateLampStatus(final List<LightSensorResponseDTO> allLightSensor) {
+	private boolean updateLampStatus(final List<LightSensorResponseDTO> allLightSensor, final List<WeatherSensorResponseDTO> allWeatherSensor) {
 
 		if (allLightSensor == null) {
 			logger.error("allLightSensor is null");
@@ -365,7 +364,8 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 				continue;
 			}
 
-			// logger.info("Processing lightSensor with ID: " + lightSensorId + ", Value: " + value);
+			// logger.info("Processing lightSensor with ID: " + lightSensorId + ", Value: " + value);\
+			// System.out.println("lightSensorId % LampProviderConstants.NUMBER_OF_LAMPS = "+ lightSensorId+"%"+LampProviderConstants.NUMBER_OF_LAMPS+" = " + lightSensorId % LampProviderConstants.NUMBER_OF_LAMPS);
 
 			int lampId = (lightSensorId % LampProviderConstants.NUMBER_OF_LAMPS) + 1;
 			Lamp lamp = lampDB.getById(lampId);

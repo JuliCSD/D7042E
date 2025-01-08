@@ -29,7 +29,7 @@ public class CsvDataLoader implements CommandLineRunner {
                 Thread.sleep(2000);
                 loadCsvData();
                 if (lightSensorDB.getAll().size() > 0) {
-                    System.out.println(lightSensorDB.getAll().get(0).getValue());
+                    // System.out.println(lightSensorDB.getAll().get(0).getValue());
                 } else {
                     System.out.println("No data available in lightSensorDB.");
                 }
@@ -44,7 +44,7 @@ public class CsvDataLoader implements CommandLineRunner {
     }
 
     private void loadCsvData() {
-        System.out.println("Loading data from CSV file...");
+        // System.out.println("Loading data from CSV file...");
         ExecutorService executorService = Executors.newFixedThreadPool(10); // Adjust the number of threads as needed
 
         try (BufferedReader br = new BufferedReader(new FileReader("light-sensor-provider/target/test.csv"))) {
