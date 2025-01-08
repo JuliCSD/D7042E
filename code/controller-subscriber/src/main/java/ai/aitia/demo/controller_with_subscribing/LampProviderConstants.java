@@ -21,6 +21,9 @@ public class LampProviderConstants {
 	public static final int NUMBER_OF_LAMPS = 10;
 	public static final int ON_THRESHOLD = 600;
 	public static final int OFF_THRESHOLD = 400;
+
+	public static final String REQUEST_PARAM_KEY_UPDATE = "request-param-update";
+	public static final String REQUEST_LAMP_UPDATE = "update";
 	
 	//=================================================================================================
 	// assistant methods

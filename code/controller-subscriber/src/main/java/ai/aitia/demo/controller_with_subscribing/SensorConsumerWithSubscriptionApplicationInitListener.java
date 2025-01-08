@@ -129,15 +129,18 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 		
 		try {
             arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION,  LampProviderConstants.LAMP_URI);
+			arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.REQUEST_LAMP_UPDATE,  LampProviderConstants.LAMP_URI);
+
 
 		} catch (final ArrowheadException ex) {
             logger.debug("Service not found in the registry, nothing to unregister.");
         }
 		
 		//Register LAMP services into ServiceRegistry	
-		ServiceRegistryRequestDTO getLampServiceRequest = createServiceRegistryRequest(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION,  LampProviderConstants.LAMP_URI, HttpMethod.GET);
-		getLampServiceRequest.getMetadata().put(LampProviderConstants.REQUEST_PARAM_KEY_STATUS, LampProviderConstants.REQUEST_PARAM_STATUS);
-		arrowheadService.forceRegisterServiceToServiceRegistry(getLampServiceRequest);
+		
+		ServiceRegistryRequestDTO updLampServiceRequest = createServiceRegistryRequest(LampProviderConstants.REQUEST_LAMP_UPDATE,  LampProviderConstants.LAMP_URI, HttpMethod.GET);
+		updLampServiceRequest.getMetadata().put(LampProviderConstants.REQUEST_PARAM_KEY_UPDATE, LampProviderConstants.REQUEST_PARAM_KEY_UPDATE);
+		arrowheadService.forceRegisterServiceToServiceRegistry(updLampServiceRequest);
 		
 	}
 
@@ -158,7 +161,8 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 		}
 		
 		arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.GET_LAMP_SERVICE_DEFINITION, LampProviderConstants.LAMP_URI);
-	
+		arrowheadService.unregisterServiceFromServiceRegistry(LampProviderConstants.REQUEST_LAMP_UPDATE, LampProviderConstants.LAMP_URI);
+
 	}
 	
 	//=================================================================================================

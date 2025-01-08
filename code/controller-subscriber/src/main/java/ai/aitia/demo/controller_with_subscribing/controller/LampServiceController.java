@@ -34,7 +34,7 @@ public class LampServiceController {
 
 	//-------------------------------------------------------------------------------------------------
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody public List<LampResponseDTO> getLamps( @RequestParam(name = LampProviderConstants.REQUEST_PARAM_STATUS, required = false) final Integer status) {
+	@ResponseBody public List<LampResponseDTO> getOnlyUpdatedLamps( @RequestParam(name = LampProviderConstants.REQUEST_PARAM_KEY_UPDATE, required = false) final boolean update) {
 		final List<LampResponseDTO> response = new ArrayList<>();
 		for (final Lamp lamp : lampDB.getAll()) {
 
@@ -42,13 +42,13 @@ public class LampServiceController {
 			lamp.setlastRequestStatus(lastRequestStatus);
 
 			boolean toAdd = true;
-			
-			if (status!=null && lamp.getStatus() != status) {
+			if (update && lamp.getSendToLamp()==false) {
 				toAdd = false;
 			}
 			if (toAdd) {
 				response.add(DTOConverter.convertLampToLampResponseDTO(lamp));
 			}
+			lamp.setSendToLamp(false);
 		}
 		return response;
 	}

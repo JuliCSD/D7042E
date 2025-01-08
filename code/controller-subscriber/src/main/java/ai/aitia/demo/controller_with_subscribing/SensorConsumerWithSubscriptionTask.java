@@ -379,7 +379,8 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 
 			if(currentStatus == 1 && value < LampProviderConstants.OFF_THRESHOLD) {
 				// lampDB.updateById(lampId, 0);
-				lampDB.getById(lampId).setStatus(0);
+				lamp.setStatus(0);
+				lamp.setSendToLamp(true);
 
 				if(currentStatus != lastRequestStatus) {
 					logger.info("Lamp ID " + lampId + " turned OFF.");
@@ -388,7 +389,9 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 
 			} else if(currentStatus == 0 && value > LampProviderConstants.ON_THRESHOLD) {
 				// lampDB.updateById(lampId, 1);
-				lampDB.getById(lampId).setStatus(1);
+				lamp.setStatus(1);
+				lamp.setSendToLamp(true);
+
 				if(currentStatus != lastRequestStatus) {
 					logger.info("Lamp ID " + lampId + " turned ON.");
 				}

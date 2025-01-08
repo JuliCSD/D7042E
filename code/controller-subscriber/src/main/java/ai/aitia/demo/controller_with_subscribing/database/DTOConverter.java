@@ -17,7 +17,7 @@ public class DTOConverter {
 	//-------------------------------------------------------------------------------------------------
 	public static LampResponseDTO convertLampToLampResponseDTO(final Lamp lamp) {
 		Assert.notNull(lamp, "lamp is null");
-		return new LampResponseDTO(lamp.getId(), lamp.getStatus(), lamp.getlastRequestStatus());
+		return new LampResponseDTO(lamp.getId(), lamp.getStatus(), lamp.getlastRequestStatus(), lamp.getSendToLamp());
 	}
 	
 	//-------------------------------------------------------------------------------------------------

@@ -60,7 +60,7 @@ public class LampConsumerMain implements ApplicationRunner {
 		int max_retry = 10;
 		while (!Thread.currentThread().isInterrupted() && (counter < max_retry)) {
 			try {
-				getLampServiceOrchestrationAndConsumption();
+				getUpdatedLampServiceOrchestrationAndConsumption();
 				Thread.sleep(10000);
 			} catch (final InterruptedException ex) {
 				logger.debug("Thread interrupted", ex);
@@ -75,7 +75,52 @@ public class LampConsumerMain implements ApplicationRunner {
     
     
     //-------------------------------------------------------------------------------------------------
-    public void getLampServiceOrchestrationAndConsumption() {
+    public void getUpdatedLampServiceOrchestrationAndConsumption() {
+    	// logger.info("Orchestration request for " + LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION + " service:");
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(LampConsumerConstants.REQUEST_LAMP_UPDATE)
+    																		.interfaces(getInterface())
+    																		.build();
+    	
+		final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
+		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
+																					   .flag(Flag.MATCHMAKING, true)
+																					   .flag(Flag.OVERRIDE_STORE, true)
+																					   .build();
+		
+		// printOut(orchestrationFormRequest);		
+		
+		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+		
+		logger.info("Orchestration response:");
+		printOut(orchestrationResponse);		
+		
+		if (orchestrationResponse == null) {
+			logger.info("No orchestration response received");
+		} else if (orchestrationResponse.getResponse().isEmpty()) {
+			logger.info("No provider found during the orchestration");
+		} else {
+			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
+			validateOrchestrationResult(orchestrationResult, LampConsumerConstants.REQUEST_LAMP_UPDATE);
+			
+			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
+
+			logger.info("Get only lamps to update:");
+			final String[] queryParamStatus= {orchestrationResult.getMetadata().get(LampConsumerConstants.REQUEST_PARAM_KEY_UPDATE), "true"};			
+			@SuppressWarnings("unchecked")
+			final LampResponseDTO[] updLampsArray = arrowheadService.consumeServiceHTTP(LampResponseDTO[].class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
+																					  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+																					  getInterface(), token, null, queryParamStatus);
+			
+			final List<LampResponseDTO> updLamps = Arrays.asList(updLampsArray);
+			printOut(updLamps);
+			turnOnOff(updLamps);
+			
+		}
+    }
+    
+
+    //-------------------------------------------------------------------------------------------------
+    public void getAllLampServiceOrchestrationAndConsumption() {
     	logger.info("Orchestration request for " + LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION + " service:");
     	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION)
     																		.interfaces(getInterface())
@@ -111,24 +156,14 @@ public class LampConsumerMain implements ApplicationRunner {
 																					orchestrationResult.getServiceUri(), getInterface(), token, null, new String[0]);
 			final List<LampResponseDTO> allLamps = Arrays.asList(lampsArray);
 			turnOnOff(allLamps);
-			
-			// logger.info("Get only ON lamps:");
-			final String[] queryParamStatus= {orchestrationResult.getMetadata().get(LampConsumerConstants.REQUEST_PARAM_KEY_STATUS), "1"};			
-			@SuppressWarnings("unchecked")
-			final List<LampResponseDTO> onLamps = arrowheadService.consumeServiceHTTP(List.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
-																					  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-																					  getInterface(), token, null, queryParamStatus);
-			
-
-
-			
-
-
 			printOut(allLamps);
+
 			
 		}
     }
     
+
+
     //=================================================================================================
 	// assistant methods
     
