@@ -8,7 +8,7 @@
   	</parent>
 	
 	<artifactId>light-sensor-provider</artifactId>
-	<name>Arrowhead Demo Sensor Provider With Publishing</name>
+	<name>Arrowhead Demo LightSensor Provider With Publishing</name>
 	
 	<dependencies>
 		<dependency>

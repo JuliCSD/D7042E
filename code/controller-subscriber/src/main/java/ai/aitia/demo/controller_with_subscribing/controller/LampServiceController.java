@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_consumer_with_subscribing.controller;
+package ai.aitia.demo.controller_with_subscribing.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.aitia.demo.smart_city_common.dto.LampRequestDTO;
 import ai.aitia.demo.smart_city_common.dto.LampResponseDTO;
-import ai.aitia.demo.sensor_consumer_with_subscribing.LampProviderConstants;
-import ai.aitia.demo.sensor_consumer_with_subscribing.database.DTOConverter;
-import ai.aitia.demo.sensor_consumer_with_subscribing.database.InMemoryLampDB;
-import ai.aitia.demo.sensor_consumer_with_subscribing.entity.Lamp;
+import ai.aitia.demo.controller_with_subscribing.LampProviderConstants;
+import ai.aitia.demo.controller_with_subscribing.database.DTOConverter;
+import ai.aitia.demo.controller_with_subscribing.database.InMemoryLampDB;
+import ai.aitia.demo.controller_with_subscribing.entity.Lamp;
 import eu.arrowhead.common.exception.BadPayloadException;
 
 @RestController

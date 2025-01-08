@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_consumer_with_subscribing;
+package ai.aitia.demo.controller_with_subscribing;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -19,7 +19,7 @@ import eu.arrowhead.common.dto.shared.EventDTO;
 
 @RestController
 @RequestMapping( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI)
-public class SensorConsumerWithSubscriptionController {
+public class LightSensorConsumerWithSubscriptionController {
 	
 	//=================================================================================================
 	// members
@@ -27,7 +27,7 @@ public class SensorConsumerWithSubscriptionController {
 	@Resource( name = SubscriberConstants.NOTIFICATION_QUEUE )
 	private ConcurrentLinkedQueue<EventDTO> notificatonQueue;
 
-	private final Logger logger = LogManager.getLogger(SensorConsumerWithSubscriptionController.class);
+	private final Logger logger = LogManager.getLogger(LightSensorConsumerWithSubscriptionController.class);
 	
 	//=================================================================================================
 	// methods

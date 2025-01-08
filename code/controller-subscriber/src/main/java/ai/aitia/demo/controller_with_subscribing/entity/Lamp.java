@@ -1,30 +1,30 @@
-package ai.aitia.demo.sensor_provider_with_publishing.entity;
+package ai.aitia.demo.controller_with_subscribing.entity;
 
-public class Sensor {
+public class Lamp {
 
 	//=================================================================================================
 	// members
 
 	private final int id;
-	private String name;
-	private String value;
+	private Integer status;
+	private Integer lastRequestStatus;
 
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public Sensor(final int id, final String name, final String value) {
+	public Lamp(final int id, final Integer status) {
 		this.id = id;
-		this.name = name;
-		this.value = value;
+		this.status= status;
+		this.lastRequestStatus = status;
 	}
 
 	//-------------------------------------------------------------------------------------------------
 	public int getId() { return id; }
-	public String getName() { return name; }
-	public String getValue() { return value; }
+	public Integer getStatus() { return status; }
+	public Integer getlastRequestStatus() { return lastRequestStatus; }
 
 	//-------------------------------------------------------------------------------------------------
-	public void setName(final String name) { this.name = name; }
-	public void setValue(final String value) { this.value = value; }	
+	public void setStatus(final Integer status) { this.status= status; }	
+	public void setlastRequestStatus(final Integer lastRequestStatus) { this.lastRequestStatus = lastRequestStatus; }
 }

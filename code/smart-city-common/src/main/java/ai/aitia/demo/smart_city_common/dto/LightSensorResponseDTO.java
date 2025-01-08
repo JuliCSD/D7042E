@@ -2,7 +2,7 @@ package ai.aitia.demo.smart_city_common.dto;
 
 import java.io.Serializable;
 
-public class SensorResponseDTO implements Serializable {
+public class LightSensorResponseDTO implements Serializable {
 
 	//=================================================================================================
 	// members
@@ -17,10 +17,10 @@ public class SensorResponseDTO implements Serializable {
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public SensorResponseDTO() {}
+	public LightSensorResponseDTO() {}
 	
 	//-------------------------------------------------------------------------------------------------
-	public SensorResponseDTO(final int id, final String name, final String value) {
+	public LightSensorResponseDTO(final int id, final String name, final String value) {
 		this.id = id;
 		this.name = name;
 		this.value = value;

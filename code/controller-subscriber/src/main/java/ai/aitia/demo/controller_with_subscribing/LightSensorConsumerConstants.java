@@ -1,6 +1,6 @@
-package ai.aitia.demo.sensor_consumer_with_subscribing;
+package ai.aitia.demo.controller_with_subscribing;
 
-public class SensorConsumerConstants {
+public class LightSensorConsumerConstants {
 	
 	//=================================================================================================
 	// members
@@ -11,9 +11,9 @@ public class SensorConsumerConstants {
 	public static final String INTERFACE_INSECURE = "HTTP-INSECURE-JSON";
 	public static final String HTTP_METHOD = "http-method";
 	
-	public static final String CREATE_SENSOR_SERVICE_DEFINITION = "create-sensor";
-	public static final String UPDATE_SENSOR_SERVICE_DEFINITION = "update-sensor";
-	public static final String GET_SENSOR_SERVICE_DEFINITION = "get-sensor";
+	public static final String CREATE_LIGHT_SENSOR_SERVICE_DEFINITION = "create-light-sensor";
+	public static final String UPDATE_LIGHT_SENSOR_SERVICE_DEFINITION = "update-light-sensor";
+	public static final String GET_LIGHT_SENSOR_SERVICE_DEFINITION = "get-light-sensor";
 	public static final String REQUEST_PARAM_KEY_NAME = "request-param-name";
 	public static final String REQUEST_PARAM_KEY_VALUE = "request-param-value";
 	public static final String $REORCHESTRATION_WD = "${reorchestration:false}";
@@ -23,7 +23,7 @@ public class SensorConsumerConstants {
 	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	private SensorConsumerConstants() {
+	private LightSensorConsumerConstants() {
 		throw new UnsupportedOperationException();
 	}
 

@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_provider_with_publishing.database;
+package ai.aitia.demo.light_sensor_provider_with_publishing.database;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.springframework.stereotype.Component;
 
-import ai.aitia.demo.sensor_provider_with_publishing.entity.Sensor;
+import ai.aitia.demo.light_sensor_provider_with_publishing.entity.LightSensor;
 import eu.arrowhead.common.exception.InvalidParameterException;
 
 import java.io.BufferedReader;
@@ -16,7 +16,7 @@ import java.io.IOException;
 
 
 @Component
-public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
+public class InMemoryLightSensorDB extends ConcurrentHashMap<Integer, LightSensor> {
 
 	//=================================================================================================
 	// members
@@ -28,8 +28,8 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
 
-	public InMemorySensorDB() {
-		initializeSensors();
+	public InMemoryLightSensorDB() {
+		initializeLightSensors();
 	}
 	
 	//=================================================================================================
@@ -37,7 +37,7 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 
 	//-------------------------------------------------------------------------------------------------
 
-	private void initializeSensors() {
+	private void initializeLightSensors() {
 		lock.readLock().lock();
 
 		try (BufferedReader br = new BufferedReader(new FileReader("light-sensor-provider/target/test.csv"))) {
@@ -58,7 +58,7 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
         }
 	}
 
-	public Sensor create(final String name, final String value) {
+	public LightSensor create(final String name, final String value) {
 		lock.readLock().lock();
         try {
 			if (name == null || name.isBlank()) {
@@ -69,7 +69,7 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 			}
 			
 			idCounter++;
-			this.put(idCounter, new Sensor(idCounter, name.toLowerCase().trim(), value.toLowerCase().trim()));
+			this.put(idCounter, new LightSensor(idCounter, name.toLowerCase().trim(), value.toLowerCase().trim()));
 
 		} finally {
             lock.readLock().unlock();
@@ -78,7 +78,7 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public List<Sensor> getAll() {
+	public List<LightSensor> getAll() {
 		lock.readLock().lock();
         try {
 			return List.copyOf(this.values());
@@ -88,7 +88,7 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public Sensor getById(final int id) {
+	public LightSensor getById(final int id) {
 		lock.writeLock().lock();
 		try{
 			if (this.containsKey(id)) {
@@ -102,19 +102,19 @@ public class InMemorySensorDB extends ConcurrentHashMap<Integer, Sensor> {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public Sensor updateById(final int id, final String name, final String value) {
+	public LightSensor updateById(final int id, final String name, final String value) {
 		lock.writeLock().lock();
         try {
 			if (this.containsKey(id)) {
-				final Sensor sensor = this.get(id);
+				final LightSensor lightSensor = this.get(id);
 				if (name!= null && !name.isBlank()) {
-					sensor.setName(name);
+					lightSensor.setName(name);
 				}
 				if (value != null && !value.isBlank()) {
-					sensor.setValue(value);
+					lightSensor.setValue(value);
 				}
-				this.put(id, sensor);
-				return sensor;
+				this.put(id, lightSensor);
+				return lightSensor;
 			} else {
 				throw new InvalidParameterException("id '" + id + "' not exists");
 			}

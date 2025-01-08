@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_provider_with_publishing;
+package ai.aitia.demo.light_sensor_provider_with_publishing;
 
 import java.io.IOException;
 import java.security.KeyStore;
@@ -37,7 +37,7 @@ import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 
 @Component
-public class SensorProviderWithPublishingApplicationInitListener extends ApplicationInitListener {
+public class LightSensorProviderWithPublishingApplicationInitListener extends ApplicationInitListener {
 	
 	//=================================================================================================
 	// members
@@ -63,7 +63,7 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_PORT_WD)
 	private int mySystemPort;
 	
-	private final Logger logger = LogManager.getLogger(SensorProviderWithPublishingApplicationInitListener.class);
+	private final Logger logger = LogManager.getLogger(LightSensorProviderWithPublishingApplicationInitListener.class);
 	
 	//=================================================================================================
 	// methods
@@ -87,16 +87,16 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 		}		
 		
 		//Register services into ServiceRegistry
-		final ServiceRegistryRequestDTO updateSensorsServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.CREATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.POST);		
-		arrowheadService.forceRegisterServiceToServiceRegistry(updateSensorsServiceRequest);
+		final ServiceRegistryRequestDTO updateLightSensorsServiceRequest = createServiceRegistryRequest(LightSensorProviderWithPublishingConstants.CREATE_LIGHT_SENSOR_SERVICE_DEFINITION, LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI, HttpMethod.POST);		
+		arrowheadService.forceRegisterServiceToServiceRegistry(updateLightSensorsServiceRequest);
 		
-		final ServiceRegistryRequestDTO updateSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.UPDATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.POST);		
-		arrowheadService.forceRegisterServiceToServiceRegistry(updateSensorServiceRequest);
+		final ServiceRegistryRequestDTO updateLightSensorServiceRequest = createServiceRegistryRequest(LightSensorProviderWithPublishingConstants.UPDATE_LIGHT_SENSOR_SERVICE_DEFINITION, LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI, HttpMethod.POST);		
+		arrowheadService.forceRegisterServiceToServiceRegistry(updateLightSensorServiceRequest);
 
-		final ServiceRegistryRequestDTO getSensorServiceRequest = createServiceRegistryRequest(SensorProviderWithPublishingConstants.GET_SENSOR_SERVICE_DEFINITION,  SensorProviderWithPublishingConstants.SENSOR_URI, HttpMethod.GET);
-		getSensorServiceRequest.getMetadata().put(SensorProviderWithPublishingConstants.REQUEST_PARAM_KEY_NAME, SensorProviderWithPublishingConstants.REQUEST_PARAM_NAME);
-		getSensorServiceRequest.getMetadata().put(SensorProviderWithPublishingConstants.REQUEST_PARAM_KEY_VALUE, SensorProviderWithPublishingConstants.REQUEST_PARAM_VALUE);
-		arrowheadService.forceRegisterServiceToServiceRegistry(getSensorServiceRequest);
+		final ServiceRegistryRequestDTO getLightSensorServiceRequest = createServiceRegistryRequest(LightSensorProviderWithPublishingConstants.GET_LIGHT_SENSOR_SERVICE_DEFINITION,  LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI, HttpMethod.GET);
+		getLightSensorServiceRequest.getMetadata().put(LightSensorProviderWithPublishingConstants.REQUEST_PARAM_KEY_NAME, LightSensorProviderWithPublishingConstants.REQUEST_PARAM_NAME);
+		getLightSensorServiceRequest.getMetadata().put(LightSensorProviderWithPublishingConstants.REQUEST_PARAM_KEY_VALUE, LightSensorProviderWithPublishingConstants.REQUEST_PARAM_VALUE);
+		arrowheadService.forceRegisterServiceToServiceRegistry(getLightSensorServiceRequest);
 		
 		if (arrowheadService.echoCoreSystem(CoreSystem.EVENTHANDLER)) {
 			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENTHANDLER);	
@@ -108,9 +108,9 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 	public void customDestroy() {
 		//Unregister service
 		publishDestroyedEvent();
-		arrowheadService.unregisterServiceFromServiceRegistry(SensorProviderWithPublishingConstants.CREATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI);
-		arrowheadService.unregisterServiceFromServiceRegistry(SensorProviderWithPublishingConstants.GET_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI);
-		arrowheadService.unregisterServiceFromServiceRegistry(SensorProviderWithPublishingConstants.UPDATE_SENSOR_SERVICE_DEFINITION, SensorProviderWithPublishingConstants.SENSOR_URI);
+		arrowheadService.unregisterServiceFromServiceRegistry(LightSensorProviderWithPublishingConstants.CREATE_LIGHT_SENSOR_SERVICE_DEFINITION, LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI);
+		arrowheadService.unregisterServiceFromServiceRegistry(LightSensorProviderWithPublishingConstants.GET_LIGHT_SENSOR_SERVICE_DEFINITION, LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI);
+		arrowheadService.unregisterServiceFromServiceRegistry(LightSensorProviderWithPublishingConstants.UPDATE_LIGHT_SENSOR_SERVICE_DEFINITION, LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI);
 
 	}
 	
@@ -183,19 +183,19 @@ public class SensorProviderWithPublishingApplicationInitListener extends Applica
 		if (sslEnabled && tokenSecurityFilterEnabled) {
 			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 			serviceRegistryRequest.setSecure(ServiceSecurityType.TOKEN.name());
-			serviceRegistryRequest.setInterfaces(List.of(SensorProviderWithPublishingConstants.INTERFACE_SECURE));
+			serviceRegistryRequest.setInterfaces(List.of(LightSensorProviderWithPublishingConstants.INTERFACE_SECURE));
 		} else if (sslEnabled) {
 			systemRequest.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 			serviceRegistryRequest.setSecure(ServiceSecurityType.CERTIFICATE.name());
-			serviceRegistryRequest.setInterfaces(List.of(SensorProviderWithPublishingConstants.INTERFACE_SECURE));
+			serviceRegistryRequest.setInterfaces(List.of(LightSensorProviderWithPublishingConstants.INTERFACE_SECURE));
 		} else {
 			serviceRegistryRequest.setSecure(ServiceSecurityType.NOT_SECURE.name());
-			serviceRegistryRequest.setInterfaces(List.of(SensorProviderWithPublishingConstants.INTERFACE_INSECURE));
+			serviceRegistryRequest.setInterfaces(List.of(LightSensorProviderWithPublishingConstants.INTERFACE_INSECURE));
 		}
 		serviceRegistryRequest.setProviderSystem(systemRequest);
 		serviceRegistryRequest.setServiceUri(serviceUri);
 		serviceRegistryRequest.setMetadata(new HashMap<>());
-		serviceRegistryRequest.getMetadata().put(SensorProviderWithPublishingConstants.HTTP_METHOD, httpMethod.name());
+		serviceRegistryRequest.getMetadata().put(LightSensorProviderWithPublishingConstants.HTTP_METHOD, httpMethod.name());
 		return serviceRegistryRequest;
 	}
 }

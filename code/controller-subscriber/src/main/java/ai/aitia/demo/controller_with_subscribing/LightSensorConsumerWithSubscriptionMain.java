@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_consumer_with_subscribing;
+package ai.aitia.demo.controller_with_subscribing;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,15 +10,15 @@ import eu.arrowhead.common.CommonConstants;
 
 @SpringBootApplication
 @EnableConfigurationProperties(ConfigEventProperites.class)
-@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, SensorConsumerConstants.BASE_PACKAGE, LampProviderConstants.BASE_PACKAGE})
-public class SensorConsumerWithSubscriptionMain {
+@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, LightSensorConsumerConstants.BASE_PACKAGE, LampProviderConstants.BASE_PACKAGE})
+public class LightSensorConsumerWithSubscriptionMain {
     
     //=================================================================================================
 	// methods
 
 	//------------------------------------------------------------------------------------------------
     public static void main( final String[] args ) {
-    	SpringApplication.run(SensorConsumerWithSubscriptionMain.class, args);
+    	SpringApplication.run(LightSensorConsumerWithSubscriptionMain.class, args);
     }
    
 }

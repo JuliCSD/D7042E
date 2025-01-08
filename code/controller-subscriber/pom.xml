@@ -8,7 +8,7 @@
   	</parent>
 	
 	<artifactId>controller-subscriber</artifactId>
-	<name>Arrowhead Demo Sensor Consumer With Subscribing</name>
+	<name>Arrowhead Demo LightSensor Consumer With Subscribing</name>
 	
 	<dependencies>
 		<dependency>

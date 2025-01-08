@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_provider_with_publishing.database;
+package ai.aitia.demo.light_sensor_provider_with_publishing.database;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,10 +16,10 @@ import eu.arrowhead.common.exception.InvalidParameterException;
 public class CsvDataLoader implements CommandLineRunner {
     
     @Autowired
-    private final InMemorySensorDB sensorDB;
+    private final InMemoryLightSensorDB lightSensorDB;
 
-    public CsvDataLoader(InMemorySensorDB sensorDB) {
-        this.sensorDB = sensorDB;
+    public CsvDataLoader(InMemoryLightSensorDB lightSensorDB) {
+        this.lightSensorDB = lightSensorDB;
     }
 
     @Override
@@ -28,10 +28,10 @@ public class CsvDataLoader implements CommandLineRunner {
             try {
                 Thread.sleep(2000);
                 loadCsvData();
-                if (sensorDB.getAll().size() > 0) {
-                    System.out.println(sensorDB.getAll().get(0).getValue());
+                if (lightSensorDB.getAll().size() > 0) {
+                    System.out.println(lightSensorDB.getAll().get(0).getValue());
                 } else {
-                    System.out.println("No data available in sensorDB.");
+                    System.out.println("No data available in lightSensorDB.");
                 }
 
             } catch (InterruptedException e) {
@@ -51,11 +51,11 @@ public class CsvDataLoader implements CommandLineRunner {
             String line;
             int id = 0;
             while ((line = br.readLine()) != null) {
-                final int sensorId = id;
+                final int lightSensorId = id;
                 final String[] values = line.split(",");
                 if (values.length == 2) {
                     executorService.submit(() -> {
-                        sensorDB.updateById(sensorId, values[0], values[1]);
+                        lightSensorDB.updateById(lightSensorId, values[0], values[1]);
                     });
                 } else {
                     throw new InvalidParameterException("Invalid line in CSV: " + line);

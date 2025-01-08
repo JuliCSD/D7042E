@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_consumer_with_subscribing;
+package ai.aitia.demo.controller_with_subscribing;
 
 import java.io.IOException;
 import java.security.KeyStore;
@@ -45,7 +45,7 @@ import eu.arrowhead.application.skeleton.subscriber.security.SubscriberSecurityC
 
 @Component
 @Configuration
-public class SensorConsumerWithSubscriptionApplicationInitListener extends ApplicationInitListener {
+public class LightSensorConsumerWithSubscriptionApplicationInitListener extends ApplicationInitListener {
 	
 	//=================================================================================================
 	// members
@@ -71,7 +71,7 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_PORT_WD)
 	private int applicationSystemPort;
 	
-	private final Logger logger = LogManager.getLogger(SensorConsumerWithSubscriptionApplicationInitListener.class);
+	private final Logger logger = LogManager.getLogger(LightSensorConsumerWithSubscriptionApplicationInitListener.class);
 	
 	@Autowired
 	private ConfigEventProperites configEventProperites;
@@ -90,8 +90,8 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 	
 	//-------------------------------------------------------------------------------------------------
 	@Bean( SubscriberConstants.CONSUMER_TASK )
-	public SensorConsumerWithSubscriptionTask getConsumerTask() {
-		return new SensorConsumerWithSubscriptionTask();
+	public LightSensorConsumerWithSubscriptionTask getConsumerTask() {
+		return new LightSensorConsumerWithSubscriptionTask();
 	}
 
 	//-------------------------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ public class SensorConsumerWithSubscriptionApplicationInitListener extends Appli
 			subscribeToPresetEvents();
 		}
 
-		final SensorConsumerWithSubscriptionTask consumerTask = applicationContext.getBean(SubscriberConstants.CONSUMER_TASK, SensorConsumerWithSubscriptionTask.class);
+		final LightSensorConsumerWithSubscriptionTask consumerTask = applicationContext.getBean(SubscriberConstants.CONSUMER_TASK, LightSensorConsumerWithSubscriptionTask.class);
 		consumerTask.start();
 		
 		try {

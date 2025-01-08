@@ -1,27 +1,26 @@
-package ai.aitia.demo.smart_city_common.dto;
+package ai.aitia.demo.light_sensor_provider_with_publishing.entity;
 
-import java.io.Serializable;
-
-public class SensorRequestDTO implements Serializable {
+public class LightSensor {
 
 	//=================================================================================================
 	// members
 
-	private static final long serialVersionUID = -5363562707054976998L;
-
+	private final int id;
 	private String name;
 	private String value;
 
 	//=================================================================================================
 	// methods
-	
+
 	//-------------------------------------------------------------------------------------------------
-	public SensorRequestDTO(final String name, final String value) {
+	public LightSensor(final int id, final String name, final String value) {
+		this.id = id;
 		this.name = name;
 		this.value = value;
 	}
 
 	//-------------------------------------------------------------------------------------------------
+	public int getId() { return id; }
 	public String getName() { return name; }
 	public String getValue() { return value; }
 

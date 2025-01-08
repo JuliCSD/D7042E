@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_consumer_with_subscribing.database;
+package ai.aitia.demo.controller_with_subscribing.database;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,8 +7,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.springframework.stereotype.Component;
 
-import ai.aitia.demo.sensor_consumer_with_subscribing.LampProviderConstants;
-import ai.aitia.demo.sensor_consumer_with_subscribing.entity.Lamp;
+import ai.aitia.demo.controller_with_subscribing.LampProviderConstants;
+import ai.aitia.demo.controller_with_subscribing.entity.Lamp;
 import eu.arrowhead.common.exception.InvalidParameterException;
 
 @Component

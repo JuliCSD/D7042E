@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_consumer_with_subscribing;
+package ai.aitia.demo.controller_with_subscribing;
 
 public class LampProviderConstants {
 	

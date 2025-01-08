@@ -1,4 +1,4 @@
-package ai.aitia.demo.sensor_consumer_with_subscribing;
+package ai.aitia.demo.controller_with_subscribing;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,9 +21,9 @@ import org.springframework.http.HttpMethod;
 
 import ai.aitia.arrowhead.application.library.ArrowheadService;
 import ai.aitia.arrowhead.application.library.util.ApplicationCommonConstants;
-import ai.aitia.demo.smart_city_common.dto.SensorResponseDTO;
-import ai.aitia.demo.sensor_consumer_with_subscribing.database.InMemoryLampDB;
-import ai.aitia.demo.sensor_consumer_with_subscribing.entity.Lamp;
+import ai.aitia.demo.smart_city_common.dto.LightSensorResponseDTO;
+import ai.aitia.demo.controller_with_subscribing.database.InMemoryLampDB;
+import ai.aitia.demo.controller_with_subscribing.entity.Lamp;
 import eu.arrowhead.application.skeleton.subscriber.SubscriberUtilities;
 import eu.arrowhead.application.skeleton.subscriber.constants.SubscriberConstants;
 import eu.arrowhead.common.CommonConstants;
@@ -43,13 +43,13 @@ import eu.arrowhead.common.dto.shared.SystemResponseDTO;
 import eu.arrowhead.common.exception.InvalidParameterException;
 
 
-public class SensorConsumerWithSubscriptionTask extends Thread {
+public class LightSensorConsumerWithSubscriptionTask extends Thread {
 	//=================================================================================================
 	// members
 	
 	private boolean interrupted = false;
 	
-	private final Logger logger = LogManager.getLogger(SensorConsumerWithSubscriptionTask.class);
+	private final Logger logger = LogManager.getLogger(LightSensorConsumerWithSubscriptionTask.class);
 	
 	@Resource( name = SubscriberConstants.NOTIFICATION_QUEUE )
 	private ConcurrentLinkedQueue<EventDTO> notificatonQueue;
@@ -75,10 +75,10 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_PORT_WD)
 	private int applicationSystemPort;
 	
-	@Value(SensorConsumerConstants.$REORCHESTRATION_WD)
+	@Value(LightSensorConsumerConstants.$REORCHESTRATION_WD)
 	private boolean reorchestration;
 	
-	@Value(SensorConsumerConstants.$MAX_RETRY_WD)
+	@Value(LightSensorConsumerConstants.$MAX_RETRY_WD)
 	private int max_retry;
 
 	@Autowired
@@ -95,7 +95,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 		
 		interrupted = Thread.currentThread().isInterrupted();
 
-		OrchestrationResultDTO sensorRequestingService = null;
+		OrchestrationResultDTO lightSensorRequestingService = null;
 		
 		int counter = 0;
 		while (!interrupted && (counter < max_retry)) {
@@ -106,7 +106,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 							if (reorchestration) {
 								logger.info("Recieved publisher destroyed event - started reorchestration.");
 								
-								sensorRequestingService = orchestrateGetSensorService();
+								lightSensorRequestingService = orchestrateGetLightSensorService();
 							} else {
 								logger.info("Recieved publisher destroyed event - started shuting down.");
 								System.exit(0);
@@ -119,21 +119,21 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 					notificatonQueue.clear();
 				}
 
-				if (sensorRequestingService != null) {
-					List<SensorResponseDTO> allSensor = callSensorRequestingService(sensorRequestingService);
-					System.out.println("LampDB updated : "+updateLampStatus(allSensor));
+				if (lightSensorRequestingService != null) {
+					List<LightSensorResponseDTO> allLightSensor = callLightSensorRequestingService(lightSensorRequestingService);
+					System.out.println("LampDB updated : "+updateLampStatus(allLightSensor));
 
 				} else {
 					counter++;
 					
-					sensorRequestingService = orchestrateGetSensorService();
+					lightSensorRequestingService = orchestrateGetLightSensorService();
 					
-					if (sensorRequestingService != null) {
+					if (lightSensorRequestingService != null) {
 						counter = 0;
 						
 						final Set<SystemResponseDTO> sources = new HashSet<SystemResponseDTO>();
 						
-						sources.add(sensorRequestingService.getProvider());
+						sources.add(lightSensorRequestingService.getProvider());
 						
 						subscribeToDestoryEvents(sources);
 					}
@@ -141,7 +141,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			} catch (final Throwable ex) {
 				logger.debug(ex.getMessage());
 				
-				sensorRequestingService = null;
+				lightSensorRequestingService = null;
 			}	
 
 
@@ -218,9 +218,9 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	
     
     //-------------------------------------------------------------------------------------------------
-    private OrchestrationResultDTO orchestrateGetSensorService() {
-    	// logger.info("Orchestration request for " + SensorConsumerConstants.GET_SENSOR_SERVICE_DEFINITION + " service:");
-    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(SensorConsumerConstants.GET_SENSOR_SERVICE_DEFINITION)
+    private OrchestrationResultDTO orchestrateGetLightSensorService() {
+    	// logger.info("Orchestration request for " + LightSensorConsumerConstants.GET_LIGHT_SENSOR_SERVICE_DEFINITION + " service:");
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(LightSensorConsumerConstants.GET_LIGHT_SENSOR_SERVICE_DEFINITION)
     																		.interfaces(getInterface())
     																		.build();
     	
@@ -243,7 +243,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			logger.info("No provider found during the orchestration");
 		} else {
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
-			validateOrchestrationResult(orchestrationResult, SensorConsumerConstants.GET_SENSOR_SERVICE_DEFINITION);
+			validateOrchestrationResult(orchestrationResult, LightSensorConsumerConstants.GET_LIGHT_SENSOR_SERVICE_DEFINITION);
 			
 			return orchestrationResult;
 		}
@@ -252,56 +252,56 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
     }
     
     //-------------------------------------------------------------------------------------------------
-    private List<SensorResponseDTO> callSensorRequestingService( final OrchestrationResultDTO orchestrationResult) {
-		validateOrchestrationResult(orchestrationResult, SensorConsumerConstants.GET_SENSOR_SERVICE_DEFINITION);
+    private List<LightSensorResponseDTO> callLightSensorRequestingService( final OrchestrationResultDTO orchestrationResult) {
+		validateOrchestrationResult(orchestrationResult, LightSensorConsumerConstants.GET_LIGHT_SENSOR_SERVICE_DEFINITION);
 		
-		// logger.info("Get all sensors:");
+		// logger.info("Get all light_sensors:");
 		final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
 		@SuppressWarnings("unchecked")
 		
-		final SensorResponseDTO[] sensorsArray = arrowheadService.consumeServiceHTTP(SensorResponseDTO[].class, 
-		HttpMethod.valueOf(orchestrationResult.getMetadata().get(SensorConsumerConstants.HTTP_METHOD)),
+		final LightSensorResponseDTO[] lightSensorsArray = arrowheadService.consumeServiceHTTP(LightSensorResponseDTO[].class, 
+		HttpMethod.valueOf(orchestrationResult.getMetadata().get(LightSensorConsumerConstants.HTTP_METHOD)),
 		orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), 
 		orchestrationResult.getServiceUri(), getInterface(), token, null, new String[0]);
 
-		final List<SensorResponseDTO> allSensor = Arrays.asList(sensorsArray);
+		final List<LightSensorResponseDTO> allLightSensor = Arrays.asList(lightSensorsArray);
 
 																				
-		// printOut(allSensor);
-		return allSensor;
+		// printOut(allLightSensor);
+		return allLightSensor;
 		
     }
   
 
 	//-------------------------------------------------------------------------------------------------
-	private boolean updateLampStatus(final List<SensorResponseDTO> allSensor) {
+	private boolean updateLampStatus(final List<LightSensorResponseDTO> allLightSensor) {
 
-		if (allSensor == null) {
-			logger.error("allSensor is null");
+		if (allLightSensor == null) {
+			logger.error("allLightSensor is null");
 			return false;
 		}		
-		if (allSensor.isEmpty()) {
-			logger.info("No sensors found.");
+		if (allLightSensor.isEmpty()) {
+			logger.info("No light_sensors found.");
 			return false;
 		}
 
-		int allSensorSize = allSensor.size();
+		int allLightSensorSize = allLightSensor.size();
 		boolean updated = false;
-		logger.info("Preparing to iterate over allSensor: " + allSensorSize);
+		logger.info("Preparing to iterate over allLightSensor: " + allLightSensorSize);
 
-		for(final SensorResponseDTO sensor : allSensor) {
-			int sensorId = sensor.getId();
+		for(final LightSensorResponseDTO lightSensor : allLightSensor) {
+			int lightSensorId = lightSensor.getId();
 			int value = 0;
 			try {
-				value = (int) Double.parseDouble(sensor.getValue());
+				value = (int) Double.parseDouble(lightSensor.getValue());
 			} catch (NumberFormatException e) {
-				logger.error("Invalid sensor value: " + sensor.getValue());
+				logger.error("Invalid lightSensor value: " + lightSensor.getValue());
 				continue;
 			}
 
-			// logger.info("Processing sensor with ID: " + sensorId + ", Value: " + value);
+			// logger.info("Processing lightSensor with ID: " + lightSensorId + ", Value: " + value);
 
-			int lampId = (sensorId % LampProviderConstants.NUMBER_OF_LAMPS) + 1;
+			int lampId = (lightSensorId % LampProviderConstants.NUMBER_OF_LAMPS) + 1;
 			Lamp lamp = lampDB.getById(lampId);
 			if (lamp == null) {
 				logger.warn("Lamp with ID " + lampId + " not found.");
@@ -334,13 +334,13 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			
 			updated = true;
 		}
-		logger.info("Completed iteration over allSensor.");
+		logger.info("Completed iteration over allLightSensor.");
 		return updated;
 	}
 
     //-------------------------------------------------------------------------------------------------
     private String getInterface() {
-    	return sslProperties.isSslEnabled() ? SensorConsumerConstants.INTERFACE_SECURE : SensorConsumerConstants.INTERFACE_INSECURE;
+    	return sslProperties.isSslEnabled() ? LightSensorConsumerConstants.INTERFACE_SECURE : LightSensorConsumerConstants.INTERFACE_INSECURE;
     }
     
     //-------------------------------------------------------------------------------------------------
