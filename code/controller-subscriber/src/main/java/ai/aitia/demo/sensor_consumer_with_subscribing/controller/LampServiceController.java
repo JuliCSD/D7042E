@@ -42,6 +42,10 @@ public class LampServiceController {
 	@ResponseBody public List<LampResponseDTO> getLamps( @RequestParam(name = LampProviderConstants.REQUEST_PARAM_STATUS, required = false) final Integer status) {
 		final List<LampResponseDTO> response = new ArrayList<>();
 		for (final Lamp lamp : lampDB.getAll()) {
+
+			int lastRequestStatus = lamp.getStatus();
+			lamp.setlastRequestStatus(lastRequestStatus);
+
 			boolean toAdd = true;
 			
 			if (status!=null && lamp.getStatus() != status) {

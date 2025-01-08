@@ -11,6 +11,7 @@ public class LampResponseDTO implements Serializable {
 	
 	private int id;
 	private Integer status;
+	private Integer lastRequestStatus;
 
 	//=================================================================================================
 	// methods
@@ -19,16 +20,19 @@ public class LampResponseDTO implements Serializable {
 	public LampResponseDTO() {}
 	
 	//-------------------------------------------------------------------------------------------------
-	public LampResponseDTO(final int id, final Integer status) {
+	public LampResponseDTO(final int id, final Integer status, final Integer lastRequestStatus) {
 		this.id = id;
 		this.status= status;
+		this.lastRequestStatus = lastRequestStatus;
 	}
 
 	//-------------------------------------------------------------------------------------------------
 	public int getId() { return id; }
 	public Integer getStatus() { return status; }
+	public Integer getlastRequestStatus() { return lastRequestStatus; }
 
 	//-------------------------------------------------------------------------------------------------
 	public void setId(final int id) {this.id = id; }
 	public void setStatus(final Integer status) { this.status= status; }	
+	public void setlastRequestStatus(final Integer lastRequestStatus) { this.lastRequestStatus = lastRequestStatus; }
 }

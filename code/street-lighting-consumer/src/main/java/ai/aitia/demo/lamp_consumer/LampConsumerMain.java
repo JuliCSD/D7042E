@@ -110,7 +110,7 @@ public class LampConsumerMain implements ApplicationRunner {
 			
 
 
-			printOut(onLamps);
+			printOut(allLamps);
 			
 		}
     }

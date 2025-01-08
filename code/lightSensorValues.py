@@ -7,7 +7,7 @@ start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 minutes_in_a_day = 1440
 min_luminosity = 0
 max_luminosity = 1000
-nb_sensors = 1000
+nb_sensors = 50
 
 
 file_path = 'light-sensor-provider/target/test.csv'

@@ -9,7 +9,7 @@ public class LampRequestDTO implements Serializable {
 
 	private static final long serialVersionUID = -5363562707054976998L;
  
-	private Integer status;
+	private Integer status; 
 
 	//=================================================================================================
 	// methods
@@ -21,9 +21,9 @@ public class LampRequestDTO implements Serializable {
 
 	//-------------------------------------------------------------------------------------------------
  
-	public Integer getStatus() { return status; }
+	public Integer getStatus() { return status; } 
 
 	//-------------------------------------------------------------------------------------------------
  
-	public void setStatus(final Integer status) { this.status= status; }	
+	public void setStatus(final Integer status) { this.status= status; }	 
 }

@@ -255,7 +255,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
     private List<SensorResponseDTO> callSensorRequestingService( final OrchestrationResultDTO orchestrationResult) {
 		validateOrchestrationResult(orchestrationResult, SensorConsumerConstants.GET_SENSOR_SERVICE_DEFINITION);
 		
-		logger.info("Get all sensors:");
+		// logger.info("Get all sensors:");
 		final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
 		@SuppressWarnings("unchecked")
 		
@@ -267,7 +267,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 		final List<SensorResponseDTO> allSensor = Arrays.asList(sensorsArray);
 
 																				
-		printOut(allSensor);
+		// printOut(allSensor);
 		return allSensor;
 		
     }
@@ -299,7 +299,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 				continue;
 			}
 
-			logger.info("Processing sensor with ID: " + sensorId + ", Value: " + value);
+			// logger.info("Processing sensor with ID: " + sensorId + ", Value: " + value);
 
 			int lampId = (sensorId % LampProviderConstants.NUMBER_OF_LAMPS) + 1;
 			Lamp lamp = lampDB.getById(lampId);
@@ -309,21 +309,29 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			}
 
 			int currentStatus = lamp.getStatus();
+			int lastRequestStatus = lamp.getlastRequestStatus();
+
 			if(currentStatus == 1 && value < LampProviderConstants.OFF_THRESHOLD) {
 				// lampDB.updateById(lampId, 0);
 				lampDB.getById(lampId).setStatus(0);
-				logger.info("Lamp ID " + lampId + " turned OFF.");
+
+				if(currentStatus != lastRequestStatus) {
+					logger.info("Lamp ID " + lampId + " turned OFF.");
+				}
 				updated = true;
 
 			} else if(currentStatus == 0 && value > LampProviderConstants.ON_THRESHOLD) {
 				// lampDB.updateById(lampId, 1);
 				lampDB.getById(lampId).setStatus(1);
-				logger.info("Lamp ID " + lampId + " turned ON.");
+				if(currentStatus != lastRequestStatus) {
+					logger.info("Lamp ID " + lampId + " turned ON.");
+				}
 				updated = true;
 				
 			} else {
-				logger.info("Lamp ID " + lampId + " retains its state: " + currentStatus);
+				// logger.info("Lamp ID " + lampId + " retains its state: " + currentStatus);
 			}
+			
 			updated = true;
 		}
 		logger.info("Completed iteration over allSensor.");

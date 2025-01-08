@@ -18,7 +18,7 @@ public class LampProviderConstants {
 	public static final String REQUEST_PARAM_KEY_STATUS = "request-param-status";
 	public static final String REQUEST_PARAM_STATUS = "status";	
 
-	public static final int NUMBER_OF_LAMPS = 500;
+	public static final int NUMBER_OF_LAMPS = 10;
 	public static final int ON_THRESHOLD = 600;
 	public static final int OFF_THRESHOLD = 400;
 	
