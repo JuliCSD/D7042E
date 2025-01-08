@@ -45,7 +45,7 @@ import eu.arrowhead.application.skeleton.subscriber.security.SubscriberSecurityC
 
 @Component
 @Configuration
-public class LightSensorConsumerWithSubscriptionApplicationInitListener extends ApplicationInitListener {
+public class SensorConsumerWithSubscriptionApplicationInitListener extends ApplicationInitListener {
 	
 	//=================================================================================================
 	// members
@@ -71,7 +71,7 @@ public class LightSensorConsumerWithSubscriptionApplicationInitListener extends 
 	@Value(ApplicationCommonConstants.$APPLICATION_SERVER_PORT_WD)
 	private int applicationSystemPort;
 	
-	private final Logger logger = LogManager.getLogger(LightSensorConsumerWithSubscriptionApplicationInitListener.class);
+	private final Logger logger = LogManager.getLogger(SensorConsumerWithSubscriptionApplicationInitListener.class);
 	
 	@Autowired
 	private ConfigEventProperites configEventProperites;
@@ -90,8 +90,8 @@ public class LightSensorConsumerWithSubscriptionApplicationInitListener extends 
 	
 	//-------------------------------------------------------------------------------------------------
 	@Bean( SubscriberConstants.CONSUMER_TASK )
-	public LightSensorConsumerWithSubscriptionTask getConsumerTask() {
-		return new LightSensorConsumerWithSubscriptionTask();
+	public SensorConsumerWithSubscriptionTask getConsumerTask() {
+		return new SensorConsumerWithSubscriptionTask();
 	}
 
 	//-------------------------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ public class LightSensorConsumerWithSubscriptionApplicationInitListener extends 
 			subscribeToPresetEvents();
 		}
 
-		final LightSensorConsumerWithSubscriptionTask consumerTask = applicationContext.getBean(SubscriberConstants.CONSUMER_TASK, LightSensorConsumerWithSubscriptionTask.class);
+		final SensorConsumerWithSubscriptionTask consumerTask = applicationContext.getBean(SubscriberConstants.CONSUMER_TASK,  SensorConsumerWithSubscriptionTask.class);
 		consumerTask.start();
 		
 		try {

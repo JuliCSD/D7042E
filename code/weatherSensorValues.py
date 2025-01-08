@@ -7,7 +7,7 @@ start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 minutes_in_a_day = 1440
 min_luminosity = 0
 max_luminosity = 1000
-nb_light_sensors = 50
+nb_weather_sensors = 50
 
 
 file_path = 'weather-sensor-provider/target/test.csv'
@@ -28,21 +28,21 @@ for minute in range(minutes_in_a_day):
             # Durante la noche, la luminosidad es baja
             luminosity = min_luminosity
 
-        light_sensor_data = []
-        for i in range(nb_light_sensors):
+        weather_sensor_data = []
+        for i in range(nb_weather_sensors):
             luminosity += random.uniform(-50, 50)
             luminosity = max(min_luminosity, min(max_luminosity, luminosity))
             luminosity = round(luminosity, 1)
 
-            light_sensor_data.append([f'light_sensor{i+1}', luminosity])
+            weather_sensor_data.append([f'weather_sensor{i+1}', luminosity])
 
         
         # Overwrite the data in the CSV file
         with open(file_path, mode='w', newline='') as file:
             writer = csv.writer(file)
-            # writer.writerow(['light_sensor_type', 'luminosity'])
-            writer.writerows(light_sensor_data)
+            writer.writerow(['weather_sensor_type', 'luminosity'])
+            writer.writerows(weather_sensor_data)
         
-        print(f"Weather values for {nb_light_sensors} sensors have been overwritten in {file_path}")    
+        print(f"Weather values for {nb_weather_sensors} sensors have been overwritten in {file_path}")    
         # Wait for 1 seconds before generating new values
         time.sleep(1)

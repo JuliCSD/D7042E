@@ -1,6 +1,6 @@
 package ai.aitia.demo.controller_with_subscribing;
 
-public class LightSensorConsumerConstants {
+public class SensorConsumerConstants {
 	
 	//=================================================================================================
 	// members
@@ -18,12 +18,17 @@ public class LightSensorConsumerConstants {
 	public static final String REQUEST_PARAM_KEY_VALUE = "request-param-value";
 	public static final String $REORCHESTRATION_WD = "${reorchestration:false}";
 	public static final String $MAX_RETRY_WD = "${max_retry:300}";
+
+
+	public static final String CREATE_WEATHER_SENSOR_SERVICE_DEFINITION = "create-weather-sensor";
+	public static final String UPDATE_WEATHER_SENSOR_SERVICE_DEFINITION = "update-weather-sensor";
+	public static final String GET_WEATHER_SENSOR_SERVICE_DEFINITION = "get-weather-sensor";
 	
 	//=================================================================================================
 	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	private LightSensorConsumerConstants() {
+	private SensorConsumerConstants() {
 		throw new UnsupportedOperationException();
 	}
 

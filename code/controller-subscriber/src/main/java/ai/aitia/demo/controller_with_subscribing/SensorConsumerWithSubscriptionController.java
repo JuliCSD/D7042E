@@ -19,7 +19,7 @@ import eu.arrowhead.common.dto.shared.EventDTO;
 
 @RestController
 @RequestMapping( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI)
-public class LightSensorConsumerWithSubscriptionController {
+public class SensorConsumerWithSubscriptionController {
 	
 	//=================================================================================================
 	// members
@@ -27,7 +27,7 @@ public class LightSensorConsumerWithSubscriptionController {
 	@Resource( name = SubscriberConstants.NOTIFICATION_QUEUE )
 	private ConcurrentLinkedQueue<EventDTO> notificatonQueue;
 
-	private final Logger logger = LogManager.getLogger(LightSensorConsumerWithSubscriptionController.class);
+	private final Logger logger = LogManager.getLogger( SensorConsumerWithSubscriptionController.class);
 	
 	//=================================================================================================
 	// methods

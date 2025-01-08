@@ -10,15 +10,15 @@ import eu.arrowhead.common.CommonConstants;
 
 @SpringBootApplication
 @EnableConfigurationProperties(ConfigEventProperites.class)
-@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE, LightSensorConsumerConstants.BASE_PACKAGE, LampProviderConstants.BASE_PACKAGE})
-public class LightSensorConsumerWithSubscriptionMain {
+@ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE,  SensorConsumerConstants.BASE_PACKAGE, LampProviderConstants.BASE_PACKAGE})
+public class SensorConsumerWithSubscriptionMain {
     
     //=================================================================================================
 	// methods
 
 	//------------------------------------------------------------------------------------------------
     public static void main( final String[] args ) {
-    	SpringApplication.run(LightSensorConsumerWithSubscriptionMain.class, args);
+    	SpringApplication.run( SensorConsumerWithSubscriptionMain.class, args);
     }
    
 }

@@ -51,9 +51,9 @@ public class CsvDataLoader implements CommandLineRunner {
             String line;
             int id = 0;
             while ((line = br.readLine()) != null) {
-                final int weatherSensorId = id;
                 final String[] values = line.split(",");
                 if (values.length == 2) {
+                    final int weatherSensorId = id;
                     executorService.submit(() -> {
                         weatherSensorDB.updateById(weatherSensorId, values[0], values[1]);
                     });
