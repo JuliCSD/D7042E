@@ -7,7 +7,7 @@ start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 minutes_in_a_day = 1440
 min_luminosity = 0
 max_luminosity = 1000
-nb_light_sensors = 50
+nb_light_sensors = 200
 
 
 file_path = 'light-sensor-provider/target/test.csv'
@@ -34,7 +34,7 @@ for minute in range(minutes_in_a_day):
             luminosity = max(min_luminosity, min(max_luminosity, luminosity))
             luminosity = round(luminosity, 1)
 
-            light_sensor_data.append([f'light_sensor{i+1}', luminosity])
+            light_sensor_data.append([luminosity])
             print(f'light_sensor{i+1}: {luminosity}')
 
         

@@ -47,8 +47,7 @@ public class LightSensorServiceWithPublishingController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<LightSensorResponseDTO> getLightSensors(@RequestParam(name = LightSensorProviderWithPublishingConstants.REQUEST_PARAM_NAME, required = false) final String name,
-                                              @RequestParam(name = LightSensorProviderWithPublishingConstants.REQUEST_PARAM_VALUE, required = false) final String value) {
+    public List<LightSensorResponseDTO> getLightSensors( @RequestParam(name = LightSensorProviderWithPublishingConstants.REQUEST_PARAM_VALUE, required = false) final String value) {
         ++counter;
 
         publisherService.publish(PresetEventType.REQUEST_RECEIVED, Map.of(EventTypeConstants.EVENT_TYPE_REQUEST_RECEIVED_METADATA_REQUEST_TYPE, HttpMethod.GET.name()), LightSensorProviderWithPublishingConstants.LIGHT_SENSOR_URI);
@@ -56,9 +55,7 @@ public class LightSensorServiceWithPublishingController {
         final List<LightSensorResponseDTO> response = new ArrayList<>();
         for (final LightSensor lightSensor : lightSensorDB.getAll()) {
             boolean toAdd = true;
-            if (name != null && !name.isBlank() && !lightSensor.getName().equalsIgnoreCase(name)) {
-                toAdd = false;
-            }
+            
             if (value != null && !value.isBlank() && !lightSensor.getValue().equalsIgnoreCase(value)) {
                 toAdd = false;
             }
@@ -83,13 +80,11 @@ public class LightSensorServiceWithPublishingController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public LightSensorResponseDTO createLightSensor(@RequestBody final LightSensorRequestDTO dto) {
-        if (dto.getName() == null || dto.getName().isBlank()) {
-            throw new BadPayloadException("name is null or blank");
-        }
+        
         if (dto.getValue() == null || dto.getValue().isBlank()) {
             throw new BadPayloadException("value is null or blank");
         }
-        final LightSensor lightSensor = lightSensorDB.create(dto.getName(), dto.getValue());
+        final LightSensor lightSensor = lightSensorDB.create( dto.getValue());
 
         return DTOConverter.convertLightSensorToLightSensorResponseDTO(lightSensor);
     }
@@ -97,13 +92,11 @@ public class LightSensorServiceWithPublishingController {
     @PutMapping(path = LightSensorProviderWithPublishingConstants.BY_ID_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public LightSensorResponseDTO updateLightSensor(@PathVariable(name = LightSensorProviderWithPublishingConstants.PATH_VARIABLE_ID) final int id, @RequestBody final LightSensorRequestDTO dto) {
-        if (dto.getName() == null || dto.getName().isBlank()) {
-            throw new BadPayloadException("name is null or blank");
-        }
+        
         if (dto.getValue() == null || dto.getValue().isBlank()) {
             throw new BadPayloadException("value is null or blank");
         }
-        final LightSensor lightSensor = lightSensorDB.updateById(id, dto.getName(), dto.getValue());
+        final LightSensor lightSensor = lightSensorDB.updateById(id, dto.getValue());
 
         return DTOConverter.convertLightSensorToLightSensorResponseDTO(lightSensor);
     }

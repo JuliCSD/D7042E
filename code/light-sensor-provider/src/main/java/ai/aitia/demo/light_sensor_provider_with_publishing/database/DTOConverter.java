@@ -17,7 +17,7 @@ public class DTOConverter {
 	//-------------------------------------------------------------------------------------------------
 	public static LightSensorResponseDTO convertLightSensorToLightSensorResponseDTO(final LightSensor lightSensor) {
 		Assert.notNull(lightSensor, "lightSensor is null");
-		return new LightSensorResponseDTO(lightSensor.getId(), lightSensor.getName(), lightSensor.getValue());
+		return new LightSensorResponseDTO(lightSensor.getId(), lightSensor.getValue());
 	}
 	
 	//-------------------------------------------------------------------------------------------------

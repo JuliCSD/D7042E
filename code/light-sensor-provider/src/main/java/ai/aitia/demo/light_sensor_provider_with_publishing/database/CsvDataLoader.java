@@ -53,9 +53,9 @@ public class CsvDataLoader implements CommandLineRunner {
             while ((line = br.readLine()) != null) {
                 final int lightSensorId = id;
                 final String[] values = line.split(",");
-                if (values.length == 2) {
+                if (values.length == 1) {
                     executorService.submit(() -> {
-                        lightSensorDB.updateById(lightSensorId, values[0], values[1]);
+                        lightSensorDB.updateById(lightSensorId, values[0]);
                     });
                 } else {
                     throw new InvalidParameterException("Invalid line in CSV: " + line);

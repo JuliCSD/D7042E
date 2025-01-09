@@ -44,8 +44,8 @@ public class InMemoryLightSensorDB extends ConcurrentHashMap<Integer, LightSenso
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-				if (values.length == 2) {
-					create(values[0], values[1]);
+				if (values.length == 1) {
+					create(values[0]);
 				} else {
 					throw new InvalidParameterException("Invalid line in CSV: " + line);
 				}
@@ -58,18 +58,16 @@ public class InMemoryLightSensorDB extends ConcurrentHashMap<Integer, LightSenso
         }
 	}
 
-	public LightSensor create(final String name, final String value) {
+	public LightSensor create(final String value) {
 		lock.readLock().lock();
         try {
-			if (name == null || name.isBlank()) {
-				throw new InvalidParameterException("name is null or empty");
-			}		
+					
 			if (value == null || value.isBlank()) {
 				throw new InvalidParameterException("value is null or empty");
 			}
 			
 			idCounter++;
-			this.put(idCounter, new LightSensor(idCounter, name.toLowerCase().trim(), value.toLowerCase().trim()));
+			this.put(idCounter, new LightSensor(idCounter, value.toLowerCase().trim()));
 
 		} finally {
             lock.readLock().unlock();
@@ -102,14 +100,12 @@ public class InMemoryLightSensorDB extends ConcurrentHashMap<Integer, LightSenso
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	public LightSensor updateById(final int id, final String name, final String value) {
+	public LightSensor updateById(final int id, final String value) {
 		lock.writeLock().lock();
         try {
 			if (this.containsKey(id)) {
 				final LightSensor lightSensor = this.get(id);
-				if (name!= null && !name.isBlank()) {
-					lightSensor.setName(name);
-				}
+				
 				if (value != null && !value.isBlank()) {
 					lightSensor.setValue(value);
 				}

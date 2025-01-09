@@ -2,7 +2,7 @@ import csv
 import time
 import random
 
-nb_weather_sensors = 50
+nb_weather_sensors = 100
 
 # Inicializar los datos de los sensores
 data = [(random.uniform(20, 25), random.uniform(40, 60), random.uniform(1010, 1020), random.uniform(0, 20)) for _ in range(nb_weather_sensors)]
