@@ -240,8 +240,10 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 																					   .flag(Flag.PING_PROVIDERS, true)
 																					   .build();
 		// printOut(orchestrationFormRequest);		
-		
+		long startTime = System.currentTimeMillis();
 		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+		long endTime = System.currentTimeMillis();
+		System.out.println("Orchestration time (light): " + (endTime - startTime) + "ms");
 		
 		// logger.info("Orchestration response:");
 		// printOut(orchestrationResponse);		
@@ -274,8 +276,10 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 																					   .flag(Flag.PING_PROVIDERS, true)
 																					   .build();
 		// printOut(orchestrationFormRequest);		
-		
+		long startTime = System.currentTimeMillis();
 		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+		long endTime = System.currentTimeMillis();
+		System.out.println("Orchestration time (weather): " + (endTime - startTime) + "ms");
 		
 		// logger.info("Orchestration response:");
 		// printOut(orchestrationResponse);		

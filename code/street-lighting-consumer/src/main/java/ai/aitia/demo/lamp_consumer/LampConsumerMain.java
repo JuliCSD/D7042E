@@ -90,7 +90,10 @@ public class LampConsumerMain implements ApplicationRunner {
 		
 		// printOut(orchestrationFormRequest);		
 		
+		long startTime = System.currentTimeMillis();
 		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+		long endTime = System.currentTimeMillis();
+		System.out.println("Orchestration time for updating lamps: " + (endTime - startTime) + " ms");
 		
 		// logger.info("Orchestration response:");
 		// printOut(orchestrationResponse);		
