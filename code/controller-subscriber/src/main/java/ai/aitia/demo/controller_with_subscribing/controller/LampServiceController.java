@@ -52,6 +52,16 @@ public class LampServiceController {
 		}
 		return response;
 	}
+
+	@GetMapping(path = LampProviderConstants.GET_LAMP_SERVICE_DEFINITION, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody public List<LampResponseDTO> getAllLamps(@RequestParam String param) {
+		final List<LampResponseDTO> response = new ArrayList<>();
+		for (final Lamp lamp : lampDB.getAll()) {
+			response.add(DTOConverter.convertLampToLampResponseDTO(lamp));
+		}
+		return response;
+	}
+	
 	
 	//-------------------------------------------------------------------------------------------------
 	@GetMapping(path = LampProviderConstants.BY_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)

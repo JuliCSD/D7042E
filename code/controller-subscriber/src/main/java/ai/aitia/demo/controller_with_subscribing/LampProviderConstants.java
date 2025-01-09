@@ -21,6 +21,11 @@ public class LampProviderConstants {
 	public static final int NUMBER_OF_LAMPS = 10;
 	public static final int ON_THRESHOLD = 600;
 	public static final int OFF_THRESHOLD = 400;
+	public static final int TEMP_MIN = 10;
+	public static final int TEMP_MAX = 35;
+	public static final int HUMIDITY_MAX = 80;
+	public static final int PRESSURE_MIN = 1010;
+	public static final int WIND_MAX = 50;
 
 	public static final String REQUEST_PARAM_KEY_UPDATE = "request-param-update";
 	public static final String REQUEST_LAMP_UPDATE = "update";

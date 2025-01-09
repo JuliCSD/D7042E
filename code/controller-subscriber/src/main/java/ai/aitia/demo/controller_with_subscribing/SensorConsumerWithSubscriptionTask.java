@@ -106,17 +106,17 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 					for (final EventDTO event : notificatonQueue) {
 						if (SubscriberConstants.PUBLISHER_DESTROYED_EVENT_TYPE.equalsIgnoreCase(event.getEventType())) {
 							if (reorchestration) {
-								logger.info("Recieved publisher destroyed event - started reorchestration.");
+								logger.info("Received publisher destroyed event - started reorchestration.");
 								
 								lightSensorRequestingService = orchestrateGetLightSensorService();
 								weatherSensorRequestingService = orchestrateGetWeatherSensorService();	
 
 							} else {
-								logger.info("Recieved publisher destroyed event - started shuting down.");
+								logger.info("Received publisher destroyed event - started shuting down.");
 								System.exit(0);
 							}
 						} else {
-							logger.info("ConsumerTask recevied event - with type: " + event.getEventType() + ", and payload: " + event.getPayload() + ".");
+							logger.info("ConsumerTask received event - with type: " + event.getEventType() + ", and payload: " + event.getPayload() + ".");
 						}
 					}
 					
@@ -135,7 +135,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 					lightSensorRequestingService = orchestrateGetLightSensorService();
 					weatherSensorRequestingService = orchestrateGetWeatherSensorService();
 					
-					if (weatherSensorRequestingService != null) {//lightSensorRequestingService != null && weatherSensorRequestingService != null) {
+					if (lightSensorRequestingService != null && weatherSensorRequestingService != null) {
 						counter = 0;
 						
 						final Set<SystemResponseDTO> sources = new HashSet<SystemResponseDTO>();
@@ -299,7 +299,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
     private List<LightSensorResponseDTO> callLightSensorRequestingService( final OrchestrationResultDTO orchestrationResult) {
 		validateOrchestrationResult(orchestrationResult, SensorConsumerConstants.GET_LIGHT_SENSOR_SERVICE_DEFINITION);
 		
-		// logger.info("Get all light_sensors:");
+		// logger.info("Get all light sensors:");
 		final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
 		@SuppressWarnings("unchecked")
 		
@@ -320,7 +320,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
     private List<WeatherSensorResponseDTO> callWeatherSensorRequestingService( final OrchestrationResultDTO orchestrationResult) {
 		validateOrchestrationResult(orchestrationResult, SensorConsumerConstants.GET_WEATHER_SENSOR_SERVICE_DEFINITION);
 		
-		// logger.info("Get all sensors:");
+		// logger.info("Get all weather sensors:");
 		final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
 		@SuppressWarnings("unchecked")
 		
@@ -341,70 +341,109 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	//-------------------------------------------------------------------------------------------------
 	private boolean updateLampStatus(final List<LightSensorResponseDTO> allLightSensor, final List<WeatherSensorResponseDTO> allWeatherSensor) {
 
-		if (allLightSensor == null) {
-			logger.error("allLightSensor is null");
+		if (allLightSensor == null || allWeatherSensor == null) {
+			logger.error("allLightSensor or allWeatherSensor is null.");
 			return false;
 		}		
-		if (allLightSensor.isEmpty()) {
-			logger.info("No light_sensors found.");
+		if (allLightSensor.isEmpty() || allWeatherSensor.isEmpty()) {
+			logger.info("allLightSensor or allWeatherSensor is empty.");
 			return false;
 		}
 
-		int allLightSensorSize = allLightSensor.size();
-		boolean updated = false;
-		logger.info("Preparing to iterate over allLightSensor: " + allLightSensorSize);
-
-		for(final LightSensorResponseDTO lightSensor : allLightSensor) {
-			int lightSensorId = lightSensor.getId();
-			int value = 0;
-			try {
-				value = (int) Double.parseDouble(lightSensor.getValue());
-			} catch (NumberFormatException e) {
-				logger.error("Invalid lightSensor value: " + lightSensor.getValue());
-				continue;
-			}
-
-			// logger.info("Processing lightSensor with ID: " + lightSensorId + ", Value: " + value);\
-			// System.out.println("lightSensorId % LampProviderConstants.NUMBER_OF_LAMPS = "+ lightSensorId+"%"+LampProviderConstants.NUMBER_OF_LAMPS+" = " + lightSensorId % LampProviderConstants.NUMBER_OF_LAMPS);
-
-			int lampId = (lightSensorId % LampProviderConstants.NUMBER_OF_LAMPS) + 1;
-			Lamp lamp = lampDB.getById(lampId);
-			if (lamp == null) {
-				logger.warn("Lamp with ID " + lampId + " not found.");
-				continue;
-			}
-
-			int currentStatus = lamp.getStatus();
-			int lastRequestStatus = lamp.getlastRequestStatus();
-
-			if(currentStatus == 1 && value < LampProviderConstants.OFF_THRESHOLD) {
-				// lampDB.updateById(lampId, 0);
-				lamp.setStatus(0);
-				lamp.setSendToLamp(true);
-
-				if(currentStatus != lastRequestStatus) {
-					logger.info("Lamp ID " + lampId + " turned OFF.");
-				}
-				updated = true;
-
-			} else if(currentStatus == 0 && value > LampProviderConstants.ON_THRESHOLD) {
-				// lampDB.updateById(lampId, 1);
-				lamp.setStatus(1);
-				lamp.setSendToLamp(true);
-
-				if(currentStatus != lastRequestStatus) {
-					logger.info("Lamp ID " + lampId + " turned ON.");
-				}
-				updated = true;
-				
-			} else {
-				// logger.info("Lamp ID " + lampId + " retains its state: " + currentStatus);
-			}
-			
-			updated = true;
+		// logger.info("Starting iteration over allLightSensor.");
+		List <Lamp> lamps = lampDB.getAll();
+		if (lamps.isEmpty()) {
+			logger.info("No lamps found.");
+			return false;
 		}
-		logger.info("Completed iteration over allLightSensor.");
+		
+		boolean updated = false;
+		
+		for (Lamp lamp : lamps) {
+			// System.out.println("Lamp ID: " + lamp.getId());
+			int lampId = lamp.getId();
+			boolean turnOn = shouldTurnOnLamp(allLightSensor, allWeatherSensor, lampId);
+			// System.out.println(lampId + " should turn on: " + turnOn);
+			
+			int newStatus = turnOn ? 1 : 0;
+			int currentStatus = lamp.getStatus();
+			int lastStatus = lamp.getlastRequestStatus();
+
+			if(lastStatus != newStatus) {
+				if (turnOn) {
+					lamp.setStatus(1);
+					lamp.setSendToLamp(true);
+					logger.info("Lamp ID " + lampId + " is turned on.");
+					updated = true;
+				} else {
+					lamp.setStatus(0);
+					lamp.setSendToLamp(true);
+					logger.info("Lamp ID " + lampId + " is turned off.");
+					updated = true;
+				}
+			} else {
+				logger.info("Lamp ID " + lampId + " retains its state: " + currentStatus);
+			}
+		}
+		// logger.info("Completed iteration over allLightSensor.");
 		return updated;
+	}
+
+	private boolean shouldTurnOnLamp(final List<LightSensorResponseDTO> allLightSensor, final List<WeatherSensorResponseDTO> allWeatherSensor, final int lampId) {
+
+		// System.out.println("Lamp ID: " + lampId);
+		int allLightSensorSize = allLightSensor.size();
+		int allWeatherSensorSize = allWeatherSensor.size();
+
+		// System.out.println("allLightSensorSize: " + allLightSensorSize);
+
+		List<LightSensorResponseDTO> lightSensors = new ArrayList<>();
+		for (LightSensorResponseDTO sensor : allLightSensor) {
+			if (sensor.getId()% LampProviderConstants.NUMBER_OF_LAMPS == lampId) {
+				lightSensors.add(sensor);
+			}
+		}
+		List<WeatherSensorResponseDTO> weatherSensors = new ArrayList<>();
+		for (WeatherSensorResponseDTO weatherSensor : allWeatherSensor) {
+			if (weatherSensor.getId()% LampProviderConstants.NUMBER_OF_LAMPS == lampId) {
+				weatherSensors.add(weatherSensor);
+			}
+		}
+		
+		Double luminosity = 0.0;
+		for(LightSensorResponseDTO sensor : lightSensors) {
+			Double value = Double.parseDouble(sensor.getValue());
+			luminosity += value;
+		}
+		luminosity = luminosity / allLightSensorSize;
+		int is_dark = luminosity < LampProviderConstants.OFF_THRESHOLD ? 1 : 0;
+		// System.out.println("is_dark: " + is_dark);
+
+		Double temperature = 0.0;
+		Double humidity = 0.0;
+		Double pressure = 0.0;
+		Double wind = 0.0;
+		for(WeatherSensorResponseDTO sensor : weatherSensors) {
+			temperature += Double.parseDouble(sensor.getTemperature());
+			humidity += Double.parseDouble(sensor.getHumidity());
+			pressure += Double.parseDouble(sensor.getPressure());
+			wind += Double.parseDouble(sensor.getWind());
+		}
+
+		temperature = temperature / allWeatherSensorSize;
+		humidity = humidity / allWeatherSensorSize;
+		pressure = pressure / allWeatherSensorSize;
+		wind = wind / allWeatherSensorSize;
+		int is_extreme_weather = temperature < LampProviderConstants.TEMP_MIN || 
+									temperature > LampProviderConstants.TEMP_MAX || 
+									humidity > LampProviderConstants.HUMIDITY_MAX || 
+									pressure < LampProviderConstants.PRESSURE_MIN || 
+									wind > LampProviderConstants.WIND_MAX
+									? 1 : 0;
+		System.out.println("is_extreme_weather: " + is_extreme_weather);
+
+		boolean turnOn = is_dark == 1 || is_extreme_weather == 1;
+		return turnOn;
 	}
 
     //-------------------------------------------------------------------------------------------------

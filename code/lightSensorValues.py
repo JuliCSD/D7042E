@@ -35,6 +35,7 @@ for minute in range(minutes_in_a_day):
             luminosity = round(luminosity, 1)
 
             light_sensor_data.append([f'light_sensor{i+1}', luminosity])
+            print(f'light_sensor{i+1}: {luminosity}')
 
         
         # Overwrite the data in the CSV file
@@ -42,7 +43,7 @@ for minute in range(minutes_in_a_day):
             writer = csv.writer(file)
             # writer.writerow(['light_sensor_type', 'luminosity'])
             writer.writerows(light_sensor_data)
-        
-        print(f"Luminosity values for {nb_light_sensors} light_sensors have been overwritten in {file_path}")    
+
+        print('\n\n')
         # Wait for 1 seconds before generating new values
         time.sleep(1)

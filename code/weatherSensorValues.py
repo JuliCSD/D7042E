@@ -17,6 +17,7 @@ while True:
         # Escribir los datos
         for i, (temp, hum, pres, wind_speed) in enumerate(data):
             writer.writerow([temp, hum, pres, wind_speed])
+            print(f'{temp}°C, {hum}%, {pres}hPa, {wind_speed}km/h')
         
         # Actualizar los datos con algunos cambios aleatorios
         data = [
@@ -30,4 +31,5 @@ while True:
         ]
     
     # Esperar 1 segundo antes de sobrescribir el archivo nuevamente
+    print('\n\n')
     time.sleep(1)

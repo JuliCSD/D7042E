@@ -60,6 +60,7 @@ public class LampConsumerMain implements ApplicationRunner {
 		int max_retry = 10;
 		while (!Thread.currentThread().isInterrupted() && (counter < max_retry)) {
 			try {
+				// getAllLampServiceOrchestrationAndConsumption();
 				getUpdatedLampServiceOrchestrationAndConsumption();
 				Thread.sleep(10000);
 			} catch (final InterruptedException ex) {
@@ -76,7 +77,7 @@ public class LampConsumerMain implements ApplicationRunner {
     
     //-------------------------------------------------------------------------------------------------
     public void getUpdatedLampServiceOrchestrationAndConsumption() {
-    	// logger.info("Orchestration request for " + LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION + " service:");
+		// logger.info("Orchestration request for " + LampConsumerConstants.REQUEST_LAMP_UPDATE + " service:");
     	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(LampConsumerConstants.REQUEST_LAMP_UPDATE)
     																		.interfaces(getInterface())
     																		.build();
@@ -91,8 +92,8 @@ public class LampConsumerMain implements ApplicationRunner {
 		
 		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
 		
-		logger.info("Orchestration response:");
-		printOut(orchestrationResponse);		
+		// logger.info("Orchestration response:");
+		// printOut(orchestrationResponse);		
 		
 		if (orchestrationResponse == null) {
 			logger.info("No orchestration response received");
@@ -121,7 +122,7 @@ public class LampConsumerMain implements ApplicationRunner {
 
     //-------------------------------------------------------------------------------------------------
     public void getAllLampServiceOrchestrationAndConsumption() {
-    	logger.info("Orchestration request for " + LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION + " service:");
+    	// logger.info("Orchestration request for " + LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION + " service:");
     	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(LampConsumerConstants.GET_LAMP_SERVICE_DEFINITION)
     																		.interfaces(getInterface())
     																		.build();
@@ -132,12 +133,12 @@ public class LampConsumerMain implements ApplicationRunner {
 																					   .flag(Flag.OVERRIDE_STORE, true)
 																					   .build();
 		
-		printOut(orchestrationFormRequest);		
+		// printOut(orchestrationFormRequest);		
 		
 		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
 		
-		logger.info("Orchestration response:");
-		printOut(orchestrationResponse);		
+		// logger.info("Orchestration response:");
+		// printOut(orchestrationResponse);		
 		
 		if (orchestrationResponse == null) {
 			logger.info("No orchestration response received");
@@ -155,7 +156,7 @@ public class LampConsumerMain implements ApplicationRunner {
 																					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), 
 																					orchestrationResult.getServiceUri(), getInterface(), token, null, new String[0]);
 			final List<LampResponseDTO> allLamps = Arrays.asList(lampsArray);
-			turnOnOff(allLamps);
+			// turnOnOff(allLamps);
 			printOut(allLamps);
 
 			
