@@ -396,21 +396,23 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 	private boolean shouldTurnOnLamp(final List<LightSensorResponseDTO> allLightSensor, final List<WeatherSensorResponseDTO> allWeatherSensor, final int lampId) {
 
 		// System.out.println("Lamp ID: " + lampId);
-		int allLightSensorSize = allLightSensor.size();
-		int allWeatherSensorSize = allWeatherSensor.size();
+		// double allLightSensorSize = allLightSensor.size();
+		// double allWeatherSensorSize = allWeatherSensor.size();
 
 		// System.out.println("allLightSensorSize: " + allLightSensorSize);
 
 		List<LightSensorResponseDTO> lightSensors = new ArrayList<>();
 		for (LightSensorResponseDTO sensor : allLightSensor) {
-			if (sensor.getId()% LampProviderConstants.NUMBER_OF_LAMPS == lampId) {
+			if ( (sensor.getId()% LampProviderConstants.NUMBER_OF_LAMPS + 1) == lampId) {
 				lightSensors.add(sensor);
+				System.out.println("Light sensor ID: " + sensor.getId()+ " Value: " + sensor.getValue());
 			}
 		}
 		List<WeatherSensorResponseDTO> weatherSensors = new ArrayList<>();
 		for (WeatherSensorResponseDTO weatherSensor : allWeatherSensor) {
-			if (weatherSensor.getId()% LampProviderConstants.NUMBER_OF_LAMPS == lampId) {
+			if ( (weatherSensor.getId()% LampProviderConstants.NUMBER_OF_LAMPS) + 1 == lampId) {
 				weatherSensors.add(weatherSensor);
+				// System.out.println("Weather sensor ID: " + weatherSensor.getId() + " Temperature: " + weatherSensor.getTemperature() + " Humidity: " + weatherSensor.getHumidity() + " Pressure: " + weatherSensor.getPressure() + " Wind: " + weatherSensor.getWind());
 			}
 		}
 		
@@ -419,9 +421,10 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			Double value = Double.parseDouble(sensor.getValue());
 			luminosity += value;
 		}
-		luminosity = luminosity / allLightSensorSize;
+		double lightSensorsSize = lightSensors.size();
+		luminosity = luminosity / lightSensorsSize ;
 		if(luminosity < LampProviderConstants.OFF_THRESHOLD) {
-			logger.info("Luminosity is below threshold.");
+			logger.info("Luminosity is below threshold: " + luminosity);
 			return true;
 		}
 
@@ -435,11 +438,13 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			pressure += Double.parseDouble(sensor.getPressure());
 			wind += Double.parseDouble(sensor.getWind());
 		}
+		double weatherSensorsSize = lightSensors.size();
 
-		temperature = temperature / allWeatherSensorSize;
-		humidity = humidity / allWeatherSensorSize;
-		pressure = pressure / allWeatherSensorSize;
-		wind = wind / allWeatherSensorSize;
+
+		temperature = temperature / weatherSensorsSize;
+		humidity = humidity / weatherSensorsSize;
+		pressure = pressure / weatherSensorsSize;
+		wind = wind / weatherSensorsSize;
 		int is_extreme_weather = temperature < LampProviderConstants.TEMP_MIN || 
 									temperature > LampProviderConstants.TEMP_MAX || 
 									humidity > LampProviderConstants.HUMIDITY_MAX || 
@@ -451,10 +456,10 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			logger.info("Extreme weather conditions detected.");
 			if(luminosity > LampProviderConstants.ON_THRESHOLD){
 				logger.info("Luminosity is above threshold.");
-				return true;
+				return false;
 			} else {
 				logger.info("Luminosity is below threshold.");
-				return false;
+				return true;
 			}
 		}
 		return false;

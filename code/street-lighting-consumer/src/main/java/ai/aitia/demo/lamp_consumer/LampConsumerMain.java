@@ -115,6 +115,31 @@ public class LampConsumerMain implements ApplicationRunner {
 																					  orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
 																					  getInterface(), token, null, queryParamStatus);
 			
+			
+			
+			// String protocol = sslProperties.isSslEnabled() ? "https" : "http";
+			// String address = orchestrationResult.getProvider().getAddress();
+			// int port = orchestrationResult.getProvider().getPort();
+			// String serviceUri = orchestrationResult.getServiceUri();
+			// String queryParamKey = orchestrationResult.getMetadata().get(LampConsumerConstants.REQUEST_PARAM_KEY_UPDATE);
+			// String queryParamValue = "true";																		  
+			// String url = String.format("%s://%s:%d%s?%s=%s", protocol, address, port, serviceUri, queryParamKey, queryParamValue);
+			// System.out.println("HTTP GET Request URL: " + url);
+			// // Realizar la solicitud HTTP
+			// @SuppressWarnings("unchecked")
+			// final LampResponseDTO[] updLampsArray = arrowheadService.consumeServiceHTTP(
+			// 	LampResponseDTO[].class, 
+			// 	HttpMethod.valueOf(orchestrationResult.getMetadata().get(LampConsumerConstants.HTTP_METHOD)),
+			// 	address, 
+			// 	port, 
+			// 	serviceUri, 
+			// 	getInterface(), 
+			// 	token, 
+			// 	null, 
+			// 	queryParamStatus
+			// );
+
+
 			final List<LampResponseDTO> updLamps = Arrays.asList(updLampsArray);
 			printOut(updLamps);
 			turnOnOff(updLamps);
