@@ -416,8 +416,10 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 			luminosity += value;
 		}
 		luminosity = luminosity / allLightSensorSize;
-		int is_dark = luminosity < LampProviderConstants.OFF_THRESHOLD ? 1 : 0;
-		// System.out.println("is_dark: " + is_dark);
+		if(luminosity < LampProviderConstants.OFF_THRESHOLD) {
+			logger.info("Luminosity is below threshold.");
+			return true;
+		}
 
 		Double temperature = 0.0;
 		Double humidity = 0.0;
@@ -440,10 +442,18 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
 									pressure < LampProviderConstants.PRESSURE_MIN || 
 									wind > LampProviderConstants.WIND_MAX
 									? 1 : 0;
-		System.out.println("is_extreme_weather: " + is_extreme_weather);
 
-		boolean turnOn = is_dark == 1 || is_extreme_weather == 1;
-		return turnOn;
+		if(is_extreme_weather == 1) {
+			logger.info("Extreme weather conditions detected.");
+			if(luminosity > LampProviderConstants.ON_THRESHOLD){
+				logger.info("Luminosity is above threshold.");
+				return true;
+			} else {
+				logger.info("Luminosity is below threshold.");
+				return false;
+			}
+		}
+		return false;
 	}
 
     //-------------------------------------------------------------------------------------------------

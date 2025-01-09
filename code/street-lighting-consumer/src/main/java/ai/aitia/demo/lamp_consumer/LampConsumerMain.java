@@ -169,6 +169,11 @@ public class LampConsumerMain implements ApplicationRunner {
 	// assistant methods
     
 	private void turnOnOff(final List<LampResponseDTO> allLamps) {
+
+		if(allLamps == null || allLamps.isEmpty()){
+			System.out.println("No lamps to turn on/off");
+			return;
+		}
 		for (final LampResponseDTO lamp : allLamps) {
 			int status = lamp.getStatus();
 			int id = lamp.getId();
