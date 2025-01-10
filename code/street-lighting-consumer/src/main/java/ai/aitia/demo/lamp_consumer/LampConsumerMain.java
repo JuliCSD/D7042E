@@ -86,6 +86,7 @@ public class LampConsumerMain implements ApplicationRunner {
 		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
 																					   .flag(Flag.MATCHMAKING, true)
 																					   .flag(Flag.OVERRIDE_STORE, true)
+																					   .flag(Flag.PING_PROVIDERS, true)
 																					   .build();
 		
 		// printOut(orchestrationFormRequest);		
@@ -159,6 +160,7 @@ public class LampConsumerMain implements ApplicationRunner {
 		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
 																					   .flag(Flag.MATCHMAKING, true)
 																					   .flag(Flag.OVERRIDE_STORE, true)
+																					   .flag(Flag.PING_PROVIDERS, true)
 																					   .build();
 		
 		// printOut(orchestrationFormRequest);		

@@ -235,7 +235,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
     	
 		final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
 		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
-																					   .flag(Flag.MATCHMAKING, false)
+																					   .flag(Flag.MATCHMAKING, true)
 																					   .flag(Flag.OVERRIDE_STORE, true)
 																					   .flag(Flag.PING_PROVIDERS, true)
 																					   .build();
@@ -271,7 +271,7 @@ public class SensorConsumerWithSubscriptionTask extends Thread {
     	
 		final Builder orchestrationFormBuilder = arrowheadService.getOrchestrationFormBuilder();
 		final OrchestrationFormRequestDTO orchestrationFormRequest = orchestrationFormBuilder.requestedService(serviceQueryForm)
-																					   .flag(Flag.MATCHMAKING, false)
+																					   .flag(Flag.MATCHMAKING, true)
 																					   .flag(Flag.OVERRIDE_STORE, true)
 																					   .flag(Flag.PING_PROVIDERS, true)
 																					   .build();
