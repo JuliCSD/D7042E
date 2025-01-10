@@ -16,6 +16,7 @@ file_path = 'light-sensor-provider/target/test.csv'
 for minute in range(minutes_in_a_day):
         current_time = start_time + timedelta(minutes=minute)
         hour = current_time.hour + current_time.minute / 60.0
+        luminosity = 500
 
         # Simular el ciclo de luminosidad del sol
         if 6 <= hour < 18:
@@ -44,6 +45,7 @@ for minute in range(minutes_in_a_day):
             # writer.writerow(['light_sensor_type', 'luminosity'])
             writer.writerows(light_sensor_data)
 
+        print(f'hour: {int(hour)}:{current_time.minute}')
         print('\n\n')
         # Wait for 1 seconds before generating new values
-        time.sleep(1)
+        time.sleep(0.5)
